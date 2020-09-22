@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "824291923536",
+    "firebase_url": "https://smart-recipe-ad850.firebaseio.com",
+    "project_id": "smart-recipe-ad850",
+    "storage_bucket": "smart-recipe-ad850.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:824291923536:android:f293e2eeb4fa95d2e16355",
+        "android_client_info": {
+          "package_name": "com.example.smartrecipemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "824291923536-ojaj8t683lfmk7e49mgrii6pnb1dtu45.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDz6WPA0XkYuMBd0vrJHJ-GRAjxrZ-QACA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "824291923536-ojaj8t683lfmk7e49mgrii6pnb1dtu45.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
