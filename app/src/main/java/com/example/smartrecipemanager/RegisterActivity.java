@@ -14,30 +14,31 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 
 public class RegisterActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
-    private EditText email;
-    private EditText password;
+    private TextInputLayout email;
+    private TextInputLayout password;
     private Button register;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist);
         mAuth = FirebaseAuth.getInstance();
-        email=(EditText)findViewById(R.id.email2);
-        password=(EditText)findViewById(R.id.password2);
+        email=(TextInputLayout)findViewById(R.id.email2);
+        password=(TextInputLayout)findViewById(R.id.password2);
         register=(Button)findViewById(R.id.register);
         register.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
 
                 //register
-                String emailText=email.getText().toString();
-                String passwordText=password.getText().toString();
+                String emailText=email.getEditText().getText().toString();
+                String passwordText=password.getEditText().getText().toString();
                 if(emailText.length()==0){
                     Toast.makeText(RegisterActivity.this, "Please input email", Toast.LENGTH_SHORT).show();
                 }

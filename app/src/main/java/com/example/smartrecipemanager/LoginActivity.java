@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -23,8 +24,8 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
-    private EditText email;
-    private EditText password;
+    private TextInputLayout email;
+    private TextInputLayout password;
     private Button login;
     private Button forgot;
     private Button newUser;
@@ -35,8 +36,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         mAuth = FirebaseAuth.getInstance();
-        email=(EditText)findViewById(R.id.email);
-        password=(EditText)findViewById(R.id.password);
+        email= (TextInputLayout)findViewById(R.id.email);
+        password=(TextInputLayout)findViewById(R.id.password);
         login=(Button)findViewById(R.id.login);
         forgot=(Button)findViewById(R.id.forgot);
         newUser=(Button)findViewById(R.id.newUser);
@@ -52,8 +53,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             case R.id.login:
                 if (network() == true) {
                     //handle input
-                    String emailText=email.getText().toString();
-                    String passwordText=password.getText().toString();
+                    String emailText=email.getEditText().getText().toString();
+                    String passwordText=password.getEditText().getText().toString();
                     //check input
                     if(emailText.length()==0){
                         Toast.makeText(this, "Please input email", Toast.LENGTH_SHORT).show();
