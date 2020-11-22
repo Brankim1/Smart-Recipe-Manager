@@ -11,4 +11,9 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="spoonacular_key">aec3f178ccca4bdead94b5d0156620b5</string>
+    <!-- 别人的：c957b6816ba048139fbc25a67d2cff33
+                 2：-->
 </resources>

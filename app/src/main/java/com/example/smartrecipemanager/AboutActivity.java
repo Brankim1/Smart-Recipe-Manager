@@ -32,7 +32,7 @@ public class AboutActivity extends AppCompatActivity {
 
         //change toolbar name and add button
         if (toolbar != null) {
-            toolbar.setTitle("Home");
+            toolbar.setTitle("About");
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

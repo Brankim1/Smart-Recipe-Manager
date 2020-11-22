@@ -58,11 +58,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     //check input
                     if(emailText.length()==0){
                         Toast.makeText(this, "Please input email", Toast.LENGTH_SHORT).show();
-                    }
-                    if(passwordText.length()==0){
+                    }else if(passwordText.length()==0){
                         Toast.makeText(this, "Please input password", Toast.LENGTH_SHORT).show();
-                    }
-                    if (!(Patterns.EMAIL_ADDRESS.matcher(emailText).matches())){
+                    }else if (!(Patterns.EMAIL_ADDRESS.matcher(emailText).matches())){
                         Toast.makeText(LoginActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
                     }
                     if(emailText.length()!=0&&passwordText.length()!=0&&Patterns.EMAIL_ADDRESS.matcher(emailText).matches()) {

@@ -5,34 +5,57 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.viewpager.widget.PagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.smartrecipemanager.Adapter.SearchViewPagerAdapter;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 
 public class SearchActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
+    TabLayout mytab;
+    private TextInputLayout searchText;
+    private Button searchButton;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         setDrawerLayout();
+        setTabLayout();
+        searchText= (TextInputLayout)findViewById(R.id.searchText);
+        searchButton=(Button)findViewById(R.id.searchButton);
+        searchButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent ResultIntent = new Intent(SearchActivity.this, SearchResultActivity.class);
+                ResultIntent.putExtra("data",searchText.getEditText().getText().toString());
+                ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                startActivity(ResultIntent);
+            }
+        });
 
     }
+
     public void setDrawerLayout(){
-//component initialize
+        //component initialize
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         final NavigationView navigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         //change toolbar name and add button
         if (toolbar != null) {
-            toolbar.setTitle("Home");
+            toolbar.setTitle("Search");
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -91,4 +114,29 @@ public class SearchActivity extends AppCompatActivity {
         TextView email=(TextView)headerView.findViewById(R.id.drawerText1);
         email.setText(currentUserEmail);
     }
+    private void setTabLayout() {
+        mytab = (TabLayout) findViewById(R.id.searchTab);
+        mytab.addTab(mytab.newTab().setText("style"));
+        mytab.addTab(mytab.newTab().setText("ingredients"));
+        mytab.addTab(mytab.newTab().setText("AI"));
+        mytab.setTabGravity(TabLayout.GRAVITY_FILL);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final SearchViewPagerAdapter adapter = new SearchViewPagerAdapter(getSupportFragmentManager(),mytab.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mytab));
+
+        mytab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+    }
 }
+
