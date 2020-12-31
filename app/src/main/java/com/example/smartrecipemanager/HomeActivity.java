@@ -164,6 +164,16 @@ public class HomeActivity extends AppCompatActivity {
                         startActivity(FavouriteIntent);
                         finish();
                         break;
+                    case R.id.menu_sharing:
+                        Intent SharingIntent = new Intent(HomeActivity.this, SharingActivity.class);
+                        startActivity(SharingIntent);
+                        finish();
+                        break;
+                    case R.id.menu_calorie:
+                        Intent CalorieIntent = new Intent(HomeActivity.this, CalorieActivity.class);
+                        startActivity(CalorieIntent);
+                        finish();
+                        break;
                     case R.id.menu_Logout:
                         Intent LogoutIntent = new Intent(HomeActivity.this, LogoutActivity.class);
                         startActivity(LogoutIntent);

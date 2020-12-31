@@ -77,7 +77,6 @@ public class RecipeActivity extends AppCompatActivity {
     }
 
     private void getDetailInfo() {
-
         String URL = "https://api.spoonacular.com/recipes/" + id + "/information?apiKey="+getString(R.string.spoonacular_key);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
 
@@ -95,7 +94,6 @@ public class RecipeActivity extends AppCompatActivity {
             }
         });
         requestQueue.add(jsonObjectRequest);
-
     }
 
     private void checkFavourite() {
@@ -125,9 +123,8 @@ public class RecipeActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (like) {
                             fab.setImageResource(R.drawable.like);
-                            Map favorites = new HashMap();
-                            favorites.put("title", getIntent().getExtras().getString("title"));
-                            mRootRef.setValue(favorites);
+                            Recipe recipe = new Recipe(id,title,pic);
+                            mRootRef.setValue(recipe);
                         } else {
                             try {
                                 fab.setImageResource(R.drawable.dislike);

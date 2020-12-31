@@ -17,6 +17,17 @@
             android:icon="@drawable/ic_favourite"
             android:title="Favourite" />
 
+        <item
+            android:id="@+id/menu_sharing"
+            android:icon="@drawable/ic_share"
+            android:title="Sharing" />
+
+        <item
+            android:id="@+id/menu_calorie"
+            android:icon="@drawable/explore_icon"
+            android:title="Calorie" />
+
+
         <item android:title="Other">
             <menu>
                 <item

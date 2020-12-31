@@ -3,6 +3,8 @@
     package="com.example.smartrecipemanager">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +13,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".SearchResultActivity"></activity>
+        <activity android:name=".PostDetailActivity"></activity>
+        <activity android:name=".SharingAddActivity" />
+        <activity android:name=".CalorieActivity" />
+        <activity android:name=".SharingActivity" />
+        <activity android:name=".SearchResultActivity" />
         <activity android:name=".RecipeActivity" />
         <activity android:name=".AboutActivity" />
         <activity android:name=".LogoutActivity" />
