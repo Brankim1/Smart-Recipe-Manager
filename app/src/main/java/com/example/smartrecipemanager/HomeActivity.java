@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,6 +30,11 @@ import com.example.smartrecipemanager.Adapter.SearchListRecyclerAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -45,6 +51,9 @@ public class HomeActivity extends AppCompatActivity {
     String style;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
+    String gender;
+    String vegan;
+    ImageView headerPortrait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,7 +84,6 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setTabLayout() {
         mytab = (TabLayout) findViewById(R.id.homeTab);
-
         mytab.addTab(mytab.newTab().setText("Breakfast"));
         mytab.addTab(mytab.newTab().setText("Lunch"));
         mytab.addTab(mytab.newTab().setText("Dinner"));
@@ -130,8 +138,10 @@ public class HomeActivity extends AppCompatActivity {
         if (toolbar != null) {
             toolbar.setTitle("Home");
             setSupportActionBar(toolbar);
-            getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.hamburger_icon);
+
         }
 
         //toolbar button set listener
@@ -189,19 +199,47 @@ public class HomeActivity extends AppCompatActivity {
                 return false;
             }
         });
-
+        vegan="Not Vegan";
         //get user email,show it in drawerlayout header
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        DatabaseReference mRootRef;
         String currentUserEmail = mAuth.getCurrentUser().getEmail();
         View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
         TextView email=(TextView)headerView.findViewById(R.id.drawerText1);
         email.setText(currentUserEmail);
+
+        //change drawerlayout header portrait image
+        headerPortrait=(ImageView)headerView.findViewById(R.id.headerPortrait);
+        final String uid = mAuth.getCurrentUser().getUid();
+        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("Information");
+        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //get information
+                    PersonalInfo Info=dataSnapshot.getValue(PersonalInfo.class);
+                    gender=Info.getGender();
+                    vegan=Info.getVegan();
+                    if(gender.equals("Male")) {
+                        headerPortrait.setImageResource(R.drawable.ic_portrait);
+                    }else{
+                        headerPortrait.setImageResource(R.drawable.ic_portrait1);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 
     private void getRandomRecipes() {
-
         RecipeList = new ArrayList<Recipe>();
         String url = "https://api.spoonacular.com/recipes/random?number=5&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style;
+        if(vegan.equals("Vegan")) {
+           //for vegan
+            url = "https://api.spoonacular.com/recipes/random?number=5&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style+",vegan";
+        }
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {

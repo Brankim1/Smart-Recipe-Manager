@@ -20,9 +20,8 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="#ffffff"
-                app:theme="@style/ToolbarTheme"
-                android:background="@color/colorPrimary"
+                app:theme="@style/Theme"
+                android:background="#FFFFFF"
                 app:layout_scrollFlags="scroll|enterAlways"/>
         </com.google.android.material.appbar.AppBarLayout>
 
@@ -50,6 +49,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:src="@drawable/add_icon"
+            app:elevation="0dp"
+            android:backgroundTint="@color/colorPrimary"
             android:layout_margin="16dp" />
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

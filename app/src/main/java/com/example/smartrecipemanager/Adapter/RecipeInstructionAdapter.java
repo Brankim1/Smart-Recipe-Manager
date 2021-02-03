@@ -47,6 +47,28 @@ public class RecipeInstructionAdapter extends RecyclerView.Adapter<RecipeInstruc
     @Override
     public void onBindViewHolder(final RecipeInstructionAdapter.MyViewHolder holder, final int position) {
         holder.ingredient_name.setText(mData.get(position));
+        //add number for the order of instructions
+        if(position==0){
+            holder.ingredient_pic.setImageResource(R.drawable.number1);
+        }else if(position==1){
+            holder.ingredient_pic.setImageResource(R.drawable.number2);
+        }else if(position==2){
+            holder.ingredient_pic.setImageResource(R.drawable.number3);
+        }else if(position==3){
+            holder.ingredient_pic.setImageResource(R.drawable.number4);
+        }else if(position==4){
+            holder.ingredient_pic.setImageResource(R.drawable.number5);
+        }else if(position==5){
+            holder.ingredient_pic.setImageResource(R.drawable.number6);
+        }else if(position==6){
+            holder.ingredient_pic.setImageResource(R.drawable.number7);
+        }else if(position==7){
+            holder.ingredient_pic.setImageResource(R.drawable.number8);
+        }else if(position==8){
+            holder.ingredient_pic.setImageResource(R.drawable.number9);
+        }else{
+            holder.ingredient_pic.setImageResource(R.drawable.number0);
+        }
 
     }
 

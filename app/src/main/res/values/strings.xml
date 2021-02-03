@@ -14,6 +14,11 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="spoonacular_key">aec3f178ccca4bdead94b5d0156620b5</string>
+    <string name="title_activity_calorie">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_activity_calorie1">MainActivity</string>
     <!-- 别人的：c957b6816ba048139fbc25a67d2cff33
                  2：-->
 </resources>

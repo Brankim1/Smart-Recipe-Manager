@@ -13,9 +13,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PostDetailActivity"></activity>
+        <activity
+            android:name=".CalorieActivity"
+            android:label="@string/title_activity_calorie1">
+        </activity>
+        <activity android:name=".PostDetailActivity" />
         <activity android:name=".SharingAddActivity" />
-        <activity android:name=".CalorieActivity" />
         <activity android:name=".SharingActivity" />
         <activity android:name=".SearchResultActivity" />
         <activity android:name=".RecipeActivity" />
@@ -30,7 +33,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

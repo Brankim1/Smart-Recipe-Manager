@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.smartrecipemanager.Adapter.SearchViewPagerAdapter;
@@ -21,12 +22,19 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class SearchActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     TabLayout mytab;
     private TextInputLayout searchText;
     private Button searchButton;
+    String gender;
+    ImageView headerPortrait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,6 +67,7 @@ public class SearchActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.hamburger_icon);
         }
 
         //toolbar button set listener
@@ -123,6 +132,30 @@ public class SearchActivity extends AppCompatActivity {
         View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
         TextView email=(TextView)headerView.findViewById(R.id.drawerText1);
         email.setText(currentUserEmail);
+
+        //change drawerlayout header portrait image
+        DatabaseReference mRootRef;
+        headerPortrait=(ImageView)headerView.findViewById(R.id.headerPortrait);
+        final String uid = mAuth.getCurrentUser().getUid();
+        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("Information");
+        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //get information
+                    PersonalInfo Info=dataSnapshot.getValue(PersonalInfo.class);
+                    gender=Info.getGender();
+                    if(gender.equals("Male")) {
+                        headerPortrait.setImageResource(R.drawable.ic_portrait);
+                    }else{
+                        headerPortrait.setImageResource(R.drawable.ic_portrait1);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
     private void setTabLayout() {
         mytab = (TabLayout) findViewById(R.id.searchTab);

@@ -10,13 +10,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class AboutActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
+    String gender;
+    ImageView headerPortrait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +44,7 @@ public class AboutActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.hamburger_icon);
         }
 
         //toolbar button set listener
@@ -70,6 +79,16 @@ public class AboutActivity extends AppCompatActivity {
                         startActivity(FavouriteIntent);
                         finish();
                         break;
+                    case R.id.menu_sharing:
+                        Intent SharingIntent = new Intent(AboutActivity.this, SharingActivity.class);
+                        startActivity(SharingIntent);
+                        finish();
+                        break;
+                    case R.id.menu_calorie:
+                        Intent CalorieIntent = new Intent(AboutActivity.this, CalorieActivity.class);
+                        startActivity(CalorieIntent);
+                        finish();
+                        break;
                     case R.id.menu_Logout:
                         Intent LogoutIntent = new Intent(AboutActivity.this, LogoutActivity.class);
                         startActivity(LogoutIntent);
@@ -90,5 +109,29 @@ public class AboutActivity extends AppCompatActivity {
         View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
         TextView email=(TextView)headerView.findViewById(R.id.drawerText1);
         email.setText(currentUserEmail);
+
+        //change drawerlayout header portrait image
+        DatabaseReference mRootRef;
+        headerPortrait=(ImageView)headerView.findViewById(R.id.headerPortrait);
+        final String uid = mAuth.getCurrentUser().getUid();
+        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("Information");
+        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //get information
+                    PersonalInfo Info=dataSnapshot.getValue(PersonalInfo.class);
+                    gender=Info.getGender();
+                    if(gender.equals("Male")) {
+                        headerPortrait.setImageResource(R.drawable.ic_portrait);
+                    }else{
+                        headerPortrait.setImageResource(R.drawable.ic_portrait1);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }

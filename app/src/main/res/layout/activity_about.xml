@@ -20,12 +20,60 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="#ffffff"
-                app:theme="@style/ToolbarTheme"
-                android:background="@color/colorPrimary"
+                app:theme="@style/Theme"
+                android:background="#FFFFFF"
                 app:layout_scrollFlags="scroll|enterAlways"/>
 
         </com.google.android.material.appbar.AppBarLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="90dp"
+            android:orientation="vertical">
+            <ImageView
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:scaleType="fitCenter"
+                android:gravity='center'
+                android:layout_gravity='center'
+                android:src="@drawable/ic_portrait3" />
+            <TextView
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Developer: Pengcheng Jin"
+                android:textColor="#000000"
+                android:textSize="20sp"/>
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:text="Email: P.Jin5@student.liverpool.ac.uk"
+                android:textColor="#000000"
+                android:textSize="20sp"/>
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:text="Phone: +44 7579919708"
+                android:textColor="#000000"
+                android:textSize="20sp"/>
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:autoLink="all"
+                android:text="Thank you very much for participation in testing SmartRecipeManager, I am glad to receive your feedback. Just Email me or call me! "
+                android:textColor="#000000"
+                android:textSize="20sp"/>
+        </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView

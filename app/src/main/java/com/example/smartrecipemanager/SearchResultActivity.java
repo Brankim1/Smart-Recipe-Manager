@@ -25,6 +25,11 @@ import com.android.volley.toolbox.Volley;
 import com.example.smartrecipemanager.Adapter.SearchListRecyclerAdapter;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -38,6 +43,7 @@ public class SearchResultActivity extends AppCompatActivity {
     String data;
     JSONArray recipeArray;
     List<Recipe> RecipeList;
+    String vegan;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,8 +52,31 @@ public class SearchResultActivity extends AppCompatActivity {
         /*get data form intent*/
         data = intent.getStringExtra("data");
         setToolBar();
-        getRecipes();
+        getVegan();
     }
+
+    private void getVegan() {
+        vegan="";
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        DatabaseReference mRootRef;
+        final String uid = mAuth.getCurrentUser().getUid();
+        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("Information");
+        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //get information
+                    PersonalInfo Info = dataSnapshot.getValue(PersonalInfo.class);
+                    vegan = Info.getVegan();
+                    getRecipes();
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
+    }
+
     public void setToolBar() {
         //component initialize
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -58,6 +87,7 @@ public class SearchResultActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_icon);
         }
 
         //toolbar button set listener
@@ -80,7 +110,10 @@ public class SearchResultActivity extends AppCompatActivity {
         String url;
         if (data.isEmpty()) {
             url = "https://api.spoonacular.com/recipes/random?number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
-            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            if(vegan.equals("Vegan")) {
+                //for vegan
+                url = "https://api.spoonacular.com/recipes/random?number=5&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags=vegan";
+            }RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -125,7 +158,7 @@ public class SearchResultActivity extends AppCompatActivity {
                     );
             requestQueue.add(jsonObjectRequest);
         } else {
-            url = "https://api.spoonacular.com/recipes/search?number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&query=" + data;
+            url = "https://api.spoonacular.com/recipes/search?number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&query=" + data+"&diet="+vegan;
 
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

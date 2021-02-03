@@ -12,6 +12,7 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,13 +23,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
+import org.w3c.dom.Text;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private TextInputLayout email;
     private TextInputLayout password;
     private Button login;
-    private Button forgot;
-    private Button newUser;
+    private TextView newUserText;
+    private TextView forgotText;
     ConnectivityManager manager;
     NetworkInfo networkInfo;
     @Override
@@ -39,11 +42,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         email= (TextInputLayout)findViewById(R.id.email);
         password=(TextInputLayout)findViewById(R.id.password);
         login=(Button)findViewById(R.id.login);
-        forgot=(Button)findViewById(R.id.forgot);
-        newUser=(Button)findViewById(R.id.newUser);
+        newUserText=(TextView)findViewById(R.id.registerText);
+        forgotText=(TextView)findViewById(R.id.forgetText);
+
         login.setOnClickListener(this);
-        forgot.setOnClickListener(this);
-        newUser.setOnClickListener(this);
+        newUserText.setOnClickListener(this);
+        forgotText.setOnClickListener(this);
 
     }
 
@@ -68,13 +72,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     }
                 }
                 break;
-            case R.id.forgot:
+            case R.id.forgetText:
                 if (network() == true) {
                     Intent startIntent = new Intent(LoginActivity.this, ResetActivity.class);
                     startActivity(startIntent);
                 }
                 break;
-            case R.id.newUser:
+            case R.id.registerText:
                 if (network() == true) {
                     Intent startIntent2 = new Intent(LoginActivity.this, RegisterActivity.class);
                     startActivity(startIntent2);

@@ -1,18 +1,33 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <!--Android 5.x开始需要把颜色设置透明，否则导航栏会呈现系统默认的浅灰色-->
+        <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.ActionBar">
-        <item name="colorControlNormal">#ffffff</item>
+
+    <style name="Theme" parent="@android:style/Theme.Holo.Light">
+        <item name="android:itemBackground">#404636</item>
+        <item name="android:textColor">#A8AFB3</item>
+        <item name="android:actionBarStyle" >@style/myActionBarStyle</item>
+    </style>
+    <style name="myActionBarStyle" parent="android:Widget.ActionBar">
+        <item name="android:titleTextStyle">@style/ActionBar_titleStyle</item>
+    </style>
+    <style name="ActionBar_titleStyle" >
+        <item name="android:textColor">#FFF00F</item>
+    </style>
+
+    <style name="AppTheme.NoActionBar.TransparentStatusBar">
+        <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">true</item>
     </style>
 </resources>

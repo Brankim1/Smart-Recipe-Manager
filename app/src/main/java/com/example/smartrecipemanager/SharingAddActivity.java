@@ -212,10 +212,11 @@ public class SharingAddActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == PICK_IMAGE) {
+        if (requestCode == PICK_IMAGE&&resultCode==RESULT_OK) {
             selectedImageURI = data.getData();
             Picasso.get().load(selectedImageURI).into(imageView);
-
+        }else{
+            Toast.makeText(getApplicationContext(),"Image Select Cancel",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -224,12 +225,14 @@ public class SharingAddActivity extends AppCompatActivity {
         //component initialize
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
 
+
         //change toolbar name and add button
         if (toolbar != null) {
             toolbar.setTitle("Post");
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_icon);
         }
         //toolbar button set listener
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

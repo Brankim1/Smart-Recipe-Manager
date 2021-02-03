@@ -52,6 +52,8 @@ public class SharingActivity extends AppCompatActivity {
     List<Post> PostList;
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
+    String gender;
+    ImageView headerPortrait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,6 +138,7 @@ public class SharingActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.hamburger_icon);
         }
 
         //toolbar button set listener
@@ -200,5 +203,29 @@ public class SharingActivity extends AppCompatActivity {
         View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
         TextView email=(TextView)headerView.findViewById(R.id.drawerText1);
         email.setText(currentUserEmail);
+
+        //change drawerlayout header portrait image
+        DatabaseReference mRootRef2;
+        headerPortrait=(ImageView)headerView.findViewById(R.id.headerPortrait);
+        final String uid = mAuth.getCurrentUser().getUid();
+        mRootRef2 = FirebaseDatabase.getInstance().getReference().child(uid).child("Information");
+        mRootRef2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //get information
+                    PersonalInfo Info=dataSnapshot.getValue(PersonalInfo.class);
+                    gender=Info.getGender();
+                    if(gender.equals("Male")) {
+                        headerPortrait.setImageResource(R.drawable.ic_portrait);
+                    }else{
+                        headerPortrait.setImageResource(R.drawable.ic_portrait1);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }

@@ -16,6 +16,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,8 @@ import java.util.List;
 public class FavouriteActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     private FirebaseAuth mAuth;
+    String gender;
+    ImageView headerPortrait;
     private DatabaseReference mRootRef;
     List<Recipe> RecipeList;
     RecyclerView recyclerView;
@@ -122,6 +125,7 @@ public class FavouriteActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setHomeButtonEnabled(true);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.hamburger_icon);
         }
 
         //toolbar button set listener
@@ -186,5 +190,29 @@ public class FavouriteActivity extends AppCompatActivity {
         View headerView = navigationView.inflateHeaderView(R.layout.drawer_header);
         TextView email=(TextView)headerView.findViewById(R.id.drawerText1);
         email.setText(currentUserEmail);
+
+        //change drawerlayout header portrait image
+        DatabaseReference mRootRef3;
+        headerPortrait=(ImageView)headerView.findViewById(R.id.headerPortrait);
+        final String uid = mAuth.getCurrentUser().getUid();
+        mRootRef3 = FirebaseDatabase.getInstance().getReference().child(uid).child("Information");
+        mRootRef3.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getValue() != null) {
+                    //get information
+                    PersonalInfo Info=dataSnapshot.getValue(PersonalInfo.class);
+                    gender=Info.getGender();
+                    if(gender.equals("Male")) {
+                        headerPortrait.setImageResource(R.drawable.ic_portrait);
+                    }else{
+                        headerPortrait.setImageResource(R.drawable.ic_portrait1);
+                    }
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+            }
+        });
     }
 }

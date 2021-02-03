@@ -20,10 +20,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:titleTextColor="#ffffff"
-                app:theme="@style/ToolbarTheme"
-                android:background="@color/colorPrimary"
-                app:layout_scrollFlags="scroll|enterAlways"/>
+                app:theme="@style/Theme"
+                android:background="#FFFFFF"
+                app:layout_scrollFlags="scroll|enterAlways" />
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/homeTab"
                 android:layout_width="match_parent"
