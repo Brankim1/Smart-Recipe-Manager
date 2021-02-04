@@ -159,11 +159,9 @@ public class SearchResultActivity extends AppCompatActivity {
             requestQueue.add(jsonObjectRequest);
         } else {
             url = "https://api.spoonacular.com/recipes/search?number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&query=" + data+"&diet="+vegan;
-
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
@@ -185,10 +183,9 @@ public class SearchResultActivity extends AppCompatActivity {
 //                            RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getContext(), lstRecipe);
 //                            myrv.setAdapter(myAdapter);
 //                            myrv.setItemAnimator(new DefaultItemAnimator());
-
-
                             } catch (JSONException e) {
                                 e.printStackTrace();
+
                             }
                         }
                     },

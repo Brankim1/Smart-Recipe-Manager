@@ -3,12 +3,17 @@ package com.example.smartrecipemanager.fragement;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.smartrecipemanager.Adapter.SearchListRecyclerAdapter;
+import com.example.smartrecipemanager.Adapter.StyleListRecyclerAdapter;
 import com.example.smartrecipemanager.R;
 
 /**
@@ -26,7 +31,7 @@ public class StyleFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    RecyclerView recyclerView;
     public StyleFragment() {
         // Required empty public constructor
     }
@@ -63,6 +68,15 @@ public class StyleFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_style, container, false);
+        View root =inflater.inflate(R.layout.fragment_style, container, false);
+
+        recyclerView = (RecyclerView) root.findViewById(R.id.styleRecyclerView);
+        GridLayoutManager layoutManager = new GridLayoutManager(getContext(),2);
+        //  StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+        StyleListRecyclerAdapter myAdapter = new StyleListRecyclerAdapter(getContext());
+        recyclerView.setAdapter(myAdapter);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        return root;
     }
 }
