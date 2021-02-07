@@ -1,5 +1,8 @@
 package com.example.smartrecipemanager;
-
+/*
+ * constructor for store and upload users' favourite recipe to server
+ *
+ * */
 public class Recipe {
     private String id;
     private String title;

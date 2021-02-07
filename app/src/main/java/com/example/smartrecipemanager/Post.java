@@ -1,7 +1,9 @@
 package com.example.smartrecipemanager;
 
-import android.net.Uri;
-
+/*
+ * constructor for store and post users' experience
+ *
+ * */
 public class Post {
 
         private long postid;

@@ -27,7 +27,9 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
+* get user's favorite recipe and show
+* */
 public class FavouriteActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     private FirebaseAuth mAuth;
@@ -46,6 +48,7 @@ public class FavouriteActivity extends AppCompatActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this,2);
         recyclerView.setLayoutManager(layoutManager);
 
+        //register listener for swipeRefreshLayout, which can update favorite recipes
         swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.favouriteSwiperefreshlayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -73,6 +76,7 @@ public class FavouriteActivity extends AppCompatActivity {
 
     private void getFavouriteID() {
         RecipeList=new ArrayList<Recipe>();
+        //get favorite recipes id from server
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
         mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("favourite");
@@ -90,7 +94,6 @@ public class FavouriteActivity extends AppCompatActivity {
                     SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
                     recyclerView.setAdapter(myAdapter);
                 }
-
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {

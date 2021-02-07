@@ -1,6 +1,6 @@
 package com.example.smartrecipemanager;
 /*
-* constructor for store user calorie information to server
+* constructor for store users' calorie information to server
 * */
 public class Calorie {
     private String time;

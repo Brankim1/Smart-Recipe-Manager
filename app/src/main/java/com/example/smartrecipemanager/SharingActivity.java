@@ -1,26 +1,17 @@
 package com.example.smartrecipemanager;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,11 +19,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.smartrecipemanager.Adapter.SearchListRecyclerAdapter;
 import com.example.smartrecipemanager.Adapter.SharingPostListRecyclerAdapter;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,11 +29,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* SharingActivity, get post from server and show
+* */
 public class SharingActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     private FirebaseAuth mAuth;
@@ -63,6 +53,7 @@ public class SharingActivity extends AppCompatActivity {
         GridLayoutManager layoutManager = new GridLayoutManager(this,2);
         recyclerView.setLayoutManager(layoutManager);
 
+        //register listener for swipeRefreshLayout, which can update post
         swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.sharingSwiperefreshlayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -70,6 +61,7 @@ public class SharingActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
+                        //get post from server
                         setPostList();
                         swipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(SharingActivity.this, "Update", Toast.LENGTH_SHORT).show();
@@ -79,14 +71,15 @@ public class SharingActivity extends AppCompatActivity {
         });
         setDrawerLayout();
         setFloatingActionButton();
-
     }
+
     @Override
     protected void onResume() {
         super.onResume();
         setPostList();
     }
     private void setPostList() {
+        //get post from server
         PostList=new ArrayList<Post>();
         mAuth = FirebaseAuth.getInstance();
         mRootRef = FirebaseDatabase.getInstance().getReference().child("sharing");
@@ -95,7 +88,7 @@ public class SharingActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 Log.i("mRootRef", String.valueOf(dataSnapshot));
                 if (dataSnapshot.getValue() != null) {
-                    //get favourite ids
+                    //get post ids
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Post post=child.getValue(Post.class);
                         PostList.add(post);
@@ -104,8 +97,8 @@ public class SharingActivity extends AppCompatActivity {
                     SharingPostListRecyclerAdapter myAdapter = new SharingPostListRecyclerAdapter(getApplicationContext(),PostList);
                     recyclerView.setAdapter(myAdapter);
                 }
-
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 Log.d("sharingActivity","data get failed");
@@ -114,6 +107,7 @@ public class SharingActivity extends AppCompatActivity {
     }
 
     private void setFloatingActionButton() {
+        //for add post
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab_sharing);
         fab1.setOnClickListener(new View.OnClickListener() {
             @Override

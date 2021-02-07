@@ -1,12 +1,13 @@
 package com.example.smartrecipemanager;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
-
 import com.google.firebase.auth.FirebaseAuth;
 
+/*
+* Log out
+* */
 public class LogoutActivity extends AppCompatActivity {
 
     @Override

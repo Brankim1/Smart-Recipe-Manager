@@ -1,16 +1,12 @@
 package com.example.smartrecipemanager;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,8 +35,10 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
-import java.security.PrivateKey;
 
+/*
+* SharingAddActivity, upload user's post
+* */
 public class SharingAddActivity extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     Uri selectedImageURI;
@@ -54,7 +52,6 @@ public class SharingAddActivity extends AppCompatActivity {
     private Button uploadImg;
     private long postid;
     private String userid;
-    private String name;
     private DatabaseReference mRootRef1;
     private DatabaseReference mRootRef2;
     private FirebaseStorage storage;
@@ -70,6 +67,8 @@ public class SharingAddActivity extends AppCompatActivity {
         title=(TextInputLayout)findViewById(R.id.title);
         content=(TextInputLayout)findViewById(R.id.content);
         imageView = (ImageView) findViewById(R.id.picture);
+
+        //register listener for post button
         post=(Button)findViewById(R.id.post);
         post.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,6 +86,8 @@ public class SharingAddActivity extends AppCompatActivity {
                 }
             }
         });
+
+        //register listener for upload Img button
         uploadImg = (Button) findViewById(R.id.ImageBut);
         uploadImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,11 +106,11 @@ public class SharingAddActivity extends AppCompatActivity {
 
 
     private void uploadImage() {
-        //上传图片
+
         // Create a storage reference from our app
         StorageReference storageRef = storage.getReference();
 
-        // Create a reference to "mountains.jpg"
+        // Create a reference to img
         final StorageReference mountainsRef = storageRef.child(String.valueOf(postid)).child(String.valueOf(selectedImageURI));
 
         //upload image by byte
@@ -131,9 +132,10 @@ public class SharingAddActivity extends AppCompatActivity {
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 Log.d("upload image","successful");
-                //获取下载网址
+
             }
         });
+        //get image url in server
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
@@ -178,6 +180,7 @@ public class SharingAddActivity extends AppCompatActivity {
     }
 
     private void getInformation() {
+        //get post id
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
         userid=uid;
@@ -196,16 +199,7 @@ public class SharingAddActivity extends AppCompatActivity {
         });
     }
     private void selectImage(Context context) {
-//        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//        getIntent.setType("image/*");
-//
-//        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        pickIntent.setType("image/*");
-//
-//        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-//
-//        startActivityForResult(chooserIntent, PICK_IMAGE);
+        //select image in device
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
@@ -224,7 +218,6 @@ public class SharingAddActivity extends AppCompatActivity {
     public void setToolBar() {
         //component initialize
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-
 
         //change toolbar name and add button
         if (toolbar != null) {

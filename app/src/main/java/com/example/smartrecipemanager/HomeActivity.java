@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -43,6 +42,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+* show random recipes(breakfast,lunch,dinner)
+* */
 public class HomeActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     TabLayout mytab;
@@ -59,10 +61,12 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         style="breakfast";
+
         recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
         GridLayoutManager layoutManager = new GridLayoutManager(this,2);
-        //  StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2,StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+        //register listener for swipeRefreshLayout, which can update random recipes
         swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swiperefreshlayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -107,11 +111,11 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onTabUnselected(TabLayout.Tab tab) {
-
             }
 
             @Override
             public void onTabReselected(TabLayout.Tab tab) {
+                //update random recipes
                 if(tab.getText().equals("Breakfast")){
                     style="breakfast";
                     getRandomRecipes();
@@ -126,6 +130,51 @@ public class HomeActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    private void getRandomRecipes() {
+        //get random recipes from spoonacular API
+        RecipeList = new ArrayList<Recipe>();
+        String url = "https://api.spoonacular.com/recipes/random?number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style;
+        if(vegan.equals("Vegan")) {
+           //for vegan
+            url = "https://api.spoonacular.com/recipes/random?number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style+",vegan";
+        }
+        RequestQueue requestQueue = Volley.newRequestQueue(this);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            recipeArray = (JSONArray) response.get("recipes");
+                            Log.i("the res is:", String.valueOf(recipeArray));
+                            for (int i = 0; i < recipeArray.length(); i++) {
+                                JSONObject jsonObject1;
+                                jsonObject1 = recipeArray.getJSONObject(i);
+                                Recipe recipe=new Recipe();
+                                recipe.setId(jsonObject1.optString("id"));
+                                recipe.setTitle(jsonObject1.optString("title"));
+                                recipe.setPic(jsonObject1.optString("image"));
+                                RecipeList.add(recipe);
+                            }
+                            //send recipe data to adapter for show
+                            SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
+                            recyclerView.setAdapter(myAdapter);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.i("the res is error:", error.toString());
+                    }
+                }
+        );
+        requestQueue.add(jsonObjectRequest);
     }
 
     public void setDrawerLayout(){
@@ -231,52 +280,5 @@ public class HomeActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
-    }
-
-    private void getRandomRecipes() {
-        RecipeList = new ArrayList<Recipe>();
-        String url = "https://api.spoonacular.com/recipes/random?number=5&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style;
-        if(vegan.equals("Vegan")) {
-           //for vegan
-            url = "https://api.spoonacular.com/recipes/random?number=5&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style+",vegan";
-        }
-        RequestQueue requestQueue = Volley.newRequestQueue(this);
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            recipeArray = (JSONArray) response.get("recipes");
-                            Log.i("the res is:", String.valueOf(recipeArray));
-                            for (int i = 0; i < recipeArray.length(); i++) {
-                                JSONObject jsonObject1;
-                                jsonObject1 = recipeArray.getJSONObject(i);
-                                Recipe recipe=new Recipe();
-                                recipe.setId(jsonObject1.optString("id"));
-                                recipe.setTitle(jsonObject1.optString("title"));
-                                recipe.setPic(jsonObject1.optString("image"));
-                                RecipeList.add(recipe);
-                            }
-                            SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
-                            recyclerView.setAdapter(myAdapter);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Log.i("the res is error:", error.toString());
-//                        progressBar.setVisibility(View.GONE);
-//                        myrv.setAlpha(0);
-//                        emptyView.setVisibility(View.VISIBLE);
-                    }
-
-                }
-        );
-        requestQueue.add(jsonObjectRequest);
     }
 }

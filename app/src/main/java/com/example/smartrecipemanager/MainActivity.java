@@ -12,6 +12,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+/*
+* main Activity
+* it can judge whether user were already login, if yes go to home Activity.if not, go to Login Activity
+* */
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     ConnectivityManager manager;
@@ -46,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }else {
             Toast.makeText(MainActivity.this, "Internet Connect Fail", Toast.LENGTH_LONG).show();
+            //waiting 5s to finish
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {

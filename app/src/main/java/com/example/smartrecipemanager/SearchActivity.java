@@ -5,12 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -28,6 +26,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/*
+* SearchActivity, user can search recipes through text, style, ingredient, AI image
+* */
 public class SearchActivity extends AppCompatActivity {
     DrawerLayout drawerLayout;
     TabLayout mytab;
@@ -41,6 +42,7 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.activity_search);
         setDrawerLayout();
         setTabLayout();
+        //register listener
         searchText= (TextInputLayout)findViewById(R.id.searchText);
         searchButton=(Button)findViewById(R.id.searchButton);
         searchButton.setOnClickListener(new View.OnClickListener(){
@@ -55,6 +57,31 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+    private void setTabLayout() {
+        // divided three fragment(style, ingredient, AI) through SearchViewPagerAdapter
+        mytab = (TabLayout) findViewById(R.id.searchTab);
+        mytab.addTab(mytab.newTab().setText("style"));
+        mytab.addTab(mytab.newTab().setText("ingredients"));
+        mytab.addTab(mytab.newTab().setText("AI"));
+        mytab.setTabGravity(TabLayout.GRAVITY_FILL);
+        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        final SearchViewPagerAdapter adapter = new SearchViewPagerAdapter(getSupportFragmentManager(),mytab.getTabCount());
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mytab));
+
+        mytab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager.setCurrentItem(tab.getPosition());
+            }
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
+        });
+    }
     public void setDrawerLayout(){
         //component initialize
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -154,30 +181,6 @@ public class SearchActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-            }
-        });
-    }
-    private void setTabLayout() {
-        mytab = (TabLayout) findViewById(R.id.searchTab);
-        mytab.addTab(mytab.newTab().setText("style"));
-        mytab.addTab(mytab.newTab().setText("ingredients"));
-        mytab.addTab(mytab.newTab().setText("AI"));
-        mytab.setTabGravity(TabLayout.GRAVITY_FILL);
-        final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final SearchViewPagerAdapter adapter = new SearchViewPagerAdapter(getSupportFragmentManager(),mytab.getTabCount());
-        viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mytab));
-
-        mytab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(TabLayout.Tab tab) {
-                viewPager.setCurrentItem(tab.getPosition());
-            }
-            @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
-            }
-            @Override
-            public void onTabReselected(TabLayout.Tab tab) {
             }
         });
     }

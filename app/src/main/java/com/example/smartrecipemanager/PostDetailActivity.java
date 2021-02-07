@@ -11,7 +11,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-
+/*
+* get information from SharingActivity, and show post details.
+* */
 public class PostDetailActivity extends AppCompatActivity {
     private String postid;
     private String userid;

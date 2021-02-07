@@ -2,7 +2,6 @@ package com.example.smartrecipemanager;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -11,10 +10,8 @@ import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
@@ -23,8 +20,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
-import org.w3c.dom.Text;
-
+/*
+* Login Activity
+* */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private TextInputLayout email;
@@ -48,7 +46,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         login.setOnClickListener(this);
         newUserText.setOnClickListener(this);
         forgotText.setOnClickListener(this);
-
     }
 
     @Override
@@ -97,7 +94,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             Intent mainIntent= new Intent(LoginActivity.this, MainActivity.class);
-                           // mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             startActivity(mainIntent);
                             finish();
                         }else{
@@ -111,7 +107,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
 
     }
-    private Boolean network(){//check device whether connected to network
+    private Boolean network(){
+        //check device whether connected to network
         boolean network=true;
         //check network connection
         manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);

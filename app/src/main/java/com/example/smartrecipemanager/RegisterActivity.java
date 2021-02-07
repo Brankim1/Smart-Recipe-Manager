@@ -27,6 +27,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/*
+* RegisterActivity, user can register through email
+* */
 public class RegisterActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private DatabaseReference mRootRef;
@@ -45,16 +48,15 @@ public class RegisterActivity extends AppCompatActivity{
         email=(TextInputLayout)findViewById(R.id.email2);
         password=(TextInputLayout)findViewById(R.id.password2);
 
+        //create a multiple choice button to choose gender
         genderGroup = (RadioGroup) findViewById(R.id.genderSelect);
-        //第一种获得单选按钮值的方法
-        //为radioGroup设置一个监听器:setOnCheckedChanged()
         genderGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 genderSelect = (RadioButton) findViewById(checkedId);
             }
         });
-
+        //create a multiple choice button to choose vegan
         veganGroup = (RadioGroup) findViewById(R.id.veganSelect);
         veganGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
@@ -70,6 +72,7 @@ public class RegisterActivity extends AppCompatActivity{
                 //register
                 String emailText=email.getEditText().getText().toString();
                 String passwordText=password.getEditText().getText().toString();
+                //check input
                 if(emailText.length()==0){
                     Toast.makeText(RegisterActivity.this, "Please input email", Toast.LENGTH_SHORT).show();
                 }else if(passwordText.length()==0){
@@ -87,6 +90,7 @@ public class RegisterActivity extends AppCompatActivity{
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
                                     if(task.isSuccessful()){
+                                        //if register successful, then add gender and vegan information to server
                                         addPersonalInfo();
                                     }
                                 }
@@ -106,6 +110,7 @@ public class RegisterActivity extends AppCompatActivity{
     }
 
     private void addPersonalInfo() {
+        //add gender and vegan information to server
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
         mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("Information");
@@ -115,7 +120,6 @@ public class RegisterActivity extends AppCompatActivity{
                 PersonalInfo personalInfo = new PersonalInfo(genderSelect.getText().toString(),veganSelect.getText().toString());
                 mRootRef.setValue(personalInfo);
                 Intent mainIntent= new Intent(RegisterActivity.this, MainActivity.class);
-                // mainIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(mainIntent);
                 finish();
             }
