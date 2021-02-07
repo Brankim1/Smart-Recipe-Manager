@@ -113,7 +113,8 @@ public class SearchResultActivity extends AppCompatActivity {
             if(vegan.equals("Vegan")) {
                 //for vegan
                 url = "https://api.spoonacular.com/recipes/random?number=5&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags=vegan";
-            }RequestQueue requestQueue = Volley.newRequestQueue(this);
+            }
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
 
@@ -158,7 +159,12 @@ public class SearchResultActivity extends AppCompatActivity {
                     );
             requestQueue.add(jsonObjectRequest);
         } else {
-            url = "https://api.spoonacular.com/recipes/search?number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&query=" + data+"&diet="+vegan;
+            url = "https://api.spoonacular.com/recipes/search?query=" + data+"&number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
+            if(vegan.equals("Vegan")) {
+                //for vegan
+                url = "https://api.spoonacular.com/recipes/search?query=" + data+"&number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&diet="+vegan;
+            }
+            Log.d("searchResult","url is"+url);
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -166,10 +172,10 @@ public class SearchResultActivity extends AppCompatActivity {
                         public void onResponse(JSONObject response) {
                             try {
                                 recipeArray = (JSONArray) response.get("results");
-                                Log.i("the res is:", String.valueOf(recipeArray));
                                 for (int i = 0; i < recipeArray.length(); i++) {
                                     JSONObject jsonObject1;
                                     jsonObject1 = recipeArray.getJSONObject(i);
+                                    Log.d("the res is:","recipe array is "+ String.valueOf(jsonObject1));
                                     Recipe recipe = new Recipe();
                                     recipe.setId(jsonObject1.optString("id"));
                                     recipe.setTitle(jsonObject1.optString("title"));

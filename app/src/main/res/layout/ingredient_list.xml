@@ -1,34 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:cardview="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/cardviewStyle"
+    android:id="@+id/cardviewIngredient"
     android:layout_width="match_parent"
-    android:layout_height="100dp"
-    android:layout_margin="5dp"
+    android:layout_height="130dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
-    cardview:cardCornerRadius="4dp">
+    android:foreground="?android:attr/selectableItemBackground">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <ImageView
-            android:id="@+id/style_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="fitXY" />
+            android:id="@+id/ingredient_image"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"/>
 
         <TextView
-            android:id="@+id/style_name"
+            android:id="@+id/ingredient_name"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="30dp"
             android:gravity="center"
             android:layout_centerInParent="true"
-            android:padding="10dp"
+            android:layout_below="@+id/ingredient_image"
             android:text=""
-            android:textColor="#ffffff"
-            android:textSize="25sp" />
+            android:textColor="#2d2d2d"
+            android:textSize="20sp" />
     </RelativeLayout>
 </androidx.cardview.widget.CardView>
