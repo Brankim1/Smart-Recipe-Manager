@@ -3,13 +3,14 @@ package com.example.smartrecipemanager.Adapter;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-
 import com.example.smartrecipemanager.fragement.AiFragment;
 import com.example.smartrecipemanager.fragement.IngredientsFragment;
 import com.example.smartrecipemanager.fragement.StyleFragment;
 
-import java.util.List;
 
+/*
+ * for swipe three fragment (StyleFragment and IngredientsFragment and AiFragment) in searchActivity.
+ * */
 public class SearchViewPagerAdapter extends FragmentPagerAdapter {
     private int list;
     public SearchViewPagerAdapter(FragmentManager fm, int list) {

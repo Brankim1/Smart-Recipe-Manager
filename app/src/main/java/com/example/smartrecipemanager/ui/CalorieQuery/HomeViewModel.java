@@ -1,4 +1,4 @@
-package com.example.smartrecipemanager.ui.home;
+package com.example.smartrecipemanager.ui.CalorieQuery;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;

@@ -7,61 +7,43 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.example.smartrecipemanager.R;
-import com.example.smartrecipemanager.Recipe;
-import com.example.smartrecipemanager.RecipeActivity;
-import com.example.smartrecipemanager.SearchActivity;
 import com.example.smartrecipemanager.SearchResultActivity;
 import com.squareup.picasso.Picasso;
 
-import java.util.List;
 
+/*
+ *  for Search activity StyleFragment recyclerview
+ *  it can register listener for Search activity Style fragment recyclerview
+ * */
 public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecyclerAdapter.ViewHolder> {
 
     private Context context;
-
-
-    static class ViewHolder extends RecyclerView.ViewHolder {
-        CardView cardview;
-        ImageView styleImage;
-        TextView styleName;
-        public ViewHolder(View view) {
-            super(view);
-            cardview=(CardView)view.findViewById(R.id.cardviewStyle);
-            styleImage = (ImageView) view.findViewById(R.id.style_image);
-            styleName = (TextView) view.findViewById(R.id.style_name);
-        }
-    }
-
 
     public StyleListRecyclerAdapter(Context context){
         this.context=context;
     }
 
     @Override
-
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
-
+        //binding style_list layout for recyclerview
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.style_list, parent, false);
         ViewHolder holder = new ViewHolder(view);
         return holder;
-
-
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
+        //register click listener for cardView, which contains style image and name
         if(position==0){
             Picasso.get().load(R.drawable.american).into(holder.styleImage);
             holder.styleName.setText("American");
             holder.cardview.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    //go to SearchResult Activity
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","American");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
@@ -184,11 +166,18 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
         return 10;
     }
 
-
-
     @Override
-    public int getItemViewType(int position) {
+    public int getItemViewType(int position) { return position; }
 
-        return position;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        CardView cardview;
+        ImageView styleImage;
+        TextView styleName;
+        public ViewHolder(View view) {
+            super(view);
+            cardview=(CardView)view.findViewById(R.id.cardviewStyle);
+            styleImage = (ImageView) view.findViewById(R.id.style_image);
+            styleName = (TextView) view.findViewById(R.id.style_name);
+        }
     }
 }

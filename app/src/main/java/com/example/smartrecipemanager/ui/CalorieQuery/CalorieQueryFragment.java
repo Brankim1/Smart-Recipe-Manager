@@ -1,4 +1,4 @@
-package com.example.smartrecipemanager.ui.home;
+package com.example.smartrecipemanager.ui.CalorieQuery;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,9 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.android.volley.Request;
@@ -32,7 +30,7 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 
-public class HomeFragment extends Fragment {
+public class CalorieQueryFragment extends Fragment {
 
     private HomeViewModel homeViewModel;
     private JSONObject NutrientsObject;
@@ -88,7 +86,8 @@ public class HomeFragment extends Fragment {
 
     }
     public void getNutrition(){
-        final DecimalFormat format = new DecimalFormat("0.00");//
+        //get nutrition information
+        final DecimalFormat format = new DecimalFormat("0.00");
         String url = "https://api.edamam.com/api/nutrition-data?app_id=6143c7de&app_key=0738a0a63dd93ea2e3e294c72def53c3&ingr=1%20"+ Uri.parse(text);
         RequestQueue requestQueue = Volley.newRequestQueue(getContext());
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

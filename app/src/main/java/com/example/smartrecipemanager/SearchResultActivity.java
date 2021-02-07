@@ -134,11 +134,7 @@ public class SearchResultActivity extends AppCompatActivity {
                                 }
                                 SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
                                 recyclerView.setAdapter(myAdapter);
-                                recyclerView.setItemAnimator(new DefaultItemAnimator());
-//                            progressBar.setVisibility(View.GONE);
-//                            RecyclerViewAdapter myAdapter = new RecyclerViewAdapter(getContext(), lstRecipe);
-//                            myrv.setAdapter(myAdapter);
-//                            myrv.setItemAnimator(new DefaultItemAnimator());
+
 
 
                             } catch (JSONException e) {

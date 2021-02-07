@@ -103,7 +103,6 @@ public class SharingActivity extends AppCompatActivity {
                     Log.d("sharingActivity","data get successful");
                     SharingPostListRecyclerAdapter myAdapter = new SharingPostListRecyclerAdapter(getApplicationContext(),PostList);
                     recyclerView.setAdapter(myAdapter);
-                    recyclerView.setItemAnimator(new DefaultItemAnimator());
                 }
 
             }

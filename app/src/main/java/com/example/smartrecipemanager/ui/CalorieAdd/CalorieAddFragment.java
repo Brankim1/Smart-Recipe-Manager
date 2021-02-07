@@ -1,22 +1,16 @@
-package com.example.smartrecipemanager.ui.dashboard;
+package com.example.smartrecipemanager.ui.CalorieAdd;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
-
 import com.example.smartrecipemanager.Calorie;
 import com.example.smartrecipemanager.R;
-import com.example.smartrecipemanager.Recipe;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -24,11 +18,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.sql.Time;
 import java.util.Calendar;
 
-public class DashboardFragment extends Fragment {
+public class CalorieAddFragment extends Fragment {
 
     private DashboardViewModel dashboardViewModel;
     private TextInputLayout editText;
@@ -41,6 +33,7 @@ public class DashboardFragment extends Fragment {
         dashboardViewModel =
                 ViewModelProviders.of(this).get(DashboardViewModel.class);
         View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        //register textView,button
         editText=(TextInputLayout)root.findViewById(R.id.CalorieData);
         query=(Button)root.findViewById(R.id.add);
         query.setOnClickListener(new View.OnClickListener() {
@@ -58,7 +51,7 @@ public class DashboardFragment extends Fragment {
     }
 
     private void addToDatabase() {
-//      get time
+        //get current time
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
         int month = calendar.get(Calendar.MONTH);
@@ -67,6 +60,7 @@ public class DashboardFragment extends Fragment {
         int minute = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
         final String time=year+","+month+","+day+"_"+hour+":"+minute+":"+second;
+        //upload information to server
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
         mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("calorie").child(time);
