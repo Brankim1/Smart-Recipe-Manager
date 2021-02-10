@@ -1,17 +1,18 @@
 package com.example.smartrecipemanager;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.DefaultItemAnimator;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -136,21 +137,26 @@ public class SearchResultActivity extends AppCompatActivity {
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
-                                recipeArray = (JSONArray) response.get("results");
-                                for (int i = 0; i < recipeArray.length(); i++) {
-                                    JSONObject jsonObject1;
-                                    jsonObject1 = recipeArray.getJSONObject(i);
-                                    Log.d("the res is:","recipe array is "+ String.valueOf(jsonObject1));
-                                    Recipe recipe = new Recipe();
-                                    recipe.setId(jsonObject1.optString("id"));
-                                    recipe.setTitle(jsonObject1.optString("title"));
-                                    recipe.setPic("https://spoonacular.com/recipeImages/" + jsonObject1.optString("image"));
-                                    RecipeList.add(recipe);
+                                if(String.valueOf(response.get("totalResults")).equals("0")){
+                                    dialog("Sorry","there is no result for your search, Please choose OK to back");
+                                }else{
+                                    recipeArray = (JSONArray) response.get("results");
+                                    for (int i = 0; i < recipeArray.length(); i++) {
+                                        JSONObject jsonObject1;
+                                        jsonObject1 = recipeArray.getJSONObject(i);
+                                        Log.d("the res is:","recipe array is "+ String.valueOf(jsonObject1));
+                                        Recipe recipe = new Recipe();
+                                        recipe.setId(jsonObject1.optString("id"));
+                                        recipe.setTitle(jsonObject1.optString("title"));
+                                        recipe.setPic("https://spoonacular.com/recipeImages/" + jsonObject1.optString("image"));
+                                        RecipeList.add(recipe);
+                                    }
+                                    SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
+                                    recyclerView.setAdapter(myAdapter);
                                 }
-                                SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
-                                recyclerView.setAdapter(myAdapter);
-                            } catch (JSONException e) {
+                            }catch (JSONException e) {
                                 e.printStackTrace();
+                                dialog("Sorry","Query recipes failed, Please choose OK to back");
                             }
                         }
                     },
@@ -158,6 +164,7 @@ public class SearchResultActivity extends AppCompatActivity {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
                                     Log.i("the res is error:", error.toString());
+                                    dialog("Sorry","Query recipes failed, Please choose OK to back");
                                 }
 
                             }
@@ -165,7 +172,26 @@ public class SearchResultActivity extends AppCompatActivity {
             requestQueue.add(jsonObjectRequest);
         }
     }
-
+    public void dialog(String title,String message){
+        //set Alert Dialog to hint
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.show();
+    }
     public void setToolBar() {
         //component initialize
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

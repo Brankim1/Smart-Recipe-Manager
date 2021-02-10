@@ -1,14 +1,6 @@
 package com.example.smartrecipemanager;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -18,6 +10,16 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -164,6 +166,7 @@ public class HomeActivity extends AppCompatActivity {
 
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            dialog("Sorry","Query recipes failed, Please choose OK to restart");
                         }
                     }
                 },
@@ -171,10 +174,34 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i("the res is error:", error.toString());
+                        dialog("Sorry","Query recipes failed, Please choose OK to restart");
                     }
                 }
         );
         requestQueue.add(jsonObjectRequest);
+    }
+
+    public void dialog(String title,String message){
+        //set Alert Dialog to hint
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = getIntent();
+                        finish();
+                        startActivity(intent);
+                        dialog.dismiss();
+                    }
+                }).create();
+        dialog.show();
     }
 
     public void setDrawerLayout(){
