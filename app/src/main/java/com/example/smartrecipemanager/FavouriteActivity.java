@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.smartrecipemanager.Adapter.SearchListRecyclerAdapter;
@@ -32,7 +32,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-/*
+/**
 * get user's favorite recipe and show
 * */
 public class FavouriteActivity extends AppCompatActivity {
@@ -43,15 +43,20 @@ public class FavouriteActivity extends AppCompatActivity {
     private DatabaseReference mRootRef;
     List<Recipe> RecipeList;
     RecyclerView recyclerView;
+    SearchListRecyclerAdapter myAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite);
 
+        RecipeList = new ArrayList<Recipe>();
         recyclerView = (RecyclerView) findViewById(R.id.favouriteRecyclerView);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(layoutManager);
+        myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
+        recyclerView.setAdapter(myAdapter);
 
         //register listener for swipeRefreshLayout, which can update favorite recipes
         swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.favouriteSwiperefreshlayout);
@@ -80,7 +85,6 @@ public class FavouriteActivity extends AppCompatActivity {
     }
 
     private void getFavouriteID() {
-        RecipeList=new ArrayList<Recipe>();
         //get favorite recipes id from server
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
@@ -96,8 +100,7 @@ public class FavouriteActivity extends AppCompatActivity {
                         Log.d("favor recipe","is: "+recipe.getId());
                         RecipeList.add(recipe);
                     }
-                    SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
-                    recyclerView.setAdapter(myAdapter);
+                    myAdapter.notifyDataSetChanged();
                 }else{
                     dialog("Sorry","Your Favourite Recipes is empty. You can choose OK to Home");
                 }

@@ -13,7 +13,10 @@ import com.example.smartrecipemanager.R;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ *  for Search activity AI Fragment recyclerview
+ *  it can register listener for Search activity AI fragment recyclerview
+ * */
 public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAdapter.ViewHolder> {
 
     private Context context;

@@ -1,18 +1,20 @@
 package com.example.smartrecipemanager;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.os.Handler;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-/*
+/**
 * main Activity
 * it can judge whether user were already login, if yes go to home Activity.if not, go to Login Activity
 * */
@@ -49,16 +51,29 @@ public class MainActivity extends AppCompatActivity {
                 finish();
             }
         }else {
-            Toast.makeText(MainActivity.this, "Internet Connect Fail", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
             //waiting 5s to finish
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    //todo
-                    finish();
-                }
-            }, 5000);
+            dialog("Sorry","Network connect fail, Please press OK to finish");
         }
 
+    }
+    public void dialog(String title,String message){
+        //set Alert Dialog to hint
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                }).create();
+        dialog.show();
     }
 }

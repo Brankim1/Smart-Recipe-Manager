@@ -1,8 +1,5 @@
 package com.example.smartrecipemanager;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +7,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import com.squareup.picasso.Picasso;
-/*
+/**
 * get information from SharingActivity, and show post details.
 * */
 public class PostDetailActivity extends AppCompatActivity {
@@ -39,7 +39,7 @@ public class PostDetailActivity extends AppCompatActivity {
 
         setToolBar();
         img = findViewById(R.id.post_img);
-        Picasso.get().load(pic).fit().into(img);
+        Picasso.get().load(pic).into(img);
         text=findViewById(R.id.post_text);
         text.setText(content);
     }

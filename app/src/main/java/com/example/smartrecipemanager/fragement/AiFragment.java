@@ -1,5 +1,7 @@
 package com.example.smartrecipemanager.fragement;
 
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -9,11 +11,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -65,7 +70,13 @@ public class AiFragment extends Fragment {
     private List<String> predictText;
     private List<Boolean> predictSelect;
     private List<String> SelectText;
+    private View inflate;
+    private TextView camera;
+    private TextView pic;
+    private TextView cancel;
+    private Dialog dialog;
     public static final int PICK_IMAGE = 1;
+    public static final int REQUEST_IMAGE_CAPTURE = 2;
     public AiFragment() {
         // Required empty public constructor
     }
@@ -122,46 +133,95 @@ public class AiFragment extends Fragment {
         searchAi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new Thread(networkTask).start();
+                if(imageView.getDrawable()==null){
+                    Toast.makeText(getContext(),"Please select Image or waiting for Image load",Toast.LENGTH_SHORT).show();
+                }else{
+                    new Thread(networkTask).start();
+                }
+
             }
         });
         searchRecipe = (Button) root.findViewById(R.id.searchAiRecipe);
         searchRecipe.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                SelectText=new ArrayList<String>();
-                //get selected ingredients
-                predictSelect= AiListRecyclerAdapter.predictSelect;
-                for(int i=0;i<predictSelect.size();i++){
-                    if(predictSelect.get(i)==true){
-                        SelectText.add(predictName.get(i));
+                if (predictName.size() == 0) {
+                    Toast.makeText(getContext(),"Please waiting for AI recognise",Toast.LENGTH_SHORT).show();
+                } else {
+                    SelectText = new ArrayList<String>();
+                    //get selected ingredients
+                    predictSelect = AiListRecyclerAdapter.predictSelect;
+                    for (int i = 0; i < predictSelect.size(); i++) {
+                        if (predictSelect.get(i) == true) {
+                            SelectText.add(predictName.get(i));
+                        }
                     }
+                    //reshape selected ingredients to string
+                    String queryData = "";
+                    for (int i = 0; i < SelectText.size(); i++) {
+                        if (i == 0) {
+                            queryData = SelectText.get(i).toString();
+                        } else {
+                            //reshape data that what ingredients were selected
+                            queryData = queryData + "," + SelectText.get(i).toString();
+                        }
+                    }
+                    Log.d("AIfragment", "querydata is " + queryData);
+                    //go to SearchResultActivity
+                    Intent searchResultIntent = new Intent(getActivity(), SearchResultActivity.class);
+                    searchResultIntent.putExtra("data", queryData);
+                    searchResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(searchResultIntent);
                 }
-                //reshape selected ingredients to string
-                String queryData="";
-                for (int i = 0; i < SelectText.size() ; i++) {
-                    if(i == 0){
-                        queryData = SelectText.get(i).toString();
-                    }else {
-                        //reshape data that what ingredients were selected
-                        queryData = queryData +"," + SelectText.get(i).toString();
-                    }
-            }
-                Log.d("AIfragment","querydata is "+queryData);
-                //go to SearchResultActivity
-                Intent searchResultIntent = new Intent(getActivity(), SearchResultActivity.class);
-                searchResultIntent.putExtra("data",queryData);
-                searchResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-                startActivity(searchResultIntent);
             }
         });
-
         return root;
     }
-    private void selectImage() {
-        //select image in device
+    public void selectImage(){
+        dialog = new Dialog(getContext(),R.style.DialogTheme);
+        inflate = LayoutInflater.from(getContext()).inflate(R.layout.choosephoto_dialog, null);
+        camera = (TextView) inflate.findViewById(R.id.takePhoto);
+        pic = (TextView) inflate.findViewById(R.id.choosePhoto);
+        cancel = (TextView) inflate.findViewById(R.id.cancel);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePic();
+            }
+        });
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickAlbum();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        //layout to dialog
+        dialog.setContentView(inflate);
+        //get activity window
+        Window dialogWindow = dialog.getWindow();
+        //dialog pop up from bottom
+        dialogWindow.setGravity( Gravity.BOTTOM);
+        //show dialog
+        dialog.show();
+    }
+
+    private void pickAlbum(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
+    }
+    private void takePic(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            // display error state to the user
+        }
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -170,8 +230,15 @@ public class AiFragment extends Fragment {
             imgPath = data.getData();
             //load image to imageView
             Picasso.get().load(imgPath).into(imageView);
+            dialog.dismiss();
+        }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+            dialog.dismiss();
         }else{
             Toast.makeText(getContext(),"Image Select Cancel",Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         }
     }
 

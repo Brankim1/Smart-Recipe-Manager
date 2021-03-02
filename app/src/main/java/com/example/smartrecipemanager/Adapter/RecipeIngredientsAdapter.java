@@ -13,7 +13,7 @@ import com.example.smartrecipemanager.R;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
-/*
+/**
 * for RecipeDetail Activity RecipeIngredientsFragment recyclerview
 * it can load recipe detail Ingredient name and image in recyclerview
 * */

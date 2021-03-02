@@ -14,7 +14,7 @@ import com.example.smartrecipemanager.SearchResultActivity;
 import com.squareup.picasso.Picasso;
 
 
-/*
+/**
  *  for Search activity StyleFragment recyclerview
  *  it can register listener for Search activity Style fragment recyclerview
  * */

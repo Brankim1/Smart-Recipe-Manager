@@ -17,8 +17,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.Request;
@@ -42,6 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /*
@@ -55,6 +56,8 @@ public class HomeActivity extends AppCompatActivity {
     String style;
     SwipeRefreshLayout swipeRefreshLayout;
     RecyclerView recyclerView;
+    SearchListRecyclerAdapter myAdapter;
+    int lastVisibleItem;
     String gender;
     String vegan;
     ImageView headerPortrait;
@@ -64,10 +67,39 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         style="breakfast";
 
+        RecipeList = new ArrayList<Recipe>();
         recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+ //     GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(layoutManager);
+        myAdapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
+        recyclerView.setAdapter(myAdapter);
 
+        //load more recipes
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState ==RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 ==myAdapter.getItemCount()) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(getApplicationContext(),"Loading...", Toast.LENGTH_SHORT).show();
+                            getRandomRecipes(false);
+                            myAdapter.notifyDataSetChanged();
+                        }
+                    },1000);
+                }
+            }
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView,dx, dy);
+                int[] visibleList =layoutManager.findLastVisibleItemPositions(null);
+                Arrays.sort(visibleList);
+                lastVisibleItem= (int) visibleList[visibleList.length-1];
+            }
+        });
         //register listener for swipeRefreshLayout, which can update random recipes
         swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swiperefreshlayout);
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -76,7 +108,7 @@ public class HomeActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        getRandomRecipes();
+                        getRandomRecipes(true);
                         swipeRefreshLayout.setRefreshing(false);
                         Toast.makeText(HomeActivity.this, "Update", Toast.LENGTH_SHORT).show();
                     }
@@ -85,7 +117,7 @@ public class HomeActivity extends AppCompatActivity {
         });
         setDrawerLayout();
         setTabLayout();
-        getRandomRecipes();
+        getRandomRecipes(true);
     }
 
     private void setTabLayout() {
@@ -99,15 +131,15 @@ public class HomeActivity extends AppCompatActivity {
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getText().equals("Breakfast")){
                     style="breakfast";
-                    getRandomRecipes();
+                    getRandomRecipes(true);
                 }
                 if(tab.getText().equals("Lunch")){
                     style="lunch";
-                    getRandomRecipes();
+                    getRandomRecipes(true);
                 }
                 if(tab.getText().equals("Dinner")){
                     style="dinner";
-                    getRandomRecipes();
+                    getRandomRecipes(true);
                 }
             }
 
@@ -120,32 +152,34 @@ public class HomeActivity extends AppCompatActivity {
                 //update random recipes
                 if(tab.getText().equals("Breakfast")){
                     style="breakfast";
-                    getRandomRecipes();
+                    getRandomRecipes(true);
                 }
                 if(tab.getText().equals("Lunch")){
                     style="lunch";
-                    getRandomRecipes();
+                    getRandomRecipes(true);
                 }
                 if(tab.getText().equals("Dinner")){
                     style="dinner";
-                    getRandomRecipes();
+                    getRandomRecipes(true);
                 }
             }
         });
     }
 
-    private void getRandomRecipes() {
+    private void getRandomRecipes(boolean clear) {
         //get random recipes from spoonacular API
-        RecipeList = new ArrayList<Recipe>();
-        String url = "https://api.spoonacular.com/recipes/random?number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style;
+        if(clear==true){
+            RecipeList.clear();
+        }
+
+        String url = "https://api.spoonacular.com/recipes/random?number=20&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style;
         if(vegan.equals("Vegan")) {
            //for vegan
-            url = "https://api.spoonacular.com/recipes/random?number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style+",vegan";
+            url = "https://api.spoonacular.com/recipes/random?number=20&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style+",vegan";
         }
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
@@ -161,9 +195,7 @@ public class HomeActivity extends AppCompatActivity {
                                 RecipeList.add(recipe);
                             }
                             //send recipe data to adapter for show
-                            SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
-                            recyclerView.setAdapter(myAdapter);
-
+                            myAdapter.notifyDataSetChanged();
                         } catch (JSONException e) {
                             e.printStackTrace();
                             dialog("Sorry","Query recipes failed, Please choose OK to restart");
@@ -174,7 +206,7 @@ public class HomeActivity extends AppCompatActivity {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Log.i("the res is error:", error.toString());
-                        dialog("Sorry","Query recipes failed, Please choose OK to restart");
+                        dialog("Sorry","Query recipes error, Please choose OK to restart");
                     }
                 }
         );

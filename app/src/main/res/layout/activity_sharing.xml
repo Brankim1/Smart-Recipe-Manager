@@ -22,7 +22,8 @@
                 android:layout_height="?attr/actionBarSize"
                 app:theme="@style/Theme"
                 android:background="#FFFFFF"
-                app:layout_scrollFlags="scroll|enterAlways"/>
+                app:layout_scrollFlags="scroll|enterAlways"
+                app:popupTheme="@style/OverflowMenu"/>
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -49,9 +50,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|bottom"
             android:src="@drawable/add_icon"
-            app:elevation="0dp"
+            app:elevation="6dp"
             android:backgroundTint="@color/colorPrimary"
-            android:layout_margin="16dp" />
+            android:layout_margin="16dp"
+            app:borderWidth="0dp"/>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
     <com.google.android.material.navigation.NavigationView

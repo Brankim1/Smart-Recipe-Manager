@@ -1,9 +1,11 @@
 package com.example.smartrecipemanager;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -11,12 +13,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.smartrecipemanager.Adapter.SharingPostListRecyclerAdapter;
@@ -32,7 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
 * SharingActivity, get post from server and show
 * */
 public class SharingActivity extends AppCompatActivity {
@@ -41,6 +44,7 @@ public class SharingActivity extends AppCompatActivity {
     private DatabaseReference mRootRef;
     List<Post> PostList;
     RecyclerView recyclerView;
+    SharingPostListRecyclerAdapter myAdapter;
     SwipeRefreshLayout swipeRefreshLayout;
     String gender;
     ImageView headerPortrait;
@@ -49,9 +53,13 @@ public class SharingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sharing);
 
+        PostList = new ArrayList<Post>();
         recyclerView = (RecyclerView) findViewById(R.id.sharingRecyclerView);
-        GridLayoutManager layoutManager = new GridLayoutManager(this,2);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(layoutManager);
+        myAdapter = new SharingPostListRecyclerAdapter(getApplicationContext(), PostList);
+        recyclerView.setAdapter(myAdapter);
 
         //register listener for swipeRefreshLayout, which can update post
         swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.sharingSwiperefreshlayout);
@@ -79,8 +87,8 @@ public class SharingActivity extends AppCompatActivity {
         setPostList();
     }
     private void setPostList() {
+        PostList.clear();
         //get post from server
-        PostList=new ArrayList<Post>();
         mAuth = FirebaseAuth.getInstance();
         mRootRef = FirebaseDatabase.getInstance().getReference().child("sharing");
         mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -93,10 +101,8 @@ public class SharingActivity extends AppCompatActivity {
                         Post post=child.getValue(Post.class);
                         PostList.add(post);
                     }
-                    Log.d("sharingActivity","data get successful");
-                    SharingPostListRecyclerAdapter myAdapter = new SharingPostListRecyclerAdapter(getApplicationContext(),PostList);
-                    recyclerView.setAdapter(myAdapter);
                 }
+                myAdapter.notifyDataSetChanged();
             }
 
             @Override
@@ -220,5 +226,51 @@ public class SharingActivity extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError databaseError) {
             }
         });
+    }
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_sharing, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.delete) {
+            showListDialog();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+    private void showListDialog(){
+        List PostName=new ArrayList<String>();
+        List PostId=new ArrayList<String>();
+        for(int i=0;i<PostList.size();i++){
+            String uid= PostList.get(i).getUserid();
+            if(uid.equals(mAuth.getUid())){
+                PostName.add(PostList.get(i).getTitle());
+                PostId.add(PostList.get(i).getPostid());
+            }
+        }
+        String[] item = new String[PostName.size()];
+        String[] id = new String[PostId.size()];
+        for(int i = 0; i < PostName.size();i++){
+            item[i] = String.valueOf(PostName.get(i));
+            id[i] = String.valueOf(PostId.get(i));
+        }
+
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(SharingActivity.this);
+        listDialog.setIcon(R.drawable.delete_icon);
+        listDialog.setTitle("Please click data to delete");
+        listDialog.setItems(item, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                DatabaseReference  mRootRef2 = FirebaseDatabase.getInstance().getReference().child("sharing").child(id[which]);
+                mRootRef2.removeValue();
+                Toast.makeText(SharingActivity.this,"Remove successful "+item[which],Toast.LENGTH_LONG).show();
+                setPostList();
+            }
+        });
+        listDialog.show();
     }
 }

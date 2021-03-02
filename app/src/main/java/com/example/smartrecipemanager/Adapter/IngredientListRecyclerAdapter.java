@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import static java.util.Arrays.asList;
 
-/*
+/**
 *  for Search activity ingredientsFragment recyclerview
 *  it can register listener for Search activity ingredient fragment recyclerview
 * */

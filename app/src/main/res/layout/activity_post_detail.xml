@@ -30,8 +30,8 @@
                 android:id="@+id/post_img"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:contentDescription="@+id/post_img"
-                app:srcCompat="@color/common_google_signin_btn_text_light_pressed" />
+                android:adjustViewBounds="true"
+                android:contentDescription="@+id/post_img" />
             <TextView
                 android:layout_marginLeft="5dp"
                 android:layout_marginRight="5dp"

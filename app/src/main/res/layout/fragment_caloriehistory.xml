@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.CalorieHistory.CalorieHistoryFragment">
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar1"
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/actionBarSize"
+        android:fitsSystemWindows="true">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:theme="@style/Theme"
+            android:background="#FFFFFF"
+            app:layout_scrollFlags="scroll|enterAlways"/>
+    </com.google.android.material.appbar.AppBarLayout>
+    <TextView
+        android:id="@+id/TodayCalorieText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:text="Today Calorie Intake"
+        android:textSize="30dp"
+        android:textColor="	#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/toolbar1"/>
+    <TextView
+        android:id="@+id/TodayCalorie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:text="0"
+        android:textSize="20dp"
+        android:textColor="	#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/TodayCalorieText"/>
+    <TextView
+        android:id="@+id/TodayCalorieNextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:text="kcal/Recommend 2500 kcal"
+        android:textSize="20dp"
+        android:textColor="	#2d2d2d"
+        android:layout_below="@+id/TodayCalorieText"
+        android:layout_toRightOf="@+id/TodayCalorie" />
+
+    <TextView
+        android:id="@+id/WeekCalorieText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="30dp"
+        android:text="Weekly Calorie Intake"
+        android:textSize="30dp"
+        android:textColor="	#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/TodayCalorieNextText"/>
+    <TextView
+        android:id="@+id/WeekCalorie"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:text="0"
+        android:textSize="20dp"
+        android:textColor="	#000000"
+        android:textStyle="bold"
+        android:layout_below="@+id/WeekCalorieText"/>
+    <TextView
+        android:id="@+id/WeekCalorieNextText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:text="kcal/Recommend 17500 kcal"
+        android:textSize="20dp"
+        android:textColor="	#2d2d2d"
+
+        android:layout_below="@+id/WeekCalorieText"
+        android:layout_toRightOf="@+id/WeekCalorie" />
+
+    <lecho.lib.hellocharts.view.LineChartView
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:layout_below="@+id/WeekCalorieNextText"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"/>
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/delete_icon"
+        app:elevation="6dp"
+        android:backgroundTint="@color/colorPrimary"
+        android:layout_marginBottom="80dp"
+        android:layout_marginRight="20dp"
+        app:borderWidth="0dp"/>
+</RelativeLayout>

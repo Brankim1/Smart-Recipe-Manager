@@ -3,6 +3,7 @@ package com.example.smartrecipemanager.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,7 +25,6 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
 
     private Context context;
     private List<Recipe> mRecipeList;
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardview;
         ImageView recipeImage;
@@ -60,6 +60,8 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
             //load food image for layout
             Picasso.get().load(mRecipeList.get(position).getPic()).into(holder.recipeImage);
         }
+
+        Log.d("searchlist","load image successful");
         //load food title for layout
         holder.recipeName.setText(recipe.getTitle());
         //register click listener for cardView, which contains food image and title

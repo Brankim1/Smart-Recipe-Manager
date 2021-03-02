@@ -1,5 +1,5 @@
 package com.example.smartrecipemanager;
-/*
+/**
 * constructor for store users' calorie information to server
 * */
 public class Calorie {

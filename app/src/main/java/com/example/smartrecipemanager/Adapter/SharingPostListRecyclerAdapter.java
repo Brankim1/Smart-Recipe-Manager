@@ -16,7 +16,7 @@ import com.example.smartrecipemanager.R;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
-/*
+/**
  *  for Sharing activity  recyclerview
  *  it can show sharing posts image and name in recyclerview
  * */

@@ -1,10 +1,7 @@
 package com.example.smartrecipemanager;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
-import android.content.Context;
+import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -12,10 +9,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -35,13 +40,22 @@ import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-/*
+/**
 * SharingAddActivity, upload user's post
 * */
 public class SharingAddActivity extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
+    public static final int REQUEST_IMAGE_CAPTURE = 2;
     Uri selectedImageURI;
+    private View inflate;
+    private TextView camera;
+    private TextView pic;
+    private TextView cancel;
+    private Dialog dialog;
     private FirebaseAuth mAuth;
     private TextInputLayout title;
     private TextInputLayout content;
@@ -76,12 +90,14 @@ public class SharingAddActivity extends AppCompatActivity {
                 titleText = title.getEditText().getText().toString();
                 contentText = content.getEditText().getText().toString();
                 if (titleText.length() == 0) {
-                    Toast.makeText(SharingAddActivity.this, "Please input email", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SharingAddActivity.this, "Please input title", Toast.LENGTH_SHORT).show();
                 } else if (contentText.length() == 0) {
-                    Toast.makeText(SharingAddActivity.this, "Please input password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(SharingAddActivity.this, "Please input content", Toast.LENGTH_SHORT).show();
+                } else if(imageView.getDrawable()==null){
+                    Toast.makeText(SharingAddActivity.this,"Please select Image or waiting for Image load",Toast.LENGTH_SHORT).show();
                 }
                 mRootRef2 = mRootRef1 = FirebaseDatabase.getInstance().getReference().child("sharing").child(String.valueOf(postid));
-                if (titleText.length() != 0 && contentText.length() != 0) {
+                if (titleText.length() != 0 && contentText.length() != 0&&imageView.getDrawable()!=null) {
                     uploadImage();
                 }
             }
@@ -92,18 +108,16 @@ public class SharingAddActivity extends AppCompatActivity {
         uploadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage(getApplicationContext());
+                selectImage();
             }
         });
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                selectImage(getApplicationContext());
+                selectImage();
             }
         });
     }
-
-
 
     private void uploadImage() {
 
@@ -180,6 +194,7 @@ public class SharingAddActivity extends AppCompatActivity {
     }
 
     private void getInformation() {
+        List id=new ArrayList<Long>();
         //get post id
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
@@ -188,20 +203,70 @@ public class SharingAddActivity extends AppCompatActivity {
         mRootRef1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                postid = dataSnapshot.getChildrenCount()+1;
-                Log.d("post id "," is"+postid);
-            }
+                if (dataSnapshot.getValue() != null) {
+                    //get post ids
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        Post post=child.getValue(Post.class);
+                        id.add(post.getPostid());
 
+                    }
+                    postid= (long) Collections.max(id)+1;
+                }else{
+                    postid=1;
+                }
+            }
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.d("post id "," is cancelled");
             }
         });
     }
-    private void selectImage(Context context) {
-        //select image in device
+
+    public void selectImage(){
+        dialog = new Dialog(this,R.style.DialogTheme);
+        inflate = LayoutInflater.from(this).inflate(R.layout.choosephoto_dialog, null);
+        camera = (TextView) inflate.findViewById(R.id.takePhoto);
+        pic = (TextView) inflate.findViewById(R.id.choosePhoto);
+        cancel = (TextView) inflate.findViewById(R.id.cancel);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                takePic();
+            }
+        });
+        pic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pickAlbum();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        //layout to dialog
+        dialog.setContentView(inflate);
+        //get activity window
+        Window dialogWindow = dialog.getWindow();
+        //dialog pop up from bottom
+        dialogWindow.setGravity( Gravity.BOTTOM);
+        //show dialog
+        dialog.show();
+    }
+
+    private void pickAlbum(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
+    }
+    private void takePic(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        } catch (ActivityNotFoundException e) {
+            // display error state to the user
+        }
     }
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -209,8 +274,15 @@ public class SharingAddActivity extends AppCompatActivity {
         if (requestCode == PICK_IMAGE&&resultCode==RESULT_OK) {
             selectedImageURI = data.getData();
             Picasso.get().load(selectedImageURI).into(imageView);
+            dialog.dismiss();
+        }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            imageView.setImageBitmap(imageBitmap);
+            dialog.dismiss();
         }else{
             Toast.makeText(getApplicationContext(),"Image Select Cancel",Toast.LENGTH_SHORT).show();
+            dialog.dismiss();
         }
     }
 

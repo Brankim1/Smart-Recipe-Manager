@@ -22,7 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
-/*
+/**
 * Login Activity
 * */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {

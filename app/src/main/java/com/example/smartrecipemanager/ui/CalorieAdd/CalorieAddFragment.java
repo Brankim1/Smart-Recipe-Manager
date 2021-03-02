@@ -32,7 +32,7 @@ public class CalorieAddFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         dashboardViewModel =
                 ViewModelProviders.of(this).get(DashboardViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_dashboard, container, false);
+        View root = inflater.inflate(R.layout.fragment_calorieadd, container, false);
         //register textView,button
         editText=(TextInputLayout)root.findViewById(R.id.CalorieData);
         query=(Button)root.findViewById(R.id.add);
@@ -54,7 +54,7 @@ public class CalorieAddFragment extends Fragment {
         //get current time
         Calendar calendar = Calendar.getInstance();
         int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
+        int month = calendar.get(Calendar.MONTH)+1;
         int day = calendar.get(Calendar.DAY_OF_MONTH);
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute = calendar.get(Calendar.MINUTE);

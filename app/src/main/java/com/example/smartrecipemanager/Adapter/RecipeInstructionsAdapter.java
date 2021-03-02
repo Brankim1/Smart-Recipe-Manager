@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartrecipemanager.R;
 import java.util.List;
 
-/*
+/**
  * for show recipe detail Instructions and order image in RecipeInstructionsFragment recyclerview
  * it can load image and text in recyclerview
  * */

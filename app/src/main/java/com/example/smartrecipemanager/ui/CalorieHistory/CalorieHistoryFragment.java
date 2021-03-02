@@ -1,5 +1,6 @@
 package com.example.smartrecipemanager.ui.CalorieHistory;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,12 +11,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.smartrecipemanager.Calorie;
 import com.example.smartrecipemanager.R;
-
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,18 +50,21 @@ public class CalorieHistoryFragment extends Fragment {
     private TextView todayCal,weekCal;
     private LineChartView lineChart;
     private FirebaseAuth mAuth;
+    private String uid;
     private DatabaseReference mRootRef;
     private List<Calorie> CalorieList;
-    private List<PointValue> mPointValues = new ArrayList<PointValue>();
-    private List<AxisValue> mAxisValues = new ArrayList<AxisValue>();
+    private List<PointValue> mPointValues;
+    private List<AxisValue> mAxisValues;
+    private FloatingActionButton fab1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         notificationsViewModel =
                 ViewModelProviders.of(this).get(NotificationsViewModel.class);
-        View root = inflater.inflate(R.layout.fragment_notifications, container, false);
+        View root = inflater.inflate(R.layout.fragment_caloriehistory, container, false);
         initView(root);
         getData();
+        setFloatingActionButton();
         return root;
     }
 
@@ -68,17 +73,19 @@ public class CalorieHistoryFragment extends Fragment {
         weekCal=(TextView)root.findViewById(R.id.WeekCalorie);
         //for draw line chart
         lineChart = (LineChartView)root.findViewById(R.id.chart);
+        fab1 = (FloatingActionButton) root.findViewById(R.id.fab);
     }
     private void getData() {
         CalorieList=new ArrayList<Calorie>();
         //get calorie information from server
         mAuth = FirebaseAuth.getInstance();
-        final String uid = mAuth.getCurrentUser().getUid();
+        uid = mAuth.getCurrentUser().getUid();
         mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("calorie");
         mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
+
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Calorie calorie=child.getValue(Calorie.class);
                         Log.d("NotifitionFragment","calorie data is "+calorie.getTime()+","+calorie.getCalorieData());
@@ -111,9 +118,9 @@ public class CalorieHistoryFragment extends Fragment {
         cal.setTime(new Date());
         for(int i=0;i<7;i++){
             int year = cal.get(Calendar.YEAR);
-            int month = cal.get(Calendar.MONTH);
+            int month = cal.get(Calendar.MONTH)+1;
             int day = cal.get(Calendar.DAY_OF_MONTH);
-            TimeList.add(day+"/"+(month+1));
+            TimeList.add(day+"/"+(month));
             String data=year+","+month+","+day;
             for(int k = 0; k < CalorieList.size(); k++){
                 String[] array2 = CalorieList.get(k).getTime().split("_");
@@ -139,11 +146,13 @@ public class CalorieHistoryFragment extends Fragment {
         initLineChart();
         }
     private void getAxisLables(){
+        mAxisValues = new ArrayList<AxisValue>();
         for (int i = 0; i < 7; i++) {
             mAxisValues.add(new AxisValue(i).setLabel(TimeList.get(i)));
         }
     }
     private void getAxisPoints(){
+        mPointValues = new ArrayList<PointValue>();
         for (int i = 0; i < 7; i++) {
             mPointValues.add(new PointValue(i, calorieDateList.get(i)));
         }
@@ -183,5 +192,39 @@ public class CalorieHistoryFragment extends Fragment {
         lineChart.setContainerScrollEnabled(true, ContainerScrollType.HORIZONTAL);
         lineChart.setLineChartData(data);
         lineChart.setVisibility(View.VISIBLE);
+    }
+
+    private void setFloatingActionButton() {
+        //for add post
+        fab1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showListDialog();
+            }
+        });
+    }
+
+    private void showListDialog(){
+        String[] items=new String[CalorieList.size()];
+        String[] time=new String[CalorieList.size()];
+        for(int k = 0; k < CalorieList.size(); k++) {
+            String array1 = CalorieList.get(k).getTime();
+            String array2 = CalorieList.get(k).getCalorieData();
+            items[k]=array1+"    "+array2+"kcal";
+            time[k]=array1;
+        }
+        AlertDialog.Builder listDialog = new AlertDialog.Builder(getActivity());
+        listDialog.setIcon(R.drawable.delete_icon);
+        listDialog.setTitle("Please click data to delete");
+        listDialog.setItems(items, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                DatabaseReference  mRootRef2 = FirebaseDatabase.getInstance().getReference().child(uid).child("calorie").child(time[which]);
+                mRootRef2.removeValue();
+                getData();
+                Toast.makeText(getActivity(),"Remove successful "+items[which],Toast.LENGTH_LONG).show();
+            }
+        });
+        listDialog.show();
     }
 }

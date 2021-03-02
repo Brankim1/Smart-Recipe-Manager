@@ -10,9 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -36,10 +35,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchResultActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
     String data;
     JSONArray recipeArray;
     List<Recipe> RecipeList;
+    RecyclerView recyclerView;
+    SearchListRecyclerAdapter myAdapter;
     String vegan;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +48,13 @@ public class SearchResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         /*get data form intent*/
         data = intent.getStringExtra("data");
+        RecipeList = new ArrayList<Recipe>();
+        recyclerView = (RecyclerView) findViewById(R.id.searchResultRecyclerView);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+        recyclerView.setLayoutManager(layoutManager);
+        myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
+        recyclerView.setAdapter(myAdapter);
         setToolBar();
         getVegan();
     }
@@ -76,11 +83,7 @@ public class SearchResultActivity extends AppCompatActivity {
 
 
     private void getRecipes() {
-        final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.searchResultRecyclerView);
-        GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(layoutManager);
 
-        RecipeList = new ArrayList<Recipe>();
         String url;
         if (data.isEmpty()) {
             //for empty search, get random recipes
@@ -107,8 +110,7 @@ public class SearchResultActivity extends AppCompatActivity {
                                     recipe.setPic(jsonObject1.optString("image"));
                                     RecipeList.add(recipe);
                                 }
-                                SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
-                                recyclerView.setAdapter(myAdapter);
+                                myAdapter.notifyDataSetChanged();
                             } catch (JSONException e) {
                                 e.printStackTrace();
                             }
