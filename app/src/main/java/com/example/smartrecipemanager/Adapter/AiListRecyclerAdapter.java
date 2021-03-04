@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 /**
  *  for Search activity AI Fragment recyclerview
- *  it can register listener for Search activity AI fragment recyclerview
+ *  it can register listener for Search activity AI fragment recyclerview to show predicted concepts
  * */
 public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAdapter.ViewHolder> {
 
@@ -23,10 +23,23 @@ public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAd
     private List<String> predictName;
     private List<String> predictText;
     public static List<Boolean> predictSelect;
+
     public AiListRecyclerAdapter(Context context, List<String> predictName, List<String>predictText){
         this.context=context;
         this.predictName=predictName;
         this.predictText=predictText;
+        predictSelect=new ArrayList<Boolean>();
+        for(int i = 0;i<predictName.size();i++){
+            predictSelect.add(false);
+        }
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView IngredientName;
+        public ViewHolder(View view) {
+            super(view);
+            IngredientName = (TextView) view.findViewById(R.id.ai_ingredient_name);
+        }
     }
 
     @Override
@@ -34,10 +47,6 @@ public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAd
         //binding style_list layout for recyclerview
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.ai_list, parent, false);
         ViewHolder holder = new ViewHolder(view);
-        predictSelect=new ArrayList<Boolean>();
-        for(int i = 0;i<predictName.size();i++){
-            predictSelect.add(false);
-        }
         return holder;
     }
 
@@ -45,6 +54,7 @@ public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAd
     public void onBindViewHolder(ViewHolder holder, final int position) {
         //register click listener for cardView, which contains ingredients name
         holder.IngredientName.setText(predictText.get(position));
+        //set color, if it was selected, turn gray
         if(predictSelect.get(position)==false){
             holder.itemView.setBackgroundColor(Color.WHITE);
         }else{
@@ -72,11 +82,4 @@ public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAd
     @Override
     public int getItemViewType(int position) { return position; }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView IngredientName;
-        public ViewHolder(View view) {
-            super(view);
-            IngredientName = (TextView) view.findViewById(R.id.ai_ingredient_name);
-        }
-    }
 }

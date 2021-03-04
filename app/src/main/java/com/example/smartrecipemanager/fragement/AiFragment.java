@@ -220,7 +220,7 @@ public class AiFragment extends Fragment {
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         } catch (ActivityNotFoundException e) {
-            // display error state to the user
+            Toast.makeText(getContext(),"Open Camera fail, Please use Gallery",Toast.LENGTH_LONG).show();
         }
     }
     @Override

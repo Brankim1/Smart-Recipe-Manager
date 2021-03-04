@@ -276,7 +276,7 @@ public class SharingAddActivity extends AppCompatActivity {
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
         } catch (ActivityNotFoundException e) {
-            // display error state to the user
+            Toast.makeText(getApplicationContext(),"Open Camera fail, Please use Gallery",Toast.LENGTH_LONG).show();
         }
     }
     @Override

@@ -22,7 +22,7 @@ import java.util.Calendar;
 
 public class CalorieAddFragment extends Fragment {
 
-    private DashboardViewModel dashboardViewModel;
+    private CalorieAddViewModel CalorieAddViewModel;
     private TextInputLayout editText;
     private Button query;
     private String text;
@@ -30,8 +30,8 @@ public class CalorieAddFragment extends Fragment {
     private DatabaseReference mRootRef;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel =
-                ViewModelProviders.of(this).get(DashboardViewModel.class);
+        CalorieAddViewModel =
+                ViewModelProviders.of(this).get(CalorieAddViewModel.class);
         View root = inflater.inflate(R.layout.fragment_calorieadd, container, false);
         //register textView,button
         editText=(TextInputLayout)root.findViewById(R.id.CalorieData);

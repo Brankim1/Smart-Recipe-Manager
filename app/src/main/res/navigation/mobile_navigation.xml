@@ -9,17 +9,17 @@
         android:id="@+id/navigation_home"
         android:name="com.example.smartrecipemanager.ui.CalorieQuery.CalorieQueryFragment"
         android:label="Query"
-        tools:layout="@layout/fragment_calorieAdd" />
+        tools:layout="@layout/fragment_caloriequery" />
 
     <fragment
         android:id="@+id/navigation_dashboard"
         android:name="com.example.smartrecipemanager.ui.CalorieAdd.CalorieAddFragment"
         android:label="Record"
-        tools:layout="@layout/fragment_calorieAdd" />
+        tools:layout="@layout/fragment_calorieadd" />
 
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.example.smartrecipemanager.ui.CalorieHistory.CalorieHistoryFragment"
         android:label="History"
-        tools:layout="@layout/fragment_calorieHistory" />
+        tools:layout="@layout/fragment_caloriehistory" />
 </navigation>

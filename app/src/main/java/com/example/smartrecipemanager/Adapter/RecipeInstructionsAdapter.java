@@ -69,7 +69,7 @@ public class RecipeInstructionsAdapter extends RecyclerView.Adapter<RecipeInstru
         }else if(position==8){
             holder.ingredient_pic.setImageResource(R.drawable.number9);
         }else{
-            holder.ingredient_pic.setImageResource(R.drawable.number0);
+            holder.ingredient_pic.setImageResource(R.drawable.omit);
         }
 
     }

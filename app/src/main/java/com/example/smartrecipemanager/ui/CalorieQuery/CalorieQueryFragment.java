@@ -32,7 +32,7 @@ import java.util.Iterator;
 
 public class CalorieQueryFragment extends Fragment {
 
-    private HomeViewModel homeViewModel;
+    private CalorieQueryViewModel CalorieQueryViewModel;
     private JSONObject NutrientsObject;
     private String text;
     private String weight,calorie,totalFat,saturatedFat,polyFat, monFat,cholesterol,
@@ -44,8 +44,8 @@ public class CalorieQueryFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel =
-                ViewModelProviders.of(this).get(HomeViewModel.class);
+        CalorieQueryViewModel =
+                ViewModelProviders.of(this).get(CalorieQueryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_caloriequery, container, false);
         initView(root);
         return root;

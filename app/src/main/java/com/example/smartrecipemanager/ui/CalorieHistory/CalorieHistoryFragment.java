@@ -44,7 +44,7 @@ import lecho.lib.hellocharts.view.LineChartView;
 
 public class CalorieHistoryFragment extends Fragment {
 
-    private NotificationsViewModel notificationsViewModel;
+    private CalorieHistoryViewModel CalorieHistoryViewModel;
     private List<Integer> calorieDateList;
     private List<String> TimeList;
     private TextView todayCal,weekCal;
@@ -59,8 +59,8 @@ public class CalorieHistoryFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        notificationsViewModel =
-                ViewModelProviders.of(this).get(NotificationsViewModel.class);
+        CalorieHistoryViewModel =
+                ViewModelProviders.of(this).get(CalorieHistoryViewModel.class);
         View root = inflater.inflate(R.layout.fragment_caloriehistory, container, false);
         initView(root);
         getData();
