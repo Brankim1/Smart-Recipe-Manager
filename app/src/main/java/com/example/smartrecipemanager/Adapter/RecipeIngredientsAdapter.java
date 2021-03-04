@@ -13,13 +13,19 @@ import com.example.smartrecipemanager.R;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
-/**
-* for RecipeDetail Activity RecipeIngredientsFragment recyclerview
+/**RecipeIngredientsAdapter
+* for RecipeActivity RecipeIngredientsFragment recyclerview
 * it can load recipe detail Ingredient name and image in recyclerview
 * */
 public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredientsAdapter.MyViewHolder> {
+
     private Context context;
     private List<Ingredient> mData;
+
+    public RecipeIngredientsAdapter(Context context, List<Ingredient> mData) {
+        this.context=context;
+        this.mData = mData;
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -31,11 +37,6 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
             ingredient_name = itemView.findViewById(R.id.recipe_ingredient_name);
             ingredient_pic = itemView.findViewById(R.id.recipe_ingredient_img);
         }
-    }
-
-    public RecipeIngredientsAdapter(Context context, List<Ingredient> mData) {
-        this.context=context;
-        this.mData = mData;
     }
 
     @NonNull
@@ -60,6 +61,5 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
     public int getItemCount() {
         return mData.size();
     }
-
 
 }

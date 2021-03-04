@@ -14,13 +14,25 @@ import com.example.smartrecipemanager.SearchResultActivity;
 import com.squareup.picasso.Picasso;
 
 
-/**
+/**StyleListRecyclerAdapter
  *  for Search activity StyleFragment recyclerview
  *  it can register listener for Search activity Style fragment recyclerview
  * */
 public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecyclerAdapter.ViewHolder> {
 
     private Context context;
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        CardView cardview;
+        ImageView styleImage;
+        TextView styleName;
+        public ViewHolder(View view) {
+            super(view);
+            cardview=(CardView)view.findViewById(R.id.cardviewStyle);
+            styleImage = (ImageView) view.findViewById(R.id.style_image);
+            styleName = (TextView) view.findViewById(R.id.style_name);
+        }
+    }
 
     public StyleListRecyclerAdapter(Context context){
         this.context=context;
@@ -169,15 +181,4 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
     @Override
     public int getItemViewType(int position) { return position; }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        CardView cardview;
-        ImageView styleImage;
-        TextView styleName;
-        public ViewHolder(View view) {
-            super(view);
-            cardview=(CardView)view.findViewById(R.id.cardviewStyle);
-            styleImage = (ImageView) view.findViewById(R.id.style_image);
-            styleName = (TextView) view.findViewById(R.id.style_name);
-        }
-    }
 }

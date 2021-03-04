@@ -19,7 +19,7 @@ import java.util.List;
 
 import static java.util.Arrays.asList;
 
-/**
+/** IngredientListRecyclerAdapter
 *  for Search activity ingredientsFragment recyclerview
 *  it can register listener for Search activity ingredient fragment recyclerview
 * */
@@ -27,9 +27,9 @@ public class IngredientListRecyclerAdapter extends RecyclerView.Adapter<Ingredie
 
     private Context context;
     public static List<String> ingredientsList;
-    public List<Boolean> Status;
-    public List<String> Name;
-    public List<Integer> Id;
+    private List<Boolean> Status;
+    private List<String> Name;
+    private List<Integer> Id;
 
     public IngredientListRecyclerAdapter(Context context){
         this.context=context;

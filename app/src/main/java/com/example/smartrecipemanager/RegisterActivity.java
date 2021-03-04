@@ -2,7 +2,6 @@ package com.example.smartrecipemanager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -26,18 +25,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-/**
-* RegisterActivity, user can register through email
+/**RegisterActivity
+* RegisterActivity, user can register through email(use firebase)
 * */
 public class RegisterActivity extends AppCompatActivity{
     private FirebaseAuth mAuth;
     private DatabaseReference mRootRef;
     private TextInputLayout email;
     private TextInputLayout password;
-    RadioGroup genderGroup;
-    RadioButton  genderSelect;
-    RadioGroup veganGroup;
-    RadioButton  veganSelect;
+    private RadioGroup genderGroup;
+    private RadioButton  genderSelect;
+    private RadioGroup veganGroup;
+    private RadioButton  veganSelect;
     private Button register;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,6 +107,9 @@ public class RegisterActivity extends AppCompatActivity{
 
     }
 
+    /**
+     * if register successful, then add gender and vegan information to server
+     * */
     private void addPersonalInfo() {
         //add gender and vegan information to server
         mAuth = FirebaseAuth.getInstance();
@@ -124,7 +126,7 @@ public class RegisterActivity extends AppCompatActivity{
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("RegisterActivity","789789onCancelled begin");
+                Toast.makeText(RegisterActivity.this, "user information add fail", Toast.LENGTH_LONG).show();
             }
         });
 
@@ -132,6 +134,10 @@ public class RegisterActivity extends AppCompatActivity{
 
 
 }
+
+/**PersonalInfo
+ * constructor for store users' register information to server
+ * */
 class PersonalInfo{
     private String gender;
     private String vegan;

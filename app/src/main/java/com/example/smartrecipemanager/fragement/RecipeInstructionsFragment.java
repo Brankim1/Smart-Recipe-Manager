@@ -1,22 +1,25 @@
 package com.example.smartrecipemanager.fragement;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.smartrecipemanager.Adapter.RecipeInstructionsAdapter;
 import com.example.smartrecipemanager.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/**RecipeInstructionsFragment
  * for RecipeInstructionsFragment in recipeActivity
  * it can handle data from recipeActivity and show recipe Instructions
  */
@@ -59,7 +62,6 @@ public class RecipeInstructionsFragment extends Fragment {
                     jsonObject3 = instructionArr2.getJSONObject(i);
                     instructionList.add(jsonObject3.optString("step"));
                 }
-                Log.d("instruction list","is : "+instructionList);
             }
              catch (JSONException e) {
                 e.printStackTrace();

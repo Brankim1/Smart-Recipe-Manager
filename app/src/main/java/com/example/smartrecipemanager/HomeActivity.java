@@ -48,31 +48,34 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/*
+/**HomeActivity
 * show random recipes(breakfast,lunch,dinner)
+ * use waterfall showing
 * */
 public class HomeActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
-    TabLayout mytab;
-    JSONArray recipeArray;
-    List<Recipe> RecipeList;
-    String style;
-    SwipeRefreshLayout swipeRefreshLayout;
-    RecyclerView recyclerView;
-    SearchListRecyclerAdapter myAdapter;
-    int lastVisibleItem;
-    String gender;
-    String vegan;
-    ImageView headerPortrait;
+    private DrawerLayout drawerLayout;
+    private TabLayout mytab;
+    private JSONArray recipeArray;
+    private List<Recipe> RecipeList;
+    private String style;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
+    private SearchListRecyclerAdapter myAdapter;
+    private int lastVisibleItem;
+    private String gender;
+    private String vegan;
+    private ImageView headerPortrait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         style="breakfast";
+        //check network connect
         ConnectivityManager  manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         if (networkInfo != null) {
             RecipeList = new ArrayList<Recipe>();
+            //waterfall showing image
             recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
             StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
@@ -85,6 +88,7 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
+                    //if visible recyclerview id is last one and no scroll, update
                     if (newState ==RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 ==myAdapter.getItemCount()) {
                         new Handler().postDelayed(new Runnable() {
                             @Override
@@ -99,6 +103,7 @@ public class HomeActivity extends AppCompatActivity {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView,dx, dy);
+                    //get visible recyclerview id
                     int[] visibleList =layoutManager.findLastCompletelyVisibleItemPositions(null);
                     Arrays.sort(visibleList);
                     lastVisibleItem= (int) visibleList[visibleList.length-1];
@@ -128,6 +133,9 @@ public class HomeActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * for breakfast, lunch, dinner change
+     * */
     private void setTabLayout() {
         mytab = (TabLayout) findViewById(R.id.homeTab);
         mytab.addTab(mytab.newTab().setText("Breakfast"));
@@ -174,6 +182,10 @@ public class HomeActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * get random recipes from spoonacular api,
+     * variable clear is judge load more or update all
+     * */
     private void getRandomRecipes(boolean clear) {
         //get random recipes from spoonacular API
         if(clear==true){
@@ -184,7 +196,7 @@ public class HomeActivity extends AppCompatActivity {
            //for vegan
             url = "https://api.spoonacular.com/recipes/random?number=20&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style+",vegan";
         }
-        Log.d("homeActivity","recipe title is dinner url is"+ url);
+        //get random recipes from spoonacular api
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -200,7 +212,6 @@ public class HomeActivity extends AppCompatActivity {
                                 recipe.setTitle(jsonObject1.optString("title"));
                                 recipe.setPic(jsonObject1.optString("image"));
                                 RecipeList.add(recipe);
-                                Log.d("home activity","recipe title is"+jsonObject1.optString("title"));
                             }
                             //send recipe data to adapter for show
                             myAdapter.notifyDataSetChanged();
@@ -220,6 +231,7 @@ public class HomeActivity extends AppCompatActivity {
         );
         requestQueue.add(jsonObjectRequest);
     }
+
 
     public void dialog(String title,String message){
         //set Alert Dialog to hint
@@ -244,6 +256,11 @@ public class HomeActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * set Drawer layout, which are the main navigation
+     * set toolbar, which show activity name and back button
+     * get user information(such as email, gender, vegan)
+     * */
     public void setDrawerLayout(){
         //component initialize
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

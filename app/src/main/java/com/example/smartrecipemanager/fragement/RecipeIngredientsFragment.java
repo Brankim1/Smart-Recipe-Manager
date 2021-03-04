@@ -1,23 +1,26 @@
 package com.example.smartrecipemanager.fragement;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.smartrecipemanager.Adapter.RecipeIngredientsAdapter;
 import com.example.smartrecipemanager.Ingredient;
 import com.example.smartrecipemanager.R;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/**RecipeIngredientsFragment
  * for RecipeIngredientsFragment in recipeActivity
  * it can handle data from recipeActivity and show recipe ingredients
  */
@@ -45,7 +48,6 @@ public class RecipeIngredientsFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if (getArguments() != null) {
             //reshape data that from recipeViewPagerAdapter
             mParam1 = getArguments().getString(ARG_PARAM1);
@@ -60,8 +62,6 @@ public class RecipeIngredientsFragment extends Fragment {
                     ingredient1.setName(jsonObject1.optString("originalString"));
                     ingredient1.setPic("https://spoonacular.com/cdn/ingredients_100x100/"+jsonObject1.optString("image"));
                     ingredientsList.add(ingredient1);
-                    Log.d("ingredientsList","is: "+ingredientsList);
-                    Log.d("ingredientsList","is: "+jsonObject1.optString("originalString"));
                 }
             } catch (JSONException e) {
                 e.printStackTrace();

@@ -13,6 +13,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 /**
 * Log out
+ * use firebase
 * */
 public class LogoutActivity extends AppCompatActivity {
 

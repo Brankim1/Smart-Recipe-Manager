@@ -16,7 +16,7 @@ import com.example.smartrecipemanager.R;
 import com.squareup.picasso.Picasso;
 import java.util.List;
 
-/**
+/**SharingPostListRecyclerAdapter
  *  for Sharing activity  recyclerview
  *  it can show sharing posts image and name in recyclerview
  * */
@@ -24,6 +24,11 @@ public class SharingPostListRecyclerAdapter extends RecyclerView.Adapter<Sharing
 
     private Context context;
     private List<Post> mPostList;
+
+    public SharingPostListRecyclerAdapter(Context context, List<Post> postList) {
+        this.context=context;
+        mPostList = postList;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardview;
@@ -37,10 +42,7 @@ public class SharingPostListRecyclerAdapter extends RecyclerView.Adapter<Sharing
             recipeName = (TextView) view.findViewById(R.id.recipe_name);
         }
     }
-    public SharingPostListRecyclerAdapter(Context context, List<Post> postList) {
-        this.context=context;
-        mPostList = postList;
-    }
+
 
     @Override
 

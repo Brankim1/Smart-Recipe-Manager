@@ -11,7 +11,6 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,13 +46,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/**
+/**SharingAddActivity
 * SharingAddActivity, upload user's post
+ * at first get post id
+ * then upload image to server, and get image url from server.
+ * finally upload post
 * */
 public class SharingAddActivity extends AppCompatActivity {
     public static final int PICK_IMAGE = 1;
     public static final int REQUEST_IMAGE_CAPTURE = 2;
-    Uri selectedImageURI;
+    private Uri selectedImageURI;
     private View inflate;
     private TextView camera;
     private TextView pic;
@@ -73,6 +75,7 @@ public class SharingAddActivity extends AppCompatActivity {
     private DatabaseReference mRootRef2;
     private FirebaseStorage storage;
     private Uri downLoadUrl;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,6 +96,7 @@ public class SharingAddActivity extends AppCompatActivity {
             post.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //data check
                     titleText = title.getEditText().getText().toString();
                     contentText = content.getEditText().getText().toString();
                     if (titleText.length() == 0) {
@@ -130,8 +134,10 @@ public class SharingAddActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * upload image to server, and get image url from server
+     * */
     private void uploadImage() {
-
         // Create a storage reference from our app
         StorageReference storageRef = storage.getReference();
 
@@ -150,41 +156,39 @@ public class SharingAddActivity extends AppCompatActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
+                Toast.makeText(SharingAddActivity.this,"Image upload fail",Toast.LENGTH_SHORT).show();
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                Log.d("upload image","successful");
+                //get image url in server
+                Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        // Continue with the task to get the download URL
+                        return mountainsRef.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            downLoadUrl = task.getResult();
+                            uploadPost();
+                        } else {
 
+                        }
+                    }
+                });
             }
         });
-        //get image url in server
-        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (!task.isSuccessful()) {
-                    throw task.getException();
-                }
 
-                // Continue with the task to get the download URL
-                return mountainsRef.getDownloadUrl();
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()) {
-                    downLoadUrl = task.getResult();
-                    Log.d("download image","url is" +downLoadUrl);
-                    uploadPost();
-                } else {
-
-                }
-            }
-        });
     }
-
+    /**
+     * after get image url from server, then post to server
+     * */
     private void uploadPost() {
         mRootRef2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -196,14 +200,16 @@ public class SharingAddActivity extends AppCompatActivity {
                 content.getEditText().getText().clear();
                 finish();
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("save ","cancelled");
+                Toast.makeText(SharingAddActivity.this,"Post fail",Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    /**
+     * get post id, it can identify posts
+     * */
     private void getInformation() {
         List id=new ArrayList<Long>();
         //get post id
@@ -228,11 +234,14 @@ public class SharingAddActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.d("post id "," is cancelled");
+                Toast.makeText(SharingAddActivity.this,"Post id get fail",Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    /**
+     * select image from gallery and camera
+     * */
     public void selectImage(){
         dialog = new Dialog(this,R.style.DialogTheme);
         inflate = LayoutInflater.from(this).inflate(R.layout.choosephoto_dialog, null);
@@ -297,7 +306,8 @@ public class SharingAddActivity extends AppCompatActivity {
         }
     }
 
-
+    /**
+     * set toolbar*/
     public void setToolBar() {
         //component initialize
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

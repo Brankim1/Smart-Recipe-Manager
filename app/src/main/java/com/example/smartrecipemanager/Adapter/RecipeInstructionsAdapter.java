@@ -11,13 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.smartrecipemanager.R;
 import java.util.List;
 
-/**
+/**RecipeInstructionsAdapter
  * for show recipe detail Instructions and order image in RecipeInstructionsFragment recyclerview
  * it can load image and text in recyclerview
  * */
 public class RecipeInstructionsAdapter extends RecyclerView.Adapter<RecipeInstructionsAdapter.MyViewHolder> {
     private Context context;
     private List<String> mData;
+
+    public RecipeInstructionsAdapter(Context context, List<String> mData) {
+        this.context=context;
+        this.mData = mData;
+    }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -29,11 +34,6 @@ public class RecipeInstructionsAdapter extends RecyclerView.Adapter<RecipeInstru
             ingredient_name = itemView.findViewById(R.id.recipe_ingredient_name);
             ingredient_pic = itemView.findViewById(R.id.recipe_ingredient_img);
         }
-    }
-
-    public RecipeInstructionsAdapter(Context context, List<String> mData) {
-        this.context=context;
-        this.mData = mData;
     }
 
     @NonNull
@@ -78,6 +78,5 @@ public class RecipeInstructionsAdapter extends RecyclerView.Adapter<RecipeInstru
     public int getItemCount() {
         return mData.size();
     }
-
 
 }

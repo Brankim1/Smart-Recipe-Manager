@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,23 +46,21 @@ import java.util.List;
 
 import static android.app.Activity.RESULT_OK;
 
-/**
+/**AiFragment
  * AI fragment in search Activity
+ * it can upload image to clarifai api to get predicted ingredients
  */
 public class AiFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
     private Uri imgPath;
     private Button uploadImg;
     private Button searchRecipe;
-    private  Button searchAi;
+    private Button searchAi;
     private ImageView imageView;
     private RecyclerView recyclerView;
     private List<String> predictName;
@@ -75,8 +72,9 @@ public class AiFragment extends Fragment {
     private TextView pic;
     private TextView cancel;
     private Dialog dialog;
-    public static final int PICK_IMAGE = 1;
-    public static final int REQUEST_IMAGE_CAPTURE = 2;
+    private static final int PICK_IMAGE = 1;
+    private static final int REQUEST_IMAGE_CAPTURE = 2;
+
     public AiFragment() {
         // Required empty public constructor
     }
@@ -84,9 +82,6 @@ public class AiFragment extends Fragment {
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AiFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -126,6 +121,7 @@ public class AiFragment extends Fragment {
         uploadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //choose image from gallery or camera
                 selectImage();
             }
         });
@@ -136,6 +132,7 @@ public class AiFragment extends Fragment {
                 if(imageView.getDrawable()==null){
                     Toast.makeText(getContext(),"Please select Image or waiting for Image load",Toast.LENGTH_SHORT).show();
                 }else{
+                    //upload image to clarifai API to predict
                     new Thread(networkTask).start();
                 }
 
@@ -166,7 +163,6 @@ public class AiFragment extends Fragment {
                             queryData = queryData + "," + SelectText.get(i).toString();
                         }
                     }
-                    Log.d("AIfragment", "querydata is " + queryData);
                     //go to SearchResultActivity
                     Intent searchResultIntent = new Intent(getActivity(), SearchResultActivity.class);
                     searchResultIntent.putExtra("data", queryData);
@@ -177,6 +173,11 @@ public class AiFragment extends Fragment {
         });
         return root;
     }
+
+    /**
+     * Select Image
+     *  through call gallery or camera
+     * */
     public void selectImage(){
         dialog = new Dialog(getContext(),R.style.DialogTheme);
         inflate = LayoutInflater.from(getContext()).inflate(R.layout.choosephoto_dialog, null);
@@ -232,6 +233,7 @@ public class AiFragment extends Fragment {
             Picasso.get().load(imgPath).into(imageView);
             dialog.dismiss();
         }else if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            //load image to imageView
             Bundle extras = data.getExtras();
             Bitmap imageBitmap = (Bitmap) extras.get("data");
             imageView.setImageBitmap(imageBitmap);
@@ -241,12 +243,13 @@ public class AiFragment extends Fragment {
             dialog.dismiss();
         }
     }
-
+    /**
+     * upload image to clarifai api to get predicted ingredients
+     * use child thread to get predicted information
+     * */
     Runnable networkTask = new Runnable() {
         @Override
         public void run() {
-            //ingredient analysis use clarifai API
-            //use child thread to get predicted information
             V2Grpc.V2BlockingStub stub = V2Grpc.newBlockingStub(ClarifaiChannel.INSTANCE.getJsonChannel())
                             .withCallCredentials(new ClarifaiCallCredentials("a742e6469bd24d3da69ff7f365d40bb2"));
             MultiOutputResponse response;
@@ -255,6 +258,7 @@ public class AiFragment extends Fragment {
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
+            //food model key=bd367be194cf45149e75f01d59f77ba7
             byte[] data = baos.toByteArray();
             response = stub.postModelOutputs(
                     PostModelOutputsRequest.newBuilder()
@@ -270,6 +274,7 @@ public class AiFragment extends Fragment {
             );
             //handle response
             if (response.getStatus().getCode() != StatusCode.SUCCESS) {
+                Toast.makeText(getContext(),"Predicted fail, Please check Internet",Toast.LENGTH_SHORT).show();
                 throw new RuntimeException("Request failed, status: " + response.getStatus());
             }
             for (Concept c : response.getOutputs(0).getData().getConceptsList()) {
@@ -277,16 +282,17 @@ public class AiFragment extends Fragment {
                 String value=String.valueOf(c.getValue());
                 predictName.add(name);
                 predictText.add(name+" : " +value);
-                Log.d("AiFragment","predict is "+String.format("%12s: %,.2f", c.getName(), c.getValue()));
             }
-            //run UI task
+            //run UI task to show predicted name
             Message msg = handler.obtainMessage();
             msg.what = 1;
             handler.sendMessage(msg);
 
         }
     };
-
+    /**
+     * run UI task to show predicted ingredient
+     * */
     private Handler handler = new Handler() {
         public void handleMessage(Message msg) {
             // UI task, set recyclerView

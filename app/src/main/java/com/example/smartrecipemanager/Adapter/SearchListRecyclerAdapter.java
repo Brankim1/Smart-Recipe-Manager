@@ -3,21 +3,23 @@ package com.example.smartrecipemanager.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.smartrecipemanager.R;
 import com.example.smartrecipemanager.Recipe;
 import com.example.smartrecipemanager.RecipeActivity;
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
-/*
+/** SearchListRecyclerAdapter
 *  for SearchResult activity and home activity  recyclerview
 *  it can show search result image and name in recyclerview
 * */
@@ -25,6 +27,12 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
 
     private Context context;
     private List<Recipe> mRecipeList;
+
+    public SearchListRecyclerAdapter(Context context, List<Recipe> recipeList) {
+        this.context=context;
+        mRecipeList = recipeList;
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardview;
         ImageView recipeImage;
@@ -36,11 +44,6 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
             recipeImage = (ImageView) view.findViewById(R.id.recipe_image);
             recipeName = (TextView) view.findViewById(R.id.recipe_name);
         }
-    }
-
-    public SearchListRecyclerAdapter(Context context, List<Recipe> recipeList) {
-        this.context=context;
-        mRecipeList = recipeList;
     }
 
     @Override
@@ -61,7 +64,6 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
             Picasso.get().load(mRecipeList.get(position).getPic()).into(holder.recipeImage);
         }
 
-        Log.d("searchlist","load image successful");
         //load food title for layout
         holder.recipeName.setText(recipe.getTitle());
         //register click listener for cardView, which contains food image and title

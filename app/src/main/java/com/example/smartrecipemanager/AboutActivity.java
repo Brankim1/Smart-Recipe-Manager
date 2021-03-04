@@ -21,13 +21,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-/**
+/**AboutActivity
 * for show developer information and app feedback email
 * */
 public class AboutActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
-    String gender;
-    ImageView headerPortrait;
+    private DrawerLayout drawerLayout;
+    private String gender;
+    private ImageView headerPortrait;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +36,12 @@ public class AboutActivity extends AppCompatActivity {
         setContentView(R.layout.activity_about);
         setDrawerLayout();
     }
+
+    /**
+     * set Drawer layout, which are the main navigation
+     * set toolbar, which show activity name and back button
+     * get user information(such as email, gender, vegan)
+     * */
     public void setDrawerLayout(){
         //component initialize
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

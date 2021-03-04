@@ -70,7 +70,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="all"
-                android:text="Thank you very much for participation in testing SmartRecipeManager, I am glad to receive your feedback. Just Email me or call me! "
+                android:text="Thank you very much for participation in testing SmartRecipeManager.If you have any questions when testing, Just Email me or Call me! I am very glad to receive your feedback. "
                 android:textColor="#000000"
                 android:textSize="20sp"/>
         </LinearLayout>

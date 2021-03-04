@@ -18,8 +18,9 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
-/**
-* ResetActivity for user forget password
+/**ResetActivity
+* ResetActivity for user forget password,use firebase
+ * user will receive an email to reset password
 * */
 public class ResetActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -41,6 +42,7 @@ public class ResetActivity extends AppCompatActivity {
                     FirebaseAuth auth = FirebaseAuth.getInstance();
                     String emailAddress = email.getEditText().getText().toString();
                     try {
+                        //input check
                         if (!(Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches())){//check mail format
                             Toast.makeText(ResetActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
                         }

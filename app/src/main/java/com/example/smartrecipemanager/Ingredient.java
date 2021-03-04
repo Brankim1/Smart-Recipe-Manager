@@ -1,5 +1,5 @@
 package com.example.smartrecipemanager;
-/**
+/**Ingredient
  * constructor for show ingredient in recipe detail
  * */
 public class Ingredient {

@@ -20,8 +20,8 @@ import com.google.firebase.auth.FirebaseUser;
 * */
 public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    ConnectivityManager manager;
-    NetworkInfo networkInfo;
+    private ConnectivityManager manager;
+    private NetworkInfo networkInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

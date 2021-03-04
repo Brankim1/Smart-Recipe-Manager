@@ -20,6 +20,10 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 
+/**CalorieAddFragment
+ * CalorieAddFragment for calorieActivity
+ * it can add calorie data to server
+ */
 public class CalorieAddFragment extends Fragment {
 
     private CalorieAddViewModel CalorieAddViewModel;
@@ -50,6 +54,10 @@ public class CalorieAddFragment extends Fragment {
         return root;
     }
 
+    /**
+     * get user input,and upload to the server
+     * time obtain from call calendar
+     * */
     private void addToDatabase() {
         //get current time
         Calendar calendar = Calendar.getInstance();
@@ -74,6 +82,7 @@ public class CalorieAddFragment extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getContext(),"upload fail",Toast.LENGTH_SHORT).show();
             }
         });
     }

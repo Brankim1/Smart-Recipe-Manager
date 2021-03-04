@@ -44,7 +44,7 @@
        <TextView
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
-           android:text="PREDICTED CONCEPT  :  PROBABILITY"
+           android:text="PREDICTED INGREDIENT  :  PROBABILITY"
            android:layout_gravity="center"
            android:gravity="center"
            android:textSize="11dp" />

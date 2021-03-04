@@ -1,5 +1,5 @@
 package com.example.smartrecipemanager;
-/**
+/**Calorie
 * constructor for store users' calorie information to server
 * */
 public class Calorie {
@@ -24,6 +24,5 @@ public class Calorie {
     public Calorie(String time, String calorieData) {
         this.time = time;
         this.calorieData = calorieData;
-
     }
 }

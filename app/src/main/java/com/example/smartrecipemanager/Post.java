@@ -1,6 +1,6 @@
 package com.example.smartrecipemanager;
 
-/**
+/**Post
  * constructor for store and post users' experience
  *
  * */

@@ -3,7 +3,6 @@ package com.example.smartrecipemanager.ui.CalorieHistory;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +41,11 @@ import lecho.lib.hellocharts.model.PointValue;
 import lecho.lib.hellocharts.model.ValueShape;
 import lecho.lib.hellocharts.view.LineChartView;
 
+/**CalorieHistoryFragment
+ * CalorieHistoryFragment for calorieActivity
+ * it can get weekly calorie data from server, and draw line chart
+ * it can manager user all calorie data
+ */
 public class CalorieHistoryFragment extends Fragment {
 
     private CalorieHistoryViewModel CalorieHistoryViewModel;
@@ -75,6 +79,10 @@ public class CalorieHistoryFragment extends Fragment {
         lineChart = (LineChartView)root.findViewById(R.id.chart);
         fab1 = (FloatingActionButton) root.findViewById(R.id.fab);
     }
+
+    /**
+     * get user calorie data from server
+     * */
     private void getData() {
         CalorieList=new ArrayList<Calorie>();
         //get calorie information from server
@@ -85,10 +93,8 @@ public class CalorieHistoryFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
-
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Calorie calorie=child.getValue(Calorie.class);
-                        Log.d("NotifitionFragment","calorie data is "+calorie.getTime()+","+calorie.getCalorieData());
                         CalorieList.add(calorie);
                     }
                     getCalorie();
@@ -98,11 +104,14 @@ public class CalorieHistoryFragment extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(getContext(),"Calorie data obtain fail",Toast.LENGTH_LONG).show();
             }
         });
     }
 
+    /**
+     * handle data from server, and get weekly, daily calorie intake
+     * */
     private void getCalorie() {
         //get weekly calorie information
         calorieDateList=new ArrayList<Integer>();
@@ -128,18 +137,20 @@ public class CalorieHistoryFragment extends Fragment {
                 calorieDateList.set(i,calorieDateList.get(i)+Integer.parseInt(CalorieList.get(k).getCalorieData()));
                 }
             }
+            //last day
             cal.add(Calendar.DAY_OF_MONTH, -1);
         }
         //reverse list
         Collections.reverse(TimeList);
         Collections.reverse(calorieDateList);
-        Log.d("CalorieHistoryFragment","789timeList is "+ TimeList);
-        Log.d("CalorieHistoryFragment","789calorieDateList is "+ calorieDateList);
         todayCal.setText(String.valueOf(calorieDateList.get(6)));
         weekCal.setText(String.valueOf(calorieDateList.get(0)+calorieDateList.get(1)+calorieDateList.get(2)+calorieDateList.get(3)+calorieDateList.get(4)+calorieDateList.get(5)+calorieDateList.get(6)));
         drawChart();
-        Log.d("NotifitionFragment","calorie data list is "+calorieDateList);
     }
+
+    /**
+     * draw line chart through helloCharts
+     * */
     private void drawChart() {
         getAxisLables();
         getAxisPoints();
@@ -194,6 +205,9 @@ public class CalorieHistoryFragment extends Fragment {
         lineChart.setVisibility(View.VISIBLE);
     }
 
+    /**
+     * set floating action button to delete calorie data
+     * */
     private void setFloatingActionButton() {
         //for add post
         fab1.setOnClickListener(new View.OnClickListener() {
@@ -204,6 +218,9 @@ public class CalorieHistoryFragment extends Fragment {
         });
     }
 
+    /**
+     * show calorie data in dialog, and choose delete
+     * */
     private void showListDialog(){
         String[] items=new String[CalorieList.size()];
         String[] time=new String[CalorieList.size()];
@@ -219,6 +236,7 @@ public class CalorieHistoryFragment extends Fragment {
         listDialog.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                //delete calorie data from server
                 DatabaseReference  mRootRef2 = FirebaseDatabase.getInstance().getReference().child(uid).child("calorie").child(time[which]);
                 mRootRef2.removeValue();
                 getData();

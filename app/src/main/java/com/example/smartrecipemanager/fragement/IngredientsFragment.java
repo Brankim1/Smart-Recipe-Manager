@@ -2,22 +2,25 @@ package com.example.smartrecipemanager.fragement;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.smartrecipemanager.Adapter.IngredientListRecyclerAdapter;
 import com.example.smartrecipemanager.R;
 import com.example.smartrecipemanager.SearchResultActivity;
+
 import java.util.List;
 
-/**
+/**IngredientsFragment
  * IngredientsFragment in search Activity
+ * it can choose different ingredients to show recipes
  */
 public class IngredientsFragment extends Fragment {
 
@@ -29,7 +32,6 @@ public class IngredientsFragment extends Fragment {
     public IngredientsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,11 +58,11 @@ public class IngredientsFragment extends Fragment {
             public void onClick(View v) {
                 //get data(which ingredient were selected) from recycler adapter
                 ingredientsList = IngredientListRecyclerAdapter.ingredientsList;
-                Log.d("ingredientFragment","ingredientsList is "+ingredientsList);
                 if(ingredientsList.isEmpty()){
                     Toast.makeText(getActivity(), "Please select at least one ingredient", Toast.LENGTH_SHORT).show();
                 }
                 else{
+                    //reshape data that what ingredients were selected
                     String queryData="";
                     if(ingredientsList.size() == 1){
                         queryData= ingredientsList.get(0).toString();
@@ -69,7 +71,6 @@ public class IngredientsFragment extends Fragment {
                             if(i == 0){
                                 queryData = ingredientsList.get(i).toString();
                             }else {
-                                //reshape data that what ingredients were selected
                                 queryData = queryData +"," + ingredientsList.get(i).toString();
                             }
                         }}

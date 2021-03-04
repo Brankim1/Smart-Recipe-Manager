@@ -25,10 +25,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+/**CalorieActivity
+ * it has 3 fragment, which are calorieadd, caloriequery, caloriehistory.
+ * this activity is the main activity of these 3 fragments
+ * */
 public class CalorieActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
-    String gender;
-    ImageView headerPortrait;
+    private DrawerLayout drawerLayout;
+    private String gender;
+    private ImageView headerPortrait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +46,12 @@ public class CalorieActivity extends AppCompatActivity {
 
         setDrawerLayout();
     }
+
+    /**
+     * set Drawer layout, which are the main navigation
+     * set toolbar, which show activity name and back button
+     * get user information(such as email, gender, vegan)
+     * */
     public void setDrawerLayout(){
         //component initialize
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

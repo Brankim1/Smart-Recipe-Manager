@@ -6,8 +6,8 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -36,30 +36,34 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
+/**SearchResultActivity
+ * show search results by recyclerView
+ * */
 public class SearchResultActivity extends AppCompatActivity {
-    ConnectivityManager manager;
-    NetworkInfo networkInfo;
-    String data;
-    JSONArray recipeArray;
-    List<Recipe> RecipeList;
-    RecyclerView recyclerView;
-    SearchListRecyclerAdapter myAdapter;
-    String vegan;
+    private ConnectivityManager manager;
+    private NetworkInfo networkInfo;
+    private String data;
+    private JSONArray recipeArray;
+    private  List<Recipe> RecipeList;
+    private RecyclerView recyclerView;
+    private SearchListRecyclerAdapter myAdapter;
+    private String vegan;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_result);
         Intent intent = getIntent();
-        /*get data form intent*/
+        /*get data form search activity*/
         data = intent.getStringExtra("data");
         RecipeList = new ArrayList<Recipe>();
+
         recyclerView = (RecyclerView) findViewById(R.id.searchResultRecyclerView);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(layoutManager);
         myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
         recyclerView.setAdapter(myAdapter);
+
         setToolBar();
         manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         networkInfo = manager.getActiveNetworkInfo();
@@ -71,6 +75,9 @@ public class SearchResultActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * get user information whether is vegan(from server)
+     * */
     private void getVegan() {
         vegan="";
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
@@ -89,30 +96,30 @@ public class SearchResultActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(SearchResultActivity.this,"vegan get fail",Toast.LENGTH_SHORT).show();
             }
         });
     }
 
-
+    /**
+     * search recipe in spoonacular api,and handle backed data
+     * */
     private void getRecipes() {
-
         String url;
         if (data.isEmpty()) {
             //for empty search, get random recipes
-            url = "https://api.spoonacular.com/recipes/random?number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
+            url = "https://api.spoonacular.com/recipes/random?number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
             if(vegan.equals("Vegan")) {
                 //for vegan
-                url = "https://api.spoonacular.com/recipes/random?number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags=vegan";
+                url = "https://api.spoonacular.com/recipes/random?number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags=vegan";
             }
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-
                         @Override
                         public void onResponse(JSONObject response) {
                             try {
                                 recipeArray = (JSONArray) response.get("recipes");
-
                                 for (int i = 0; i < recipeArray.length(); i++) {
                                     JSONObject jsonObject1;
                                     jsonObject1 = recipeArray.getJSONObject(i);
@@ -124,6 +131,7 @@ public class SearchResultActivity extends AppCompatActivity {
                                 }
                                 myAdapter.notifyDataSetChanged();
                             } catch (JSONException e) {
+                                Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();
                             }
                         }
@@ -131,7 +139,7 @@ public class SearchResultActivity extends AppCompatActivity {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.i("the res is error:", error.toString());
+                                    Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -144,7 +152,6 @@ public class SearchResultActivity extends AppCompatActivity {
                 //for vegan
                 url = "https://api.spoonacular.com/recipes/search?query=" + data+"&number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&diet="+vegan;
             }
-            Log.d("searchResult","url is"+url);
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -158,18 +165,16 @@ public class SearchResultActivity extends AppCompatActivity {
                                     for (int i = 0; i < recipeArray.length(); i++) {
                                         JSONObject jsonObject1;
                                         jsonObject1 = recipeArray.getJSONObject(i);
-                                        Log.d("the res is:","recipe array is "+ String.valueOf(jsonObject1));
                                         Recipe recipe = new Recipe();
                                         recipe.setId(jsonObject1.optString("id"));
                                         recipe.setTitle(jsonObject1.optString("title"));
                                         recipe.setPic("https://spoonacular.com/recipeImages/" + jsonObject1.optString("image"));
                                         RecipeList.add(recipe);
                                     }
-                                    SearchListRecyclerAdapter myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
-                                    recyclerView.setAdapter(myAdapter);
+                                    myAdapter.notifyDataSetChanged();
                                 }
                             }catch (JSONException e) {
-                                e.printStackTrace();
+                                Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
                                 dialog("Sorry","Query recipes failed, Please choose OK to back");
                             }
                         }
@@ -177,7 +182,7 @@ public class SearchResultActivity extends AppCompatActivity {
                             new Response.ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Log.i("the res is error:", error.toString());
+                                    Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
                                     dialog("Sorry","Query recipes failed, Please choose OK to back");
                                 }
 
@@ -186,6 +191,7 @@ public class SearchResultActivity extends AppCompatActivity {
             requestQueue.add(jsonObjectRequest);
         }
     }
+
     public void dialog(String title,String message){
         //set Alert Dialog to hint
         AlertDialog dialog = new AlertDialog.Builder(this)
@@ -206,6 +212,7 @@ public class SearchResultActivity extends AppCompatActivity {
                 }).create();
         dialog.show();
     }
+
     public void setToolBar() {
         //component initialize
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -218,7 +225,6 @@ public class SearchResultActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.back_icon);
         }
-
         //toolbar button set listener
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -226,7 +232,5 @@ public class SearchResultActivity extends AppCompatActivity {
                 finish();
             }
         });
-
-
     }
 }

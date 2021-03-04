@@ -7,7 +7,7 @@ import com.example.smartrecipemanager.fragement.RecipeIngredientsFragment;
 import com.example.smartrecipemanager.fragement.RecipeInstructionsFragment;
 import org.json.JSONObject;
 
-/**
+/** RecipeViewPagerAdapter
 * for swipe two fragment (RecipeIngredientsFragment and RecipeInstructionsFragment) in recipeActivity.
 * */
 public class RecipeViewPagerAdapter extends FragmentPagerAdapter {

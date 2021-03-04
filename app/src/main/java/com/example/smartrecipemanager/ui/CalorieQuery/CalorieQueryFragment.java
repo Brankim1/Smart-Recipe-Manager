@@ -30,6 +30,10 @@ import java.math.BigDecimal;
 import java.text.DecimalFormat;
 import java.util.Iterator;
 
+/**CalorieQueryFragment
+ * CalorieQueryFragment for calorieActivity
+ * it can query calorie data from Edamam Nutrition Analysis api
+ */
 public class CalorieQueryFragment extends Fragment {
 
     private CalorieQueryViewModel CalorieQueryViewModel;
@@ -81,10 +85,11 @@ public class CalorieQueryFragment extends Fragment {
         vcView=(TextView)root.findViewById(R.id.VitaminC);
         calciumView =(TextView)root.findViewById(R.id.Calcium);
         ironView =(TextView)root.findViewById(R.id.Iron);
-
-
-
     }
+
+    /**
+     * get nutrition analysis from edamam api
+     * */
     public void getNutrition(){
         //get nutrition information
         final DecimalFormat format = new DecimalFormat("0.00");
@@ -100,6 +105,7 @@ public class CalorieQueryFragment extends Fragment {
                             NutrientsObject = (JSONObject) response.get("totalNutrients");
                             Iterator iterator = NutrientsObject.keys();
                             while(iterator.hasNext()){
+                                //handle data from api
                                 key = (String) iterator.next();
                                 String label=NutrientsObject.getJSONObject(key).optString("label");
                                 String quantity=NutrientsObject.getJSONObject(key).optString("quantity");
@@ -135,6 +141,7 @@ public class CalorieQueryFragment extends Fragment {
                                     iron =format.format(new BigDecimal(quantity))+unit;
                                 }
                             }
+                            //set nutrition text
                             weightView.setText(weight);
                             calorieView.setText(calorie);
                             totalFatView.setText(totalFat);

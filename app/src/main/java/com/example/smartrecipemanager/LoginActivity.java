@@ -22,8 +22,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 
-/**
-* Login Activity
+/**Login Activity
+ * use firebase to verify email and password
 * */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
@@ -32,29 +32,29 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button login;
     private TextView newUserText;
     private TextView forgotText;
-    ConnectivityManager manager;
-    NetworkInfo networkInfo;
+    private  ConnectivityManager manager;
+    private NetworkInfo networkInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        ConnectivityManager  manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        //check network connect
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        email= (TextInputLayout)findViewById(R.id.email);
+        password=(TextInputLayout)findViewById(R.id.password);
+        login=(Button)findViewById(R.id.login);
+        newUserText=(TextView)findViewById(R.id.registerText);
+        forgotText=(TextView)findViewById(R.id.forgetText);
+        login.setOnClickListener(this);
+        newUserText.setOnClickListener(this);
+        forgotText.setOnClickListener(this);
+
         if (networkInfo != null) {
             mAuth = FirebaseAuth.getInstance();
-            email= (TextInputLayout)findViewById(R.id.email);
-            password=(TextInputLayout)findViewById(R.id.password);
-            login=(Button)findViewById(R.id.login);
-            newUserText=(TextView)findViewById(R.id.registerText);
-            forgotText=(TextView)findViewById(R.id.forgetText);
-
-            login.setOnClickListener(this);
-            newUserText.setOnClickListener(this);
-            forgotText.setOnClickListener(this);
         }else{
             Toast.makeText(LoginActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
         }
-
     }
 
     @Override
@@ -95,6 +95,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
+    /**
+     * use firebase to login
+     * */
     private void login(String emailText, String passwordText) {
         //use firebaseAuth to authentic email and password
         mAuth.signInWithEmailAndPassword(emailText, passwordText)
@@ -117,6 +120,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 });
 
     }
+
+    /**
+     * judge network
+     * */
     private Boolean network(){
         //check device whether connected to network
         boolean network=true;

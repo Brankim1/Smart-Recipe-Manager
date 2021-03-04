@@ -8,7 +8,7 @@ import com.example.smartrecipemanager.fragement.IngredientsFragment;
 import com.example.smartrecipemanager.fragement.StyleFragment;
 
 
-/**
+/**SearchViewPagerAdapter
  * for swipe three fragment (StyleFragment and IngredientsFragment and AiFragment) in searchActivity.
  * */
 public class SearchViewPagerAdapter extends FragmentPagerAdapter {

@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -38,19 +37,19 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
+/**SharingActivity
 * SharingActivity, get post from server and show
 * */
 public class SharingActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
+    private DrawerLayout drawerLayout;
     private FirebaseAuth mAuth;
     private DatabaseReference mRootRef;
-    List<Post> PostList;
-    RecyclerView recyclerView;
-    SharingPostListRecyclerAdapter myAdapter;
-    SwipeRefreshLayout swipeRefreshLayout;
-    String gender;
-    ImageView headerPortrait;
+    private List<Post> PostList;
+    private RecyclerView recyclerView;
+    private SharingPostListRecyclerAdapter myAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private String gender;
+    private ImageView headerPortrait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +93,10 @@ public class SharingActivity extends AppCompatActivity {
         super.onResume();
         setPostList();
     }
+
+    /**
+     * get post data from server
+     * */
     private void setPostList() {
         PostList.clear();
         //get post from server
@@ -102,9 +105,8 @@ public class SharingActivity extends AppCompatActivity {
         mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i("mRootRef", String.valueOf(dataSnapshot));
                 if (dataSnapshot.getValue() != null) {
-                    //get post ids
+                    //get post information
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Post post=child.getValue(Post.class);
                         PostList.add(post);
@@ -115,11 +117,14 @@ public class SharingActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                Log.d("sharingActivity","data get failed");
+                Toast.makeText(SharingActivity.this,"Post get fail",Toast.LENGTH_SHORT).show();
             }
         });
     }
 
+    /**
+     * for add post
+     * */
     private void setFloatingActionButton() {
         //for add post
         FloatingActionButton fab1 = (FloatingActionButton) findViewById(R.id.fab_sharing);
@@ -132,7 +137,11 @@ public class SharingActivity extends AppCompatActivity {
         });
     }
 
-
+    /**
+     * set Drawer layout, which are the main navigation
+     * set toolbar, which show activity name and back button
+     * get user information(such as email, gender, vegan)
+     * */
     public void setDrawerLayout(){
         //component initialize
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -235,6 +244,10 @@ public class SharingActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * set toolbar menu to delete post
+     * */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_sharing, menu);
@@ -249,6 +262,9 @@ public class SharingActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    /** get personal post to show and delete
+    * */
     private void showListDialog(){
         List PostName=new ArrayList<String>();
         List PostId=new ArrayList<String>();

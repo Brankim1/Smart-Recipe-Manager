@@ -13,9 +13,9 @@ import com.example.smartrecipemanager.R;
 
 import java.util.ArrayList;
 import java.util.List;
-/**
+/** AiListRecyclerAdapter
  *  for Search activity AI Fragment recyclerview
- *  it can register listener for Search activity AI fragment recyclerview to show predicted concepts
+ *  it can register listener to Search activity AI fragment recyclerview to show predicted ingredients
  * */
 public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAdapter.ViewHolder> {
 
@@ -52,7 +52,7 @@ public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAd
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        //register click listener for cardView, which contains ingredients name
+        //set predicted concepts name
         holder.IngredientName.setText(predictText.get(position));
         //set color, if it was selected, turn gray
         if(predictSelect.get(position)==false){
@@ -60,6 +60,7 @@ public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAd
         }else{
             holder.itemView.setBackgroundColor(Color.parseColor("#c9c9c9"));
         }
+        //register click listener it
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

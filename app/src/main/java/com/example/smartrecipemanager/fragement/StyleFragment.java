@@ -1,23 +1,24 @@
 package com.example.smartrecipemanager.fragement;
 
 import android.os.Bundle;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.smartrecipemanager.Adapter.StyleListRecyclerAdapter;
 import com.example.smartrecipemanager.R;
 
-/**
+/**StyleFragment
  * StyleFragment for searchActivity
+ * it can search style recipes, such as chinese, English food
  */
 public class StyleFragment extends Fragment {
-
-
     // the fragment initialization parameters
-    RecyclerView recyclerView;
+   private RecyclerView recyclerView;
 
     public StyleFragment() {
         // Required empty public constructor

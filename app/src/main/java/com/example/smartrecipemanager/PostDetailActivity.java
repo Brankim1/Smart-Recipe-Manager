@@ -2,7 +2,6 @@ package com.example.smartrecipemanager;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.squareup.picasso.Picasso;
-/**
+/**PostDetailActivity
 * get information from SharingActivity, and show post details.
 * */
 public class PostDetailActivity extends AppCompatActivity {
@@ -35,7 +34,6 @@ public class PostDetailActivity extends AppCompatActivity {
         title = intent.getStringExtra("title");
         pic = intent.getStringExtra("pic");
         content = intent.getStringExtra("content");
-        Log.d("postdatailActivity","data is "+postid+userid+name+title+pic+content);
 
         setToolBar();
         img = findViewById(R.id.post_img);
@@ -43,6 +41,10 @@ public class PostDetailActivity extends AppCompatActivity {
         text=findViewById(R.id.post_text);
         text.setText(content);
     }
+
+    /**
+     * set toolbar to show post name in the top
+     * */
     public void setToolBar() {
         //component initialize
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

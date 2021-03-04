@@ -30,16 +30,17 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-/**
+/** SearchActivity
 * SearchActivity, user can search recipes through text, style, ingredient, AI image
+ * there are 3 fragment, which are style, ingredient, and AI
 * */
 public class SearchActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
-    TabLayout mytab;
+    private DrawerLayout drawerLayout;
+    private TabLayout mytab;
     private TextInputLayout searchText;
     private Button searchButton;
-    String gender;
-    ImageView headerPortrait;
+    private String gender;
+    private ImageView headerPortrait;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +70,8 @@ public class SearchActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * set tab layout to switch 3 fragments*/
     private void setTabLayout() {
         // divided three fragment(style, ingredient, AI) through SearchViewPagerAdapter
         mytab = (TabLayout) findViewById(R.id.searchTab);
@@ -94,6 +97,12 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
     }
+
+    /**
+     * set Drawer layout, which are the main navigation
+     * set toolbar, which show activity name and back button
+     * get user information(such as email, gender, vegan)
+     * */
     public void setDrawerLayout(){
         //component initialize
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);

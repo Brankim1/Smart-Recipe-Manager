@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -35,23 +34,25 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-/**
+/**FavouriteActivity
 * get user's favorite recipe and show
+ * from Firebase server
 * */
 public class FavouriteActivity extends AppCompatActivity {
-    DrawerLayout drawerLayout;
+    private DrawerLayout drawerLayout;
     private FirebaseAuth mAuth;
-    String gender;
-    ImageView headerPortrait;
+    private String gender;
+    private ImageView headerPortrait;
     private DatabaseReference mRootRef;
-    List<Recipe> RecipeList;
-    RecyclerView recyclerView;
-    SearchListRecyclerAdapter myAdapter;
-    SwipeRefreshLayout swipeRefreshLayout;
+    private List<Recipe> RecipeList;
+    private RecyclerView recyclerView;
+    private SearchListRecyclerAdapter myAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite);
+        //check network connect
         ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         if (networkInfo != null) {
@@ -91,7 +92,11 @@ public class FavouriteActivity extends AppCompatActivity {
         getFavouriteID();
     }
 
+    /**
+     * get user favorite recipes' id  from server
+     * */
     private void getFavouriteID() {
+        RecipeList.clear();
         //get favorite recipes id from server
         mAuth = FirebaseAuth.getInstance();
         final String uid = mAuth.getCurrentUser().getUid();
@@ -99,12 +104,10 @@ public class FavouriteActivity extends AppCompatActivity {
         mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.i("mRootRef", String.valueOf(dataSnapshot));
                 if (dataSnapshot.getValue() != null) {
                     //get favourite ids
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Recipe recipe=child.getValue(Recipe.class);
-                        Log.d("favor recipe","is: "+recipe.getId());
                         RecipeList.add(recipe);
                     }
                     myAdapter.notifyDataSetChanged();
@@ -114,11 +117,13 @@ public class FavouriteActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-
+                Toast.makeText(FavouriteActivity.this, "Favorite get fail", Toast.LENGTH_SHORT).show();
             }
         });
     }
-
+    /**
+     * dialog to figure out problem
+     * */
     public void dialog(String title,String message){
         //set Alert Dialog to hint
         AlertDialog dialog = new AlertDialog.Builder(this)
@@ -142,6 +147,11 @@ public class FavouriteActivity extends AppCompatActivity {
         dialog.show();
     }
 
+    /**
+     * set Drawer layout, which are the main navigation
+     * set toolbar, which show activity name and back button
+     * get user information(such as email, gender, vegan)
+     * */
     public void setDrawerLayout(){
         //component initialize
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
