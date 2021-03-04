@@ -2,9 +2,12 @@ package com.example.smartrecipemanager;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -74,49 +77,57 @@ public class SharingAddActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sharing_add);
-        setToolBar();
-        getInformation();
-        storage = FirebaseStorage.getInstance();
-        mAuth = FirebaseAuth.getInstance();
-        title=(TextInputLayout)findViewById(R.id.title);
-        content=(TextInputLayout)findViewById(R.id.content);
-        imageView = (ImageView) findViewById(R.id.picture);
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            setToolBar();
+            getInformation();
+            storage = FirebaseStorage.getInstance();
+            mAuth = FirebaseAuth.getInstance();
+            title=(TextInputLayout)findViewById(R.id.title);
+            content=(TextInputLayout)findViewById(R.id.content);
+            imageView = (ImageView) findViewById(R.id.picture);
 
-        //register listener for post button
-        post=(Button)findViewById(R.id.post);
-        post.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                titleText = title.getEditText().getText().toString();
-                contentText = content.getEditText().getText().toString();
-                if (titleText.length() == 0) {
-                    Toast.makeText(SharingAddActivity.this, "Please input title", Toast.LENGTH_SHORT).show();
-                } else if (contentText.length() == 0) {
-                    Toast.makeText(SharingAddActivity.this, "Please input content", Toast.LENGTH_SHORT).show();
-                } else if(imageView.getDrawable()==null){
-                    Toast.makeText(SharingAddActivity.this,"Please select Image or waiting for Image load",Toast.LENGTH_SHORT).show();
+            //register listener for post button
+            post=(Button)findViewById(R.id.post);
+            post.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    titleText = title.getEditText().getText().toString();
+                    contentText = content.getEditText().getText().toString();
+                    if (titleText.length() == 0) {
+                        Toast.makeText(SharingAddActivity.this, "Please input title", Toast.LENGTH_SHORT).show();
+                    } else if (contentText.length() == 0) {
+                        Toast.makeText(SharingAddActivity.this, "Please input content", Toast.LENGTH_SHORT).show();
+                    } else if(imageView.getDrawable()==null){
+                        Toast.makeText(SharingAddActivity.this,"Please select Image or waiting for Image load",Toast.LENGTH_SHORT).show();
+                    }
+                    mRootRef2 = mRootRef1 = FirebaseDatabase.getInstance().getReference().child("sharing").child(String.valueOf(postid));
+                    if (titleText.length() != 0 && contentText.length() != 0&&imageView.getDrawable()!=null) {
+                        uploadImage();
+                    }
                 }
-                mRootRef2 = mRootRef1 = FirebaseDatabase.getInstance().getReference().child("sharing").child(String.valueOf(postid));
-                if (titleText.length() != 0 && contentText.length() != 0&&imageView.getDrawable()!=null) {
-                    uploadImage();
-                }
-            }
-        });
+            });
 
-        //register listener for upload Img button
-        uploadImg = (Button) findViewById(R.id.ImageBut);
-        uploadImg.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage();
-            }
-        });
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectImage();
-            }
-        });
+            //register listener for upload Img button
+            uploadImg = (Button) findViewById(R.id.ImageBut);
+            uploadImg.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectImage();
+                }
+            });
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    selectImage();
+                }
+            });
+        }else{
+            Toast.makeText(SharingAddActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
+
+        }
+
     }
 
     private void uploadImage() {

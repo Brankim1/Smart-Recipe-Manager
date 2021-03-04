@@ -45,7 +45,11 @@ public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAd
     public void onBindViewHolder(ViewHolder holder, final int position) {
         //register click listener for cardView, which contains ingredients name
         holder.IngredientName.setText(predictText.get(position));
-        holder.itemView.setBackgroundColor(Color.WHITE);
+        if(predictSelect.get(position)==false){
+            holder.itemView.setBackgroundColor(Color.WHITE);
+        }else{
+            holder.itemView.setBackgroundColor(Color.parseColor("#c9c9c9"));
+        }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

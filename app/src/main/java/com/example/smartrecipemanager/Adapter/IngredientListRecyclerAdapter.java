@@ -7,12 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 import com.example.smartrecipemanager.R;
-import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
+
 import static java.util.Arrays.asList;
 
 /**
@@ -63,8 +67,8 @@ public class IngredientListRecyclerAdapter extends RecyclerView.Adapter<Ingredie
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-            //load ingredients image for layout
-            Picasso.get().load(ingreId.get(position)).into(holder.ingredient_image);
+            //load ingredients image for layout(use Glide to improve performance)
+        Glide.with(context).load(ingreId.get(position)).into(holder.ingredient_image);
             //load ingredients name for layout
             holder.ingredient_name.setText(ingreName.get(position));
             //register click listener for cardView, which contains ingredient image and name

@@ -1,7 +1,10 @@
 package com.example.smartrecipemanager;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -66,58 +69,63 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         style="breakfast";
+        ConnectivityManager  manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            RecipeList = new ArrayList<Recipe>();
+            recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+            recyclerView.setLayoutManager(layoutManager);
+            myAdapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
+            recyclerView.setAdapter(myAdapter);
 
-        RecipeList = new ArrayList<Recipe>();
-        recyclerView = (RecyclerView) findViewById(R.id.homeRecyclerView);
- //     GridLayoutManager layoutManager = new GridLayoutManager(this,2);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-        recyclerView.setLayoutManager(layoutManager);
-        myAdapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
-        recyclerView.setAdapter(myAdapter);
-
-        //load more recipes
-        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if (newState ==RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 ==myAdapter.getItemCount()) {
+            //load more recipes
+            recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    if (newState ==RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 ==myAdapter.getItemCount()) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getApplicationContext(),"Loading...", Toast.LENGTH_SHORT).show();
+                                getRandomRecipes(false);
+                                myAdapter.notifyDataSetChanged();
+                            }
+                        },1000);
+                    }
+                }
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView,dx, dy);
+                    int[] visibleList =layoutManager.findLastCompletelyVisibleItemPositions(null);
+                    Arrays.sort(visibleList);
+                    lastVisibleItem= (int) visibleList[visibleList.length-1];
+                }
+            });
+            //register listener for swipeRefreshLayout, which can update random recipes
+            swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swiperefreshlayout);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(getApplicationContext(),"Loading...", Toast.LENGTH_SHORT).show();
-                            getRandomRecipes(false);
-                            myAdapter.notifyDataSetChanged();
+                            getRandomRecipes(true);
+                            swipeRefreshLayout.setRefreshing(false);
+                            Toast.makeText(HomeActivity.this, "Update", Toast.LENGTH_SHORT).show();
                         }
-                    },1000);
+                    }, 2000);
                 }
-            }
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView,dx, dy);
-                int[] visibleList =layoutManager.findLastVisibleItemPositions(null);
-                Arrays.sort(visibleList);
-                lastVisibleItem= (int) visibleList[visibleList.length-1];
-            }
-        });
-        //register listener for swipeRefreshLayout, which can update random recipes
-        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.swiperefreshlayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getRandomRecipes(true);
-                        swipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(HomeActivity.this, "Update", Toast.LENGTH_SHORT).show();
-                    }
-                }, 2000);
-            }
-        });
-        setDrawerLayout();
-        setTabLayout();
-        getRandomRecipes(true);
+            });
+            setDrawerLayout();
+            setTabLayout();
+            getRandomRecipes(true);
+        }else{
+            dialog("Sorry","Network connect fail, Please press OK to finish");
+        }
+
     }
 
     private void setTabLayout() {
@@ -171,12 +179,12 @@ public class HomeActivity extends AppCompatActivity {
         if(clear==true){
             RecipeList.clear();
         }
-
         String url = "https://api.spoonacular.com/recipes/random?number=20&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style;
         if(vegan.equals("Vegan")) {
            //for vegan
             url = "https://api.spoonacular.com/recipes/random?number=20&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags="+style+",vegan";
         }
+        Log.d("homeActivity","recipe title is dinner url is"+ url);
         RequestQueue requestQueue = Volley.newRequestQueue(this);
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
@@ -184,7 +192,6 @@ public class HomeActivity extends AppCompatActivity {
                     public void onResponse(JSONObject response) {
                         try {
                             recipeArray = (JSONArray) response.get("recipes");
-                            Log.i("the res is:", String.valueOf(recipeArray));
                             for (int i = 0; i < recipeArray.length(); i++) {
                                 JSONObject jsonObject1;
                                 jsonObject1 = recipeArray.getJSONObject(i);
@@ -193,6 +200,7 @@ public class HomeActivity extends AppCompatActivity {
                                 recipe.setTitle(jsonObject1.optString("title"));
                                 recipe.setPic(jsonObject1.optString("image"));
                                 RecipeList.add(recipe);
+                                Log.d("home activity","recipe title is"+jsonObject1.optString("title"));
                             }
                             //send recipe data to adapter for show
                             myAdapter.notifyDataSetChanged();

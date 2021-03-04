@@ -1,7 +1,10 @@
 package com.example.smartrecipemanager;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -52,33 +55,38 @@ public class SharingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sharing);
-
         PostList = new ArrayList<Post>();
-        recyclerView = (RecyclerView) findViewById(R.id.sharingRecyclerView);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-        recyclerView.setLayoutManager(layoutManager);
-        myAdapter = new SharingPostListRecyclerAdapter(getApplicationContext(), PostList);
-        recyclerView.setAdapter(myAdapter);
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            recyclerView = (RecyclerView) findViewById(R.id.sharingRecyclerView);
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+            recyclerView.setLayoutManager(layoutManager);
+            myAdapter = new SharingPostListRecyclerAdapter(getApplicationContext(), PostList);
+            recyclerView.setAdapter(myAdapter);
 
-        //register listener for swipeRefreshLayout, which can update post
-        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.sharingSwiperefreshlayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        //get post from server
-                        setPostList();
-                        swipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(SharingActivity.this, "Update", Toast.LENGTH_SHORT).show();
-                    }
-                }, 2000);
-            }
-        });
-        setDrawerLayout();
-        setFloatingActionButton();
+            //register listener for swipeRefreshLayout, which can update post
+            swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.sharingSwiperefreshlayout);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            //get post from server
+                            setPostList();
+                            swipeRefreshLayout.setRefreshing(false);
+                            Toast.makeText(SharingActivity.this, "Update", Toast.LENGTH_SHORT).show();
+                        }
+                    }, 2000);
+                }
+            });
+            setDrawerLayout();
+            setFloatingActionButton();
+        }else{
+            Toast.makeText(SharingActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

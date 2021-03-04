@@ -1,7 +1,10 @@
 package com.example.smartrecipemanager;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +38,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SearchResultActivity extends AppCompatActivity {
+    ConnectivityManager manager;
+    NetworkInfo networkInfo;
     String data;
     JSONArray recipeArray;
     List<Recipe> RecipeList;
@@ -56,7 +61,14 @@ public class SearchResultActivity extends AppCompatActivity {
         myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
         recyclerView.setAdapter(myAdapter);
         setToolBar();
-        getVegan();
+        manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            getVegan();
+        }else{
+            dialog("Sorry","Network connect fail, Please press OK to finish");
+        }
+
     }
 
     private void getVegan() {
@@ -100,7 +112,7 @@ public class SearchResultActivity extends AppCompatActivity {
                         public void onResponse(JSONObject response) {
                             try {
                                 recipeArray = (JSONArray) response.get("recipes");
-                                Log.i("the res is:", String.valueOf(recipeArray));
+
                                 for (int i = 0; i < recipeArray.length(); i++) {
                                     JSONObject jsonObject1;
                                     jsonObject1 = recipeArray.getJSONObject(i);

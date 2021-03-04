@@ -38,16 +38,23 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
-        mAuth = FirebaseAuth.getInstance();
-        email= (TextInputLayout)findViewById(R.id.email);
-        password=(TextInputLayout)findViewById(R.id.password);
-        login=(Button)findViewById(R.id.login);
-        newUserText=(TextView)findViewById(R.id.registerText);
-        forgotText=(TextView)findViewById(R.id.forgetText);
+        ConnectivityManager  manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            mAuth = FirebaseAuth.getInstance();
+            email= (TextInputLayout)findViewById(R.id.email);
+            password=(TextInputLayout)findViewById(R.id.password);
+            login=(Button)findViewById(R.id.login);
+            newUserText=(TextView)findViewById(R.id.registerText);
+            forgotText=(TextView)findViewById(R.id.forgetText);
 
-        login.setOnClickListener(this);
-        newUserText.setOnClickListener(this);
-        forgotText.setOnClickListener(this);
+            login.setOnClickListener(this);
+            newUserText.setOnClickListener(this);
+            forgotText.setOnClickListener(this);
+        }else{
+            Toast.makeText(LoginActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
+        }
+
     }
 
     @Override

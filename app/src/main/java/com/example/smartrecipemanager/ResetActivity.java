@@ -1,5 +1,8 @@
 package com.example.smartrecipemanager;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -26,38 +29,46 @@ public class ResetActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reset);
-        mAuth = FirebaseAuth.getInstance();
-        email=(TextInputLayout)findViewById(R.id.email3);
-        reset=(Button)findViewById(R.id.reset);
-        reset.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth auth = FirebaseAuth.getInstance();
-                String emailAddress = email.getEditText().getText().toString();
-                try {
-                    if (!(Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches())){//check mail format
-                        Toast.makeText(ResetActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
-                    }
-                    else{
-                        auth.sendPasswordResetEmail(emailAddress)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                       @Override
-                                       public void onComplete(@NonNull Task<Void> task) {
-                                           if (task.isSuccessful()) {
-                                               Toast.makeText(ResetActivity.this, "Email sent", Toast.LENGTH_LONG).show();
-                                           }
-                                           else if(task.getException() instanceof FirebaseAuthInvalidUserException){
-                                               Toast.makeText(ResetActivity.this, "Email not exist", Toast.LENGTH_LONG).show();
-                                           }
-                                       }
-                                   }
-                                );
-                    }
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            mAuth = FirebaseAuth.getInstance();
+            email=(TextInputLayout)findViewById(R.id.email3);
+            reset=(Button)findViewById(R.id.reset);
+            reset.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v) {
+                    FirebaseAuth auth = FirebaseAuth.getInstance();
+                    String emailAddress = email.getEditText().getText().toString();
+                    try {
+                        if (!(Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches())){//check mail format
+                            Toast.makeText(ResetActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            auth.sendPasswordResetEmail(emailAddress)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                                               @Override
+                                                               public void onComplete(@NonNull Task<Void> task) {
+                                                                   if (task.isSuccessful()) {
+                                                                       Toast.makeText(ResetActivity.this, "Email sent", Toast.LENGTH_LONG).show();
+                                                                   }
+                                                                   else if(task.getException() instanceof FirebaseAuthInvalidUserException){
+                                                                       Toast.makeText(ResetActivity.this, "Email not exist", Toast.LENGTH_LONG).show();
+                                                                   }
+                                                               }
+                                                           }
+                                    );
+                        }
 
-                } catch (Exception e) {
-                    Toast.makeText(ResetActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    } catch (Exception e) {
+                        Toast.makeText(ResetActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            Toast.makeText(ResetActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
+
+        }
+
     }
 }

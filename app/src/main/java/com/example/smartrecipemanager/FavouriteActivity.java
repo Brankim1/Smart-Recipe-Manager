@@ -1,7 +1,10 @@
 package com.example.smartrecipemanager;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -49,32 +52,36 @@ public class FavouriteActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favourite);
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            RecipeList = new ArrayList<Recipe>();
+            recyclerView = (RecyclerView) findViewById(R.id.favouriteRecyclerView);
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
+            recyclerView.setLayoutManager(layoutManager);
+            myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
+            recyclerView.setAdapter(myAdapter);
 
-        RecipeList = new ArrayList<Recipe>();
-        recyclerView = (RecyclerView) findViewById(R.id.favouriteRecyclerView);
-        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
-        recyclerView.setLayoutManager(layoutManager);
-        myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
-        recyclerView.setAdapter(myAdapter);
-
-        //register listener for swipeRefreshLayout, which can update favorite recipes
-        swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.favouriteSwiperefreshlayout);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        getFavouriteID();
-                        swipeRefreshLayout.setRefreshing(false);
-                        Toast.makeText(FavouriteActivity.this, "Update", Toast.LENGTH_SHORT).show();
-                    }
-                }, 2000);
-            }
-        });
-
-        setDrawerLayout();
+            //register listener for swipeRefreshLayout, which can update favorite recipes
+            swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.favouriteSwiperefreshlayout);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            getFavouriteID();
+                            swipeRefreshLayout.setRefreshing(false);
+                            Toast.makeText(FavouriteActivity.this, "Update", Toast.LENGTH_SHORT).show();
+                        }
+                    }, 2000);
+                }
+            });
+            setDrawerLayout();
+        }else{
+            dialog("Sorry","Network connect fail, Please press OK to finish");
+        }
 
     }
 

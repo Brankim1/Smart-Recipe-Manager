@@ -1,10 +1,14 @@
 package com.example.smartrecipemanager;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -55,10 +59,17 @@ public class RecipeActivity extends AppCompatActivity {
         pic = intent.getStringExtra("pic");
         img = findViewById(R.id.recipe_img);
         fab = findViewById(R.id.floatingActionButton);
-        setToolBar();
-        checkFavourite();
-        getImage();
-        getDetailInfo();
+        ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = manager.getActiveNetworkInfo();
+        if (networkInfo != null) {
+            setToolBar();
+            checkFavourite();
+            getImage();
+            getDetailInfo();
+        }else{
+            Toast.makeText(RecipeActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
+
+        }
 
     }
 
