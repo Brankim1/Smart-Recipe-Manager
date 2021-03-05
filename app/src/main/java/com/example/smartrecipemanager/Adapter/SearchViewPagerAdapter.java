@@ -3,9 +3,9 @@ package com.example.smartrecipemanager.Adapter;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import com.example.smartrecipemanager.fragement.AiFragment;
-import com.example.smartrecipemanager.fragement.IngredientsFragment;
-import com.example.smartrecipemanager.fragement.StyleFragment;
+import com.example.smartrecipemanager.fragment.AiFragment;
+import com.example.smartrecipemanager.fragment.IngredientsFragment;
+import com.example.smartrecipemanager.fragment.StyleFragment;
 
 
 /**SearchViewPagerAdapter

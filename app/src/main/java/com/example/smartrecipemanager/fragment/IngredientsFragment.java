@@ -1,4 +1,4 @@
-package com.example.smartrecipemanager.fragement;
+package com.example.smartrecipemanager.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;

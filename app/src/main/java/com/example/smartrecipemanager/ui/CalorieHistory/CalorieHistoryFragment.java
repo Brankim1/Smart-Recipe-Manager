@@ -173,7 +173,6 @@ public class CalorieHistoryFragment extends Fragment {
         Line line = new Line(mPointValues).setColor(Color.parseColor("#FFA500")).setCubic(false);
         List<Line> lines = new ArrayList<Line>();
         line.setShape(ValueShape.CIRCLE);
-        line.setCubic(true);
         line.setFilled(true);
         line.setHasLabelsOnlyForSelected(true);
         line.setHasLines(true);

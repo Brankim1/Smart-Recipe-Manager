@@ -3,8 +3,8 @@ package com.example.smartrecipemanager.Adapter;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
-import com.example.smartrecipemanager.fragement.RecipeIngredientsFragment;
-import com.example.smartrecipemanager.fragement.RecipeInstructionsFragment;
+import com.example.smartrecipemanager.fragment.RecipeIngredientsFragment;
+import com.example.smartrecipemanager.fragment.RecipeInstructionsFragment;
 import org.json.JSONObject;
 
 /** RecipeViewPagerAdapter

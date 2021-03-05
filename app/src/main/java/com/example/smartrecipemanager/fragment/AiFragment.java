@@ -1,4 +1,4 @@
-package com.example.smartrecipemanager.fragement;
+package com.example.smartrecipemanager.fragment;
 
 import android.app.Dialog;
 import android.content.ActivityNotFoundException;
