@@ -13,7 +13,8 @@ import org.json.JSONObject;
 public class RecipeViewPagerAdapter extends FragmentPagerAdapter {
     private int list;
     private JSONObject response;
-
+    private RecipeIngredientsFragment recipeIngredientsFragment;
+    private RecipeInstructionsFragment recipeInstructionsFragment;
     public RecipeViewPagerAdapter(FragmentManager fm, int list, JSONObject response) {
         super(fm);
         this.list = list;
@@ -25,7 +26,7 @@ public class RecipeViewPagerAdapter extends FragmentPagerAdapter {
         switch (position) {
             case 0:
                 //go to RecipeIngredientsFragment
-                RecipeIngredientsFragment recipeIngredientsFragment = new RecipeIngredientsFragment();
+                recipeIngredientsFragment = new RecipeIngredientsFragment();
                 return recipeIngredientsFragment.newInstance(response.toString());
             case 1:
                 //go to RecipeInstructionsFragment

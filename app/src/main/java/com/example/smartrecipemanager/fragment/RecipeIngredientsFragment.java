@@ -31,7 +31,7 @@ public class RecipeIngredientsFragment extends Fragment {
     private View view;
     private static final String ARG_PARAM1 = "param1";
     private String mParam1;
-
+    private RecipeIngredientsAdapter myAdapter;
     public RecipeIngredientsFragment() {
         // Required empty public constructor
     }
@@ -76,7 +76,7 @@ public class RecipeIngredientsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
         myrv = (RecyclerView)view.findViewById(R.id.recipe_ingredients);
         myrv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        RecipeIngredientsAdapter myAdapter = new RecipeIngredientsAdapter(getContext(), ingredientsList);
+        myAdapter = new RecipeIngredientsAdapter(getContext(), ingredientsList);
         myrv.setAdapter(myAdapter);
 
         return view;

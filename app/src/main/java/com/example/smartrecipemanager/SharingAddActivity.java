@@ -75,7 +75,7 @@ public class SharingAddActivity extends AppCompatActivity {
     private DatabaseReference mRootRef2;
     private FirebaseStorage storage;
     private Uri downLoadUrl;
-
+    public Post post2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -193,8 +193,8 @@ public class SharingAddActivity extends AppCompatActivity {
         mRootRef2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Post post = new Post(postid,userid,"author", titleText, String.valueOf(downLoadUrl),contentText);
-                mRootRef2.setValue(post);
+                post2 = new Post(postid,userid,"author", titleText, String.valueOf(downLoadUrl),contentText);
+                mRootRef2.setValue(post2);
                 Toast.makeText(SharingAddActivity.this, "Post Successful", Toast.LENGTH_SHORT).show();
                 title.getEditText().getText().clear();
                 content.getEditText().getText().clear();
@@ -225,7 +225,6 @@ public class SharingAddActivity extends AppCompatActivity {
                     for (DataSnapshot child : dataSnapshot.getChildren()) {
                         Post post=child.getValue(Post.class);
                         id.add(post.getPostid());
-
                     }
                     postid= (long) Collections.max(id)+1;
                 }else{

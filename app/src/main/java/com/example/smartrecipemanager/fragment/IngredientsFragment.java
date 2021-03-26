@@ -28,7 +28,8 @@ public class IngredientsFragment extends Fragment {
     private RecyclerView recyclerView;
     private Button searchButton;
     private List<String> ingredientsList;
-
+    private IngredientListRecyclerAdapter myAdapter;
+    private Intent searchResultIntent;
     public IngredientsFragment() {
         // Required empty public constructor
     }
@@ -48,7 +49,7 @@ public class IngredientsFragment extends Fragment {
         //recyclerView have 3 columns
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(),3);
         recyclerView.setLayoutManager(layoutManager);
-        IngredientListRecyclerAdapter myAdapter = new IngredientListRecyclerAdapter(getContext());
+        myAdapter = new IngredientListRecyclerAdapter(getContext());
         recyclerView.setAdapter(myAdapter);
 
         //register search button
@@ -75,7 +76,7 @@ public class IngredientsFragment extends Fragment {
                             }
                         }}
                     //go to SearchResultActivity
-                    Intent searchResultIntent = new Intent(getActivity(), SearchResultActivity.class);
+                    searchResultIntent = new Intent(getActivity(), SearchResultActivity.class);
                     searchResultIntent.putExtra("data",queryData);
                     searchResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     startActivity(searchResultIntent);

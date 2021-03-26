@@ -32,6 +32,7 @@ public class CalorieAddFragment extends Fragment {
     private String text;
     private FirebaseAuth mAuth;
     private DatabaseReference mRootRef;
+    private Calorie calorie;
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         CalorieAddViewModel =
@@ -75,7 +76,7 @@ public class CalorieAddFragment extends Fragment {
         mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Calorie calorie = new Calorie(time,text);
+                calorie = new Calorie(time,text);
                 mRootRef.setValue(calorie);
                     Toast.makeText(getContext(),"upload successful",Toast.LENGTH_SHORT).show();
                     editText.getEditText().setText("");

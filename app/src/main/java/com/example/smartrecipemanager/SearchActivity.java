@@ -41,6 +41,7 @@ public class SearchActivity extends AppCompatActivity {
     private Button searchButton;
     private String gender;
     private ImageView headerPortrait;
+    private SearchViewPagerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +81,7 @@ public class SearchActivity extends AppCompatActivity {
         mytab.addTab(mytab.newTab().setText("AI"));
         mytab.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        final SearchViewPagerAdapter adapter = new SearchViewPagerAdapter(getSupportFragmentManager(),mytab.getTabCount());
+        adapter = new SearchViewPagerAdapter(getSupportFragmentManager(),mytab.getTabCount());
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mytab));
 

@@ -13,6 +13,9 @@ import com.example.smartrecipemanager.fragment.StyleFragment;
  * */
 public class SearchViewPagerAdapter extends FragmentPagerAdapter {
     private int list;
+    private StyleFragment styleFragment;
+    private IngredientsFragment ingredientsFragment;
+    private AiFragment aiFragment;
     public SearchViewPagerAdapter(FragmentManager fm, int list) {
         super(fm);
         this.list = list;
@@ -21,13 +24,13 @@ public class SearchViewPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                StyleFragment styleFragment = new StyleFragment();
+                styleFragment = new StyleFragment();
                 return styleFragment;
             case 1:
-                IngredientsFragment ingredientsFragment = new IngredientsFragment();
+                ingredientsFragment = new IngredientsFragment();
                 return ingredientsFragment;
             case 2:
-                AiFragment aiFragment = new AiFragment();
+                aiFragment = new AiFragment();
                 return aiFragment;
             default:
                 StyleFragment styleFragment2 = new StyleFragment();

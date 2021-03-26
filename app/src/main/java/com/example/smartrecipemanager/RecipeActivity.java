@@ -48,6 +48,8 @@ public class RecipeActivity extends AppCompatActivity {
     private DatabaseReference mRootRef;
     private FloatingActionButton fab;
     private boolean like = false;
+    private Recipe recipe;
+    private RecipeViewPagerAdapter adapter;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,7 +108,7 @@ public class RecipeActivity extends AppCompatActivity {
                         if (like==false) {
                             like=true;
                             fab.setImageResource(R.drawable.like);
-                            Recipe recipe = new Recipe(id,title,pic);
+                            recipe = new Recipe(id,title,pic);
                             mRootRef.setValue(recipe);
                         } else {
                             try {
@@ -173,7 +175,7 @@ public class RecipeActivity extends AppCompatActivity {
         mytab.addTab(mytab.newTab().setText("instructions"));
         mytab.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.recipe_pager);
-        final RecipeViewPagerAdapter adapter = new RecipeViewPagerAdapter(getSupportFragmentManager(),mytab.getTabCount(),response);
+        adapter = new RecipeViewPagerAdapter(getSupportFragmentManager(),mytab.getTabCount(),response);
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mytab));
 

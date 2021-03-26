@@ -38,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity{
     private RadioGroup veganGroup;
     private RadioButton  veganSelect;
     private Button register;
+    private PersonalInfo personalInfo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -118,7 +119,7 @@ public class RegisterActivity extends AppCompatActivity{
         mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                PersonalInfo personalInfo = new PersonalInfo(genderSelect.getText().toString(),veganSelect.getText().toString());
+                personalInfo = new PersonalInfo(genderSelect.getText().toString(),veganSelect.getText().toString());
                 mRootRef.setValue(personalInfo);
                 Intent mainIntent= new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(mainIntent);
