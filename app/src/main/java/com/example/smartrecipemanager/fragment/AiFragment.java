@@ -124,6 +124,7 @@ public class AiFragment extends Fragment {
         uploadImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imageView.setImageDrawable(null);
                 //choose image from gallery or camera
                 selectImage();
             }
@@ -169,6 +170,7 @@ public class AiFragment extends Fragment {
                     //go to SearchResultActivity
                     searchResultIntent = new Intent(getActivity(), SearchResultActivity.class);
                     searchResultIntent.putExtra("data", queryData);
+                    searchResultIntent.putExtra("ingredient","ingredientSearch");
                     searchResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(searchResultIntent);
                 }

@@ -78,6 +78,7 @@ public class IngredientsFragment extends Fragment {
                     //go to SearchResultActivity
                     searchResultIntent = new Intent(getActivity(), SearchResultActivity.class);
                     searchResultIntent.putExtra("data",queryData);
+                    searchResultIntent.putExtra("ingredient","ingredientSearch");
                     searchResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     startActivity(searchResultIntent);
                 }

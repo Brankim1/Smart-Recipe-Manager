@@ -58,6 +58,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                     //go to SearchResult Activity
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","American");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }
@@ -70,6 +71,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","Turkish");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }
@@ -82,6 +84,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","French");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }
@@ -94,6 +97,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","Indian");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }
@@ -106,6 +110,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","Chinese");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }
@@ -118,6 +123,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","Italian");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }
@@ -130,6 +136,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","Dessert");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }
@@ -142,6 +149,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","vegan");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }
@@ -154,6 +162,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","Salad");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }
@@ -166,6 +175,7 @@ public class StyleListRecyclerAdapter extends RecyclerView.Adapter<StyleListRecy
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(context, SearchResultActivity.class);
                     ResultIntent.putExtra("data","Healthy");
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     context.startActivity(ResultIntent);
                 }

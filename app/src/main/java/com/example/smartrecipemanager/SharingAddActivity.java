@@ -118,12 +118,14 @@ public class SharingAddActivity extends AppCompatActivity {
             uploadImg.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    imageView.setImageDrawable(null);
                     selectImage();
                 }
             });
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    imageView.setImageDrawable(null);
                     selectImage();
                 }
             });

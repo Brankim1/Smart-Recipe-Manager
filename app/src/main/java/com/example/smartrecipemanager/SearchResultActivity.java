@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -19,7 +20,9 @@ import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
+import com.android.volley.Response.ErrorListener;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.example.smartrecipemanager.Adapter.SearchListRecyclerAdapter;
@@ -48,6 +51,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private SearchListRecyclerAdapter myAdapter;
     private String vegan;
+    private String ingredientSearch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +59,7 @@ public class SearchResultActivity extends AppCompatActivity {
         Intent intent = getIntent();
         /*get data form search activity*/
         data = intent.getStringExtra("data");
+        ingredientSearch = intent.getStringExtra("ingredient");
         RecipeList = new ArrayList<Recipe>();
 
         recyclerView = (RecyclerView) findViewById(R.id.searchResultRecyclerView);
@@ -136,7 +141,7 @@ public class SearchResultActivity extends AppCompatActivity {
                             }
                         }
                     },
-                            new Response.ErrorListener() {
+                            new ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
                                     Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
@@ -145,8 +150,46 @@ public class SearchResultActivity extends AppCompatActivity {
                             }
                     );
             requestQueue.add(jsonObjectRequest);
-        } else {
-            //for non empty search, get recipes
+        } else if(ingredientSearch.equals("ingredientSearch")) {
+            //for non empty ingredient and AI search, get recipes
+            url = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + data+"&number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
+            Log.d("SearchActivity","ingredientsearch url is "+url);
+            RequestQueue requestQueue = Volley.newRequestQueue(this);
+            JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
+                    (Request.Method.GET, url, null, new Response.Listener<JSONArray>() {
+                        @Override
+                        public void onResponse(JSONArray response) {
+                            try {
+                            for (int i = 0; i < response.length(); i++) {
+                                JSONObject jsonObject1;
+                                jsonObject1 = response.getJSONObject(i);
+                                Recipe recipe = new Recipe();
+                                recipe.setId(jsonObject1.optString("id"));
+                                recipe.setTitle(jsonObject1.optString("title"));
+                                recipe.setPic(jsonObject1.optString("image"));
+                                RecipeList.add(recipe);
+                                }
+                            }catch (JSONException ex) {
+                                Toast.makeText(SearchResultActivity.this, "recipes get fail", Toast.LENGTH_SHORT).show();
+                                dialog("Sorry", "Query recipes failed, Please choose OK to back");
+                            }
+                            myAdapter.notifyDataSetChanged();
+                        }
+                    },
+                            new ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
+                                    dialog("Sorry","Query recipes failed, Please choose OK to back");
+                                }
+
+                            }
+                    );
+            requestQueue.add(jsonArrayRequest);
+        }
+
+        else {
+            //for non empty text search, get recipes
             url = "https://api.spoonacular.com/recipes/search?query=" + data+"&number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
             if(vegan.equals("Vegan")) {
                 //for vegan
@@ -179,7 +222,7 @@ public class SearchResultActivity extends AppCompatActivity {
                             }
                         }
                     },
-                            new Response.ErrorListener() {
+                            new ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
                                     Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();

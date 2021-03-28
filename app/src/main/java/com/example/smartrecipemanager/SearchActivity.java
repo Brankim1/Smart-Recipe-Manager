@@ -59,6 +59,7 @@ public class SearchActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     Intent ResultIntent = new Intent(SearchActivity.this, SearchResultActivity.class);
                     ResultIntent.putExtra("data",searchText.getEditText().getText().toString());
+                    ResultIntent.putExtra("ingredient","");
                     ResultIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                     startActivity(ResultIntent);
                 }
