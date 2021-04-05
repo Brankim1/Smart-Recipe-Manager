@@ -153,7 +153,7 @@ public class SharingAddActivity extends AppCompatActivity {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
-
+        //upload image
         final UploadTask uploadTask = mountainsRef.putBytes(data);
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override

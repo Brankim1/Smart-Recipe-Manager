@@ -47,7 +47,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private NetworkInfo networkInfo;
     private String data;
     private JSONArray recipeArray;
-    private  List<Recipe> RecipeList;
+    public  List<Recipe> RecipeList;
     private RecyclerView recyclerView;
     private SearchListRecyclerAdapter myAdapter;
     private String vegan;
@@ -113,10 +113,10 @@ public class SearchResultActivity extends AppCompatActivity {
         String url;
         if (data.isEmpty()) {
             //for empty search, get random recipes
-            url = "https://api.spoonacular.com/recipes/random?number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
+            url = "https://api.spoonacular.com/recipes/random?number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
             if(vegan.equals("Vegan")) {
                 //for vegan
-                url = "https://api.spoonacular.com/recipes/random?number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags=vegan";
+                url = "https://api.spoonacular.com/recipes/random?number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&tags=vegan";
             }
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -152,7 +152,7 @@ public class SearchResultActivity extends AppCompatActivity {
             requestQueue.add(jsonObjectRequest);
         } else if(ingredientSearch.equals("ingredientSearch")) {
             //for non empty ingredient and AI search, get recipes
-            url = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + data+"&number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
+            url = "https://api.spoonacular.com/recipes/findByIngredients?ingredients=" + data+"&number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
             Log.d("SearchActivity","ingredientsearch url is "+url);
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonArrayRequest jsonArrayRequest = new JsonArrayRequest
@@ -190,10 +190,10 @@ public class SearchResultActivity extends AppCompatActivity {
 
         else {
             //for non empty text search, get recipes
-            url = "https://api.spoonacular.com/recipes/search?query=" + data+"&number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
+            url = "https://api.spoonacular.com/recipes/search?query=" + data+"&number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key);
             if(vegan.equals("Vegan")) {
                 //for vegan
-                url = "https://api.spoonacular.com/recipes/search?query=" + data+"&number=30&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&diet="+vegan;
+                url = "https://api.spoonacular.com/recipes/search?query=" + data+"&number=50&instructionsRequired=true&apiKey="+getString(R.string.spoonacular_key)+"&diet="+vegan;
             }
             RequestQueue requestQueue = Volley.newRequestQueue(this);
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

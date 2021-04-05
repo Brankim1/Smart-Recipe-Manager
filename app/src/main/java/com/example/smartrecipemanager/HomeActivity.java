@@ -56,7 +56,7 @@ public class HomeActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
     private TabLayout mytab;
     private JSONArray recipeArray;
-    private List<Recipe> RecipeList;
+    public List<Recipe> RecipeList;
     private String style;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;

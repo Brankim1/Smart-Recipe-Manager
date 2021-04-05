@@ -49,16 +49,16 @@ public class ResetActivity extends AppCompatActivity {
                         else{
                             auth.sendPasswordResetEmail(emailAddress)
                                     .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                               @Override
-                                                               public void onComplete(@NonNull Task<Void> task) {
-                                                                   if (task.isSuccessful()) {
-                                                                       Toast.makeText(ResetActivity.this, "Email sent", Toast.LENGTH_LONG).show();
-                                                                   }
-                                                                   else if(task.getException() instanceof FirebaseAuthInvalidUserException){
-                                                                       Toast.makeText(ResetActivity.this, "Email not exist", Toast.LENGTH_LONG).show();
-                                                                   }
-                                                               }
-                                                           }
+                                       @Override
+                                       public void onComplete(@NonNull Task<Void> task) {
+                                           if (task.isSuccessful()) {
+                                               Toast.makeText(ResetActivity.this, "Email sent", Toast.LENGTH_LONG).show();
+                                           }
+                                           else if(task.getException() instanceof FirebaseAuthInvalidUserException){
+                                               Toast.makeText(ResetActivity.this, "Email not exist", Toast.LENGTH_LONG).show();
+                                           }
+                                       }
+                                   }
                                     );
                         }
 
