@@ -125,6 +125,8 @@ public class AiFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 imageView.setImageDrawable(null);
+                predictName.clear();
+                predictText.clear();
                 //choose image from gallery or camera
                 selectImage();
             }
@@ -306,7 +308,7 @@ public class AiFragment extends Fragment {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    myAdapter = new AiListRecyclerAdapter(getContext(),predictName,predictText);
+                    AiListRecyclerAdapter myAdapter = new AiListRecyclerAdapter(getContext(),predictName,predictText);
                     recyclerView.setAdapter(myAdapter);
                     break;
 
