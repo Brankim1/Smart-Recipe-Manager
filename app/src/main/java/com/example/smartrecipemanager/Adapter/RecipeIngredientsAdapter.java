@@ -15,7 +15,7 @@ import java.util.List;
 
 /**RecipeIngredientsAdapter
 * for RecipeActivity RecipeIngredientsFragment recyclerview
-* it can load recipe detail Ingredient name and image in recyclerview
+* it can load recipe Ingredients' name and image in recyclerview
 * */
 public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredientsAdapter.MyViewHolder> {
 

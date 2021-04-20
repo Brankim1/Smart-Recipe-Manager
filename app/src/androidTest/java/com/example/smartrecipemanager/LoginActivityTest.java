@@ -38,6 +38,11 @@ public class LoginActivityTest {
         scenario.onActivity(activity -> {
             ImageView imageView = activity.findViewById(R.id.imageLogin);
             assertNotNull(imageView.getDrawable());
+            Button button =activity.findViewById(R.id.login);
+            for(int i=0;i<100;i++){
+                button.performClick();
+            }
+
         });
 
     }

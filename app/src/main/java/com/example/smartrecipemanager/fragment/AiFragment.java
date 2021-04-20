@@ -186,11 +186,13 @@ public class AiFragment extends Fragment {
      *  through call gallery or camera
      * */
     public void selectImage(){
+        //custom dialog
         dialog = new Dialog(getContext(),R.style.DialogTheme);
         inflate = LayoutInflater.from(getContext()).inflate(R.layout.choosephoto_dialog, null);
         camera = (TextView) inflate.findViewById(R.id.takePhoto);
         pic = (TextView) inflate.findViewById(R.id.choosePhoto);
         cancel = (TextView) inflate.findViewById(R.id.cancel);
+        //add listener for dialog text
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -220,10 +222,12 @@ public class AiFragment extends Fragment {
     }
 
     private void pickAlbum(){
+        //go to the device default gallery application
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
     private void takePic(){
+         //go to the device default camera application
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
@@ -234,6 +238,7 @@ public class AiFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        //get returned image data from gallery or camera
         if (requestCode == PICK_IMAGE&&resultCode==RESULT_OK) {
             imgPath = data.getData();
             //load image to imageView

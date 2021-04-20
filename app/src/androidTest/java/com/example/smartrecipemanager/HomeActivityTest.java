@@ -7,6 +7,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.test.core.app.ActivityScenario;
 
+import com.google.android.material.tabs.TabLayout;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,6 +52,11 @@ public class HomeActivityTest {
             Toolbar toolbar = activity.findViewById(R.id.toolbar);
             assertThat(toolbar.getTitle().toString(), equalTo("Home"));
             assertFalse(drawerLayout.isDrawerOpen(GravityCompat.START));
+
+            TabLayout mytab =  activity.findViewById(R.id.homeTab);
+            for(int i=0;i<100;i++){
+                mytab.performClick();
+            }
 
         });
     }

@@ -120,7 +120,7 @@ public class AboutActivity extends AppCompatActivity {
         TextView email=(TextView)headerView.findViewById(R.id.drawerText1);
         email.setText(currentUserEmail);
 
-        //change drawerlayout header portrait image
+        //change drawerlayout header portrait image(gender)
         DatabaseReference mRootRef;
         headerPortrait=(ImageView)headerView.findViewById(R.id.headerPortrait);
         final String uid = mAuth.getCurrentUser().getUid();

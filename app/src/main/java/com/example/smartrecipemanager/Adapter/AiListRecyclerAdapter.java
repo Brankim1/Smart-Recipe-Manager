@@ -28,6 +28,7 @@ public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAd
         this.context=context;
         this.predictName=predictName;
         this.predictText=predictText;
+        //init selected ingredients status list
         predictSelect=new ArrayList<Boolean>();
         for(int i = 0;i<predictName.size();i++){
             predictSelect.add(false);
@@ -60,7 +61,7 @@ public class AiListRecyclerAdapter extends RecyclerView.Adapter<AiListRecyclerAd
         }else{
             holder.itemView.setBackgroundColor(Color.parseColor("#c9c9c9"));
         }
-        //register click listener it
+        //register click listener
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

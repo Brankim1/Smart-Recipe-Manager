@@ -33,6 +33,7 @@ public class IngredientListRecyclerAdapter extends RecyclerView.Adapter<Ingredie
 
     public IngredientListRecyclerAdapter(Context context){
         this.context=context;
+        //init selected ingredients status list
         ingredientsList = new ArrayList<>();
         Status=new ArrayList<Boolean>();
         for(int i=0;i<24;i++){

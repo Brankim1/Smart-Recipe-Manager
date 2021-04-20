@@ -32,6 +32,9 @@ public class ResetActivityTest {
             TextInputLayout textView = activity.findViewById(R.id.email3);
             textView.getEditText().setText("pengchengjin123@gmail.com");
             Button button =activity.findViewById(R.id.reset);
+            for(int i=0;i<100;i++){
+                button.performClick();
+            }
             button.performClick();
             //detect email whether receive reset password email
         });

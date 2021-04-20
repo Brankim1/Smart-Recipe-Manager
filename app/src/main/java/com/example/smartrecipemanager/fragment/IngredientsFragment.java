@@ -63,7 +63,7 @@ public class IngredientsFragment extends Fragment {
                     Toast.makeText(getActivity(), "Please select at least one ingredient", Toast.LENGTH_SHORT).show();
                 }
                 else{
-                    //reshape data that what ingredients were selected
+                    //reshape data that which ingredients were selected
                     String queryData="";
                     if(ingredientsList.size() == 1){
                         queryData= ingredientsList.get(0).toString();

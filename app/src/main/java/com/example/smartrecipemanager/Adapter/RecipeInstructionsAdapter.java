@@ -13,7 +13,7 @@ import java.util.List;
 
 /**RecipeInstructionsAdapter
  * for show recipe detail Instructions and order image in RecipeInstructionsFragment recyclerview
- * it can load image and text in recyclerview
+ * it can load instruction image and text in recyclerview
  * */
 public class RecipeInstructionsAdapter extends RecyclerView.Adapter<RecipeInstructionsAdapter.MyViewHolder> {
     private Context context;
