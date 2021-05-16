@@ -75,9 +75,7 @@ public class RecipeActivity extends AppCompatActivity {
             getDetailInfo();
         }else{
             Toast.makeText(RecipeActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
-
         }
-
     }
 
     /**
@@ -166,7 +164,6 @@ public class RecipeActivity extends AppCompatActivity {
             Picasso.get().load((String) pic).into(img);
         }
         catch (Exception e){
-
         }
     }
 

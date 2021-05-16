@@ -3,6 +3,7 @@ package com.example.smartrecipemanager.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,10 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.smartrecipemanager.R;
 import com.example.smartrecipemanager.Recipe;
 import com.example.smartrecipemanager.RecipeActivity;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -54,10 +55,9 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Recipe recipe = recipeList.get(position);
-        // handle empty image
         if (recipeList.get(position).getPic()!= "") {
             //load food image for layout
-            Picasso.get().load(recipeList.get(position).getPic()).into(holder.recipeImage);
+            Glide.with(context).load(recipeList.get(position).getPic()).into(holder.recipeImage);
         }
 
         //load food title for layout
@@ -67,6 +67,7 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
             @Override
             public void onClick(View view) {
                 //go to RecipeActivity to show recipe details
+                Log.d("SearchListRecycler","item was clicked");
                 Intent RecipeActivityIntent = new Intent(context, RecipeActivity.class);
                 RecipeActivityIntent.putExtra("id",recipeList.get(position).getId());
                 RecipeActivityIntent.putExtra("title",recipeList.get(position).getTitle());

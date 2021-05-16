@@ -18,7 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -96,16 +95,13 @@ public class RegisterActivity extends AppCompatActivity{
                             }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            if(e instanceof FirebaseAuthUserCollisionException){
                                 Toast.makeText(RegisterActivity.this, "Email already exists", Toast.LENGTH_LONG).show();
-                            }
                         }
                     });
                 }
 
             }
           });
-
     }
 
     /**

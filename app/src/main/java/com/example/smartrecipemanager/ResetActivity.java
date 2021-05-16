@@ -39,37 +39,31 @@ public class ResetActivity extends AppCompatActivity {
             reset.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    String emailAddress = email.getEditText().getText().toString();
                     try {
                         //input check
-                        if (!(Patterns.EMAIL_ADDRESS.matcher(emailAddress).matches())){//check mail format
-                            Toast.makeText(ResetActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
+                        String emailadd = email.getEditText().getText().toString();
+                        if (Patterns.EMAIL_ADDRESS.matcher(emailadd).matches()){//check mail format
+                            auth.sendPasswordResetEmail(emailadd)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if (task.getException() instanceof FirebaseAuthInvalidUserException) {
+                                                Toast.makeText(ResetActivity.this, "Email not exist", Toast.LENGTH_LONG).show();
+                                            }else if (task.isSuccessful()) {
+                                                Toast.makeText(ResetActivity.this, "Email sent", Toast.LENGTH_LONG).show();
+                                            }
+                                        }
+                                    });
                         }
                         else{
-                            auth.sendPasswordResetEmail(emailAddress)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                       @Override
-                                       public void onComplete(@NonNull Task<Void> task) {
-                                           if (task.isSuccessful()) {
-                                               Toast.makeText(ResetActivity.this, "Email sent", Toast.LENGTH_LONG).show();
-                                           }
-                                           else if(task.getException() instanceof FirebaseAuthInvalidUserException){
-                                               Toast.makeText(ResetActivity.this, "Email not exist", Toast.LENGTH_LONG).show();
-                                           }
-                                       }
-                                   }
-                                    );
+                            Toast.makeText(ResetActivity.this, "Invalid Email", Toast.LENGTH_SHORT).show();
                         }
-
                     } catch (Exception e) {
-
                     }
                 }
             });
         }else{
             Toast.makeText(ResetActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
-
         }
-
     }
 }
