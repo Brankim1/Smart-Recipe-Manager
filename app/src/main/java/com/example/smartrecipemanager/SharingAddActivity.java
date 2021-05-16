@@ -61,7 +61,7 @@ public class SharingAddActivity extends AppCompatActivity {
     private TextView pic;
     private TextView cancel;
     private Dialog dialog;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
     private TextInputLayout title;
     private TextInputLayout content;
     private String titleText;
@@ -86,7 +86,7 @@ public class SharingAddActivity extends AppCompatActivity {
             setToolBar();
             getInformation();
             storage = FirebaseStorage.getInstance();
-            mAuth = FirebaseAuth.getInstance();
+            auth = FirebaseAuth.getInstance();
             title=(TextInputLayout)findViewById(R.id.title);
             content=(TextInputLayout)findViewById(R.id.content);
             imageView = (ImageView) findViewById(R.id.picture);
@@ -215,8 +215,8 @@ public class SharingAddActivity extends AppCompatActivity {
     private void getInformation() {
         List id=new ArrayList<Long>();
         //get post id
-        mAuth = FirebaseAuth.getInstance();
-        final String uid = mAuth.getCurrentUser().getUid();
+        auth = FirebaseAuth.getInstance();
+        final String uid = auth.getCurrentUser().getUid();
         userid=uid;
         mRootRef1 = FirebaseDatabase.getInstance().getReference().child("sharing");
         mRootRef1.addValueEventListener(new ValueEventListener() {

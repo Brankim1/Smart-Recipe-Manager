@@ -27,11 +27,11 @@ import java.util.List;
 public class RecipeIngredientsFragment extends Fragment {
     private JSONArray ingredientsArr;
     private List<Ingredient> ingredientsList = new ArrayList<Ingredient>();
-    private RecyclerView myrv;
+    private RecyclerView recyclerView;
     private View view;
     private static final String ARG_PARAM1 = "param1";
     private String mParam1;
-    private RecipeIngredientsAdapter myAdapter;
+    private RecipeIngredientsAdapter adapter;
     public RecipeIngredientsFragment() {
         // Required empty public constructor
     }
@@ -74,10 +74,10 @@ public class RecipeIngredientsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_recipe_ingredients, container, false);
-        myrv = (RecyclerView)view.findViewById(R.id.recipe_ingredients);
-        myrv.setLayoutManager(new GridLayoutManager(getContext(), 2));
-        myAdapter = new RecipeIngredientsAdapter(getContext(), ingredientsList);
-        myrv.setAdapter(myAdapter);
+        recyclerView = (RecyclerView)view.findViewById(R.id.recipe_ingredients);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 2));
+        adapter = new RecipeIngredientsAdapter(getContext(), ingredientsList);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }

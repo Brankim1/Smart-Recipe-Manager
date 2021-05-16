@@ -19,7 +19,7 @@ import com.example.smartrecipemanager.R;
 public class StyleFragment extends Fragment {
     // the fragment initialization parameters
     private RecyclerView recyclerView;
-    private StyleListRecyclerAdapter myAdapter;
+    private StyleListRecyclerAdapter adapter;
     public StyleFragment() {
         // Required empty public constructor
     }
@@ -39,8 +39,8 @@ public class StyleFragment extends Fragment {
         //recyclerView have 2 columns
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(),2);
         recyclerView.setLayoutManager(layoutManager);
-        myAdapter = new StyleListRecyclerAdapter(getContext());
-        recyclerView.setAdapter(myAdapter);
+        adapter = new StyleListRecyclerAdapter(getContext());
+        recyclerView.setAdapter(adapter);
 
         return root;
     }

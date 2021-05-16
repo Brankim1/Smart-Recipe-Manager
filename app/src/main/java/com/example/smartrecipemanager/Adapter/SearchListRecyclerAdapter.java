@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.smartrecipemanager.R;
@@ -26,21 +25,19 @@ import java.util.List;
 public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRecyclerAdapter.ViewHolder> {
 
     private Context context;
-    private List<Recipe> mRecipeList;
+    private List<Recipe> recipeList;
 
     public SearchListRecyclerAdapter(Context context, List<Recipe> recipeList) {
         this.context=context;
-        mRecipeList = recipeList;
+        this.recipeList = recipeList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        CardView cardview;
         ImageView recipeImage;
         TextView recipeName;
 
         public ViewHolder(View view) {
             super(view);
-            cardview=(CardView)view.findViewById(R.id.cardviewHome);
             recipeImage = (ImageView) view.findViewById(R.id.recipe_image);
             recipeName = (TextView) view.findViewById(R.id.recipe_name);
         }
@@ -56,25 +53,25 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Recipe recipe = mRecipeList.get(position);
+        Recipe recipe = recipeList.get(position);
         // handle empty image
-        if (mRecipeList.get(position).getPic().isEmpty()) {
+        if (recipeList.get(position).getPic().isEmpty()) {
         } else{
             //load food image for layout
-            Picasso.get().load(mRecipeList.get(position).getPic()).into(holder.recipeImage);
+            Picasso.get().load(recipeList.get(position).getPic()).into(holder.recipeImage);
         }
 
         //load food title for layout
         holder.recipeName.setText(recipe.getTitle());
         //register click listener for cardView, which contains food image and title
-        holder.cardview.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //go to RecipeActivity to show recipe details
                 Intent RecipeActivityIntent = new Intent(context, RecipeActivity.class);
-                RecipeActivityIntent.putExtra("id",mRecipeList.get(position).getId());
-                RecipeActivityIntent.putExtra("title",mRecipeList.get(position).getTitle());
-                RecipeActivityIntent.putExtra("pic",mRecipeList.get(position).getPic());
+                RecipeActivityIntent.putExtra("id",recipeList.get(position).getId());
+                RecipeActivityIntent.putExtra("title",recipeList.get(position).getTitle());
+                RecipeActivityIntent.putExtra("pic",recipeList.get(position).getPic());
                 RecipeActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                 context.startActivity(RecipeActivityIntent);
             }
@@ -82,7 +79,7 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
     }
 
     @Override
-    public int getItemCount() { return mRecipeList.size(); }
+    public int getItemCount() { return recipeList.size(); }
 
     @Override
     public int getItemViewType(int position) { return position; }

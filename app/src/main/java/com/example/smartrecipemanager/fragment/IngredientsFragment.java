@@ -28,7 +28,7 @@ public class IngredientsFragment extends Fragment {
     private RecyclerView recyclerView;
     private Button searchButton;
     private List<String> ingredientsList;
-    private IngredientListRecyclerAdapter myAdapter;
+    private IngredientListRecyclerAdapter adapter;
     private Intent searchResultIntent;
     public IngredientsFragment() {
         // Required empty public constructor
@@ -49,8 +49,8 @@ public class IngredientsFragment extends Fragment {
         //recyclerView have 3 columns
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(),3);
         recyclerView.setLayoutManager(layoutManager);
-        myAdapter = new IngredientListRecyclerAdapter(getContext());
-        recyclerView.setAdapter(myAdapter);
+        adapter = new IngredientListRecyclerAdapter(getContext());
+        recyclerView.setAdapter(adapter);
 
         //register search button
         searchButton=(Button)root.findViewById(R.id.ingredientSearch);

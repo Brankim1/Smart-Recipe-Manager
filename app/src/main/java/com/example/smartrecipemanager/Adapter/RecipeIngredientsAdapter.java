@@ -20,11 +20,11 @@ import java.util.List;
 public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredientsAdapter.MyViewHolder> {
 
     private Context context;
-    private List<Ingredient> mData;
+    private List<Ingredient> data;
 
-    public RecipeIngredientsAdapter(Context context, List<Ingredient> mData) {
+    public RecipeIngredientsAdapter(Context context, List<Ingredient> data) {
         this.context=context;
-        this.mData = mData;
+        this.data = data;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -52,14 +52,14 @@ public class RecipeIngredientsAdapter extends RecyclerView.Adapter<RecipeIngredi
     @Override
     public void onBindViewHolder(final RecipeIngredientsAdapter.MyViewHolder holder, final int position) {
         //load ingredients name for layout
-        holder.ingredient_name.setText(mData.get(position).getName());
+        holder.ingredient_name.setText(data.get(position).getName());
         //load ingredients image for layout
-        Picasso.get().load(mData.get(position).getPic()).into(holder.ingredient_pic);
+        Picasso.get().load(data.get(position).getPic()).into(holder.ingredient_pic);
     }
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return data.size();
     }
 
 }

@@ -42,11 +42,11 @@ import java.util.List;
 * */
 public class SharingActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mRootRef;
+    private FirebaseAuth auth;
+    private DatabaseReference rootRef;
     private List<Post> PostList;
     private RecyclerView recyclerView;
-    private SharingPostListRecyclerAdapter myAdapter;
+    private SharingPostListRecyclerAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     private String gender;
     private ImageView headerPortrait;
@@ -62,8 +62,8 @@ public class SharingActivity extends AppCompatActivity {
             StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
             recyclerView.setLayoutManager(layoutManager);
-            myAdapter = new SharingPostListRecyclerAdapter(getApplicationContext(), PostList);
-            recyclerView.setAdapter(myAdapter);
+            adapter = new SharingPostListRecyclerAdapter(getApplicationContext(), PostList);
+            recyclerView.setAdapter(adapter);
 
             //register listener for swipeRefreshLayout, which can update post
             swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.sharingSwiperefreshlayout);
@@ -100,9 +100,9 @@ public class SharingActivity extends AppCompatActivity {
     private void setPostList() {
         PostList.clear();
         //get post from server
-        mAuth = FirebaseAuth.getInstance();
-        mRootRef = FirebaseDatabase.getInstance().getReference().child("sharing");
-        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        auth = FirebaseAuth.getInstance();
+        rootRef = FirebaseDatabase.getInstance().getReference().child("sharing");
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -112,7 +112,7 @@ public class SharingActivity extends AppCompatActivity {
                         PostList.add(post);
                     }
                 }
-                myAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -270,7 +270,7 @@ public class SharingActivity extends AppCompatActivity {
         List PostId=new ArrayList<String>();
         for(int i=0;i<PostList.size();i++){
             String uid= PostList.get(i).getUserid();
-            if(uid.equals(mAuth.getUid())){
+            if(uid.equals(auth.getUid())){
                 PostName.add(PostList.get(i).getTitle());
                 PostId.add(PostList.get(i).getPostid());
             }

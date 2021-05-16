@@ -8,12 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import androidx.cardview.widget.CardView;
+
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.smartrecipemanager.Post;
 import com.example.smartrecipemanager.PostDetailActivity;
 import com.example.smartrecipemanager.R;
 import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
 /**SharingPostListRecyclerAdapter
@@ -23,21 +25,19 @@ import java.util.List;
 public class SharingPostListRecyclerAdapter extends RecyclerView.Adapter<SharingPostListRecyclerAdapter.ViewHolder> {
 
     private Context context;
-    private List<Post> mPostList;
+    private List<Post> postList;
 
     public SharingPostListRecyclerAdapter(Context context, List<Post> postList) {
         this.context=context;
-        mPostList = postList;
+        this.postList = postList;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        CardView cardview;
         ImageView recipeImage;
         TextView recipeName;
 
         public ViewHolder(View view) {
             super(view);
-            cardview=(CardView)view.findViewById(R.id.cardviewHome);
             recipeImage = (ImageView) view.findViewById(R.id.recipe_image);
             recipeName = (TextView) view.findViewById(R.id.recipe_name);
         }
@@ -55,25 +55,25 @@ public class SharingPostListRecyclerAdapter extends RecyclerView.Adapter<Sharing
 
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-        Post post = mPostList.get(position);
+        Post post = postList.get(position);
         //handle empty image
-        if (mPostList.get(position).getPic() != "") {
+        if (postList.get(position).getPic() != "") {
             //load post image for layout
-            Picasso.get().load(mPostList.get(position).getPic()).fit().into(holder.recipeImage);
+            Picasso.get().load(postList.get(position).getPic()).fit().into(holder.recipeImage);
         }
         //load post title for layout
         holder.recipeName.setText(post.getTitle());
-        holder.cardview.setOnClickListener(new View.OnClickListener() {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //go to PostDetailActivity
                 Intent PostDetailActivityIntent = new Intent(context, PostDetailActivity.class);
-                PostDetailActivityIntent.putExtra("postid",String.valueOf(mPostList.get(position).getPostid()));
-                PostDetailActivityIntent.putExtra("userid",mPostList.get(position).getUserid());
-                PostDetailActivityIntent.putExtra("name",mPostList.get(position).getName());
-                PostDetailActivityIntent.putExtra("title",mPostList.get(position).getTitle());
-                PostDetailActivityIntent.putExtra("pic",mPostList.get(position).getPic());
-                PostDetailActivityIntent.putExtra("content",mPostList.get(position).getContent());
+                PostDetailActivityIntent.putExtra("postid",String.valueOf(postList.get(position).getPostid()));
+                PostDetailActivityIntent.putExtra("userid",postList.get(position).getUserid());
+                PostDetailActivityIntent.putExtra("name",postList.get(position).getName());
+                PostDetailActivityIntent.putExtra("title",postList.get(position).getTitle());
+                PostDetailActivityIntent.putExtra("pic",postList.get(position).getPic());
+                PostDetailActivityIntent.putExtra("content",postList.get(position).getContent());
                 PostDetailActivityIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                 context.startActivity(PostDetailActivityIntent);
             }
@@ -82,7 +82,7 @@ public class SharingPostListRecyclerAdapter extends RecyclerView.Adapter<Sharing
 
     @Override
     public int getItemCount() {
-        return mPostList.size();
+        return postList.size();
     }
 
     @Override

@@ -23,7 +23,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
  * user will receive an email to reset password
 * */
 public class ResetActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
     private TextInputLayout email;
     private Button reset;
     @Override
@@ -33,13 +33,12 @@ public class ResetActivity extends AppCompatActivity {
         ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
         if (networkInfo != null) {
-            mAuth = FirebaseAuth.getInstance();
+            auth = FirebaseAuth.getInstance();
             email=(TextInputLayout)findViewById(R.id.email3);
             reset=(Button)findViewById(R.id.reset);
             reset.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    FirebaseAuth auth = FirebaseAuth.getInstance();
                     String emailAddress = email.getEditText().getText().toString();
                     try {
                         //input check
@@ -63,7 +62,7 @@ public class ResetActivity extends AppCompatActivity {
                         }
 
                     } catch (Exception e) {
-                        Toast.makeText(ResetActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+
                     }
                 }
             });

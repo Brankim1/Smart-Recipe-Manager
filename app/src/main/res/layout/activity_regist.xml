@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,27 +10,27 @@
     <ImageView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        app:layout_constraintStart_toStartOf="parent"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/loginpic" />
+        app:srcCompat="@drawable/loginpic"
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <androidx.cardview.widget.CardView
-        android:id="@+id/cardView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="25dp"
+        android:layout_marginStart="30dp"
         android:layout_marginTop="250dp"
-        android:layout_marginEnd="25dp"
+
         app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginEnd="30dp"
+
+        app:cardBackgroundColor="#fdf5e6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:contentPadding="10dp"
-        app:cardBackgroundColor="#fdf5e6"
         app:cardCornerRadius="20dp"
+        app:contentPadding="10dp"
         app:cardElevation="20dp">
 
         <LinearLayout
@@ -41,10 +42,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:textColor="#000000"
+                android:textSize="18sp"
                 android:padding="10dp"
                 android:text="Register"
-                android:textColor="#2d2d2d"
-                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <com.google.android.material.textfield.TextInputLayout

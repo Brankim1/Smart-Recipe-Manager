@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -46,10 +45,11 @@
                 android:textColor="#000000"
                 android:textSize="20sp"/>
             <TextView
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:text="Developer: Pengcheng Jin"
                 android:textColor="#000000"
                 android:textSize="20sp"/>
@@ -63,24 +63,24 @@
                 android:textColor="#000000"
                 android:textSize="20sp"/>
             <TextView
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
                 android:autoLink="all"
                 android:text="Phone: +44 7579919708"
                 android:textColor="#000000"
                 android:textSize="20sp"/>
             <TextView
                 android:id="@+id/textViewAbout"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:autoLink="all"
-                android:text="Thank you very much for participation in testing SmartRecipeManager.If you have any questions when testing, Just Email me or Call me! I am very glad to receive your feedback. "
+                android:text="Thank you very much for participation in testing SmartRecipeManager. If you have any questions when testing, Just Email me or Call me! I am very glad to receive your feedback. "
                 android:textColor="#000000"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:textSize="20sp"/>
         </LinearLayout>
     </androidx.coordinatorlayout.widget.CoordinatorLayout>

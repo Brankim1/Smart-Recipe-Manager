@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,7 +73,6 @@ public class AiFragment extends Fragment {
     private TextView cancel;
     private Dialog dialog;
     private Intent searchResultIntent;
-    private AiListRecyclerAdapter myAdapter;
     private static final int PICK_IMAGE = 1;
     private static final int REQUEST_IMAGE_CAPTURE = 2;
 
@@ -289,11 +287,9 @@ public class AiFragment extends Fragment {
                 Toast.makeText(getContext(),"Predicted fail, Please check Internet",Toast.LENGTH_SHORT).show();
                 throw new RuntimeException("Request failed, status: " + response.getStatus());
             }
-            Log.d("AIFragment","Image predict result");
             for (Concept c : response.getOutputs(0).getData().getConceptsList()) {
                 String name=c.getName();
                 String value=String.valueOf(c.getValue());
-                Log.d("AIFragment",""+name+":"+value);
                 predictName.add(name);
                 predictText.add(name+" : " +value);
             }
@@ -320,5 +316,4 @@ public class AiFragment extends Fragment {
             }
         };
     };
-
 }

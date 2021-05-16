@@ -17,11 +17,11 @@ import java.util.List;
  * */
 public class RecipeInstructionsAdapter extends RecyclerView.Adapter<RecipeInstructionsAdapter.MyViewHolder> {
     private Context context;
-    private List<String> mData;
+    private List<String> data;
 
-    public RecipeInstructionsAdapter(Context context, List<String> mData) {
+    public RecipeInstructionsAdapter(Context context, List<String> data) {
         this.context=context;
-        this.mData = mData;
+        this.data = data;
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
@@ -48,7 +48,7 @@ public class RecipeInstructionsAdapter extends RecyclerView.Adapter<RecipeInstru
 
     @Override
     public void onBindViewHolder(final RecipeInstructionsAdapter.MyViewHolder holder, final int position) {
-        holder.ingredient_name.setText(mData.get(position));
+        holder.ingredient_name.setText(data.get(position));
         //add number for the order of instructions
         if(position==0){
             holder.ingredient_pic.setImageResource(R.drawable.number1);
@@ -76,7 +76,7 @@ public class RecipeInstructionsAdapter extends RecyclerView.Adapter<RecipeInstru
 
     @Override
     public int getItemCount() {
-        return mData.size();
+        return data.size();
     }
 
 }

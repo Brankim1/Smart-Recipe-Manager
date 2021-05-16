@@ -24,13 +24,13 @@ import java.util.List;
  * it can handle data from recipeActivity and show recipe Instructions
  */
 public class RecipeInstructionsFragment extends Fragment {
-    private JSONArray instructionArr;
+    private JSONArray instructionArray;
     private List instructionList = new ArrayList<>();
-    private RecyclerView myrv;
+    private RecyclerView recyclerView;
     private View view;
     private static final String ARG_PARAM1 = "param1";
     private String mParam1;
-    private RecipeInstructionsAdapter myAdapter;
+    private RecipeInstructionsAdapter adapter;
     public RecipeInstructionsFragment() {
         // Required empty public constructor
     }
@@ -54,8 +54,8 @@ public class RecipeInstructionsFragment extends Fragment {
             try {
                 //handle the data to get instructions
                 JSONObject result = new JSONObject(mParam1);
-                instructionArr = (JSONArray) result.get("analyzedInstructions");
-                JSONObject jsonObject1 = instructionArr.getJSONObject(0);
+                instructionArray = (JSONArray) result.get("analyzedInstructions");
+                JSONObject jsonObject1 = instructionArray.getJSONObject(0);
                 JSONArray instructionArr2 = (JSONArray) jsonObject1.get("steps");
                 for (int i = 0; i < instructionArr2.length(); i++) {
                     JSONObject jsonObject3;
@@ -74,10 +74,10 @@ public class RecipeInstructionsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_recipe_instructions, container, false);
-        myrv = (RecyclerView)view.findViewById(R.id.recipe_instructions);
-        myrv.setLayoutManager(new GridLayoutManager(getContext(), 1));
-        myAdapter = new RecipeInstructionsAdapter(getContext(), instructionList);
-        myrv.setAdapter(myAdapter);
+        recyclerView = (RecyclerView)view.findViewById(R.id.recipe_instructions);
+        recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 1));
+        adapter = new RecipeInstructionsAdapter(getContext(), instructionList);
+        recyclerView.setAdapter(adapter);
 
         return view;
     }

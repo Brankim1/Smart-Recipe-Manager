@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -43,13 +42,11 @@ public class IngredientListRecyclerAdapter extends RecyclerView.Adapter<Ingredie
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        CardView cardview;
         ImageView ingredient_image;
         TextView ingredient_name;
 
         public ViewHolder(View view) {
             super(view);
-            cardview=(CardView)view.findViewById(R.id.cardviewIngredient);
             ingredient_image = (ImageView) view.findViewById(R.id.ingredient_image);
             ingredient_name = (TextView) view.findViewById(R.id.ingredient_name);
         }
@@ -74,21 +71,21 @@ public class IngredientListRecyclerAdapter extends RecyclerView.Adapter<Ingredie
             holder.ingredient_name.setText(Name.get(position));
             //set color, if it was selected, turn gray
             if (Status.get(position)== false) {
-                holder.cardview.setCardBackgroundColor(Color.WHITE);
+                holder.itemView.setBackgroundColor(Color.WHITE);
             } else {
-                holder.cardview.setCardBackgroundColor(Color.parseColor("#c9c9c9"));
+                holder.itemView.setBackgroundColor(Color.parseColor("#c9c9c9"));
             }
             //register click listener for cardView, which contains ingredient image and name
-            holder.cardview.setOnClickListener(new View.OnClickListener() {
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (Status.get(position)== false){
                         Status.set(position,true);
                         ingredientsList.add(Name.get(position));
-                        holder.cardview.setCardBackgroundColor(Color.parseColor("#c9c9c9"));
+                        holder.itemView.setBackgroundColor(Color.parseColor("#c9c9c9"));
                     } else {
                         Status.set(position,false);
-                        holder.cardview.setCardBackgroundColor(Color.WHITE);
+                        holder.itemView.setBackgroundColor(Color.WHITE);
                         ingredientsList.remove(ingredientsList.indexOf(Name.get(position)));
                     }
 

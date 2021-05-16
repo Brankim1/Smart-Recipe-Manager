@@ -7,7 +7,6 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
@@ -54,13 +53,13 @@ import java.util.List;
 * */
 public class HomeActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
-    private TabLayout mytab;
+    private TabLayout tab;
     private JSONArray recipeArray;
     public List<Recipe> RecipeList;
     private String style;
     private SwipeRefreshLayout swipeRefreshLayout;
     private RecyclerView recyclerView;
-    private SearchListRecyclerAdapter myAdapter;
+    private SearchListRecyclerAdapter adapter;
     private int lastVisibleItem;
     private String gender;
     private String vegan;
@@ -80,8 +79,8 @@ public class HomeActivity extends AppCompatActivity {
             StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
             recyclerView.setLayoutManager(layoutManager);
-            myAdapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
-            recyclerView.setAdapter(myAdapter);
+            adapter = new SearchListRecyclerAdapter(getApplicationContext(),RecipeList);
+            recyclerView.setAdapter(adapter);
 
             //load more recipes
             recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -89,13 +88,13 @@ public class HomeActivity extends AppCompatActivity {
                 public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
                     //if visible recyclerview id is last one and no scroll, update
-                    if (newState ==RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 ==myAdapter.getItemCount()) {
+                    if (newState ==RecyclerView.SCROLL_STATE_IDLE && lastVisibleItem + 1 ==adapter.getItemCount()) {
                         new Handler().postDelayed(new Runnable() {
                             @Override
                             public void run() {
                                 Toast.makeText(getApplicationContext(),"Loading...", Toast.LENGTH_SHORT).show();
                                 getRandomRecipes(false);
-                                myAdapter.notifyDataSetChanged();
+                                adapter.notifyDataSetChanged();
                             }
                         },1000);
                     }
@@ -137,12 +136,12 @@ public class HomeActivity extends AppCompatActivity {
      * for breakfast, lunch, dinner change
      * */
     private void setTabLayout() {
-        mytab = (TabLayout) findViewById(R.id.homeTab);
-        mytab.addTab(mytab.newTab().setText("Breakfast"));
-        mytab.addTab(mytab.newTab().setText("Lunch"));
-        mytab.addTab(mytab.newTab().setText("Dinner"));
+        tab = (TabLayout) findViewById(R.id.homeTab);
+        tab.addTab(tab.newTab().setText("Breakfast"));
+        tab.addTab(tab.newTab().setText("Lunch"));
+        tab.addTab(tab.newTab().setText("Dinner"));
 
-        mytab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
+        tab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener(){
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if(tab.getText().equals("Breakfast")){
@@ -214,9 +213,8 @@ public class HomeActivity extends AppCompatActivity {
                                 RecipeList.add(recipe);
                             }
                             //send recipe data to adapter for show
-                            myAdapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                         } catch (JSONException e) {
-                            e.printStackTrace();
                             dialog("Sorry","Query recipes failed, Please choose OK to restart");
                         }
                     }
@@ -224,7 +222,6 @@ public class HomeActivity extends AppCompatActivity {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Log.i("the res is error:", error.toString());
                         dialog("Sorry","Query recipes error, Please choose OK to restart");
                     }
                 }

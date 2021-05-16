@@ -40,13 +40,13 @@ import java.util.List;
 * */
 public class FavouriteActivity extends AppCompatActivity {
     private DrawerLayout drawerLayout;
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
     private String gender;
     private ImageView headerPortrait;
-    private DatabaseReference mRootRef;
+    private DatabaseReference rootRef;
     private List<Recipe> RecipeList;
     private RecyclerView recyclerView;
-    private SearchListRecyclerAdapter myAdapter;
+    private SearchListRecyclerAdapter adapter;
     private SwipeRefreshLayout swipeRefreshLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +61,8 @@ public class FavouriteActivity extends AppCompatActivity {
             StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
             layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
             recyclerView.setLayoutManager(layoutManager);
-            myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
-            recyclerView.setAdapter(myAdapter);
+            adapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
+            recyclerView.setAdapter(adapter);
 
             //register listener for swipeRefreshLayout, which can update favorite recipes
             swipeRefreshLayout=(SwipeRefreshLayout)findViewById(R.id.favouriteSwiperefreshlayout);
@@ -98,10 +98,10 @@ public class FavouriteActivity extends AppCompatActivity {
     private void getFavouriteID() {
         RecipeList.clear();
         //get favorite recipes id from server
-        mAuth = FirebaseAuth.getInstance();
-        final String uid = mAuth.getCurrentUser().getUid();
-        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("favourite");
-        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        auth = FirebaseAuth.getInstance();
+        final String uid = auth.getCurrentUser().getUid();
+        rootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("favourite");
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
@@ -110,7 +110,7 @@ public class FavouriteActivity extends AppCompatActivity {
                         Recipe recipe=child.getValue(Recipe.class);
                         RecipeList.add(recipe);
                     }
-                    myAdapter.notifyDataSetChanged();
+                    adapter.notifyDataSetChanged();
                 }else{
                     dialog("Sorry","Your Favourite Recipes is empty. You can choose OK to Home");
                 }

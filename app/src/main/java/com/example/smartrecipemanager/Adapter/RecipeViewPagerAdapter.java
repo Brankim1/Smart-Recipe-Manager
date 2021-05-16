@@ -30,7 +30,7 @@ public class RecipeViewPagerAdapter extends FragmentPagerAdapter {
                 return recipeIngredientsFragment.newInstance(response.toString());
             case 1:
                 //go to RecipeInstructionsFragment
-                RecipeInstructionsFragment recipeInstructionsFragment = new RecipeInstructionsFragment();
+                recipeInstructionsFragment = new RecipeInstructionsFragment();
                 return recipeInstructionsFragment.newInstance(response.toString());
             default:
                 //default go to RecipeIngredientsFragment

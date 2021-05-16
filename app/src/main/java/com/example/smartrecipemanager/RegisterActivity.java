@@ -29,8 +29,8 @@ import com.google.firebase.database.ValueEventListener;
 * RegisterActivity, user can register through email(use firebase)
 * */
 public class RegisterActivity extends AppCompatActivity{
-    private FirebaseAuth mAuth;
-    private DatabaseReference mRootRef;
+    private FirebaseAuth auth;
+    private DatabaseReference rootRef;
     private TextInputLayout email;
     private TextInputLayout password;
     private RadioGroup genderGroup;
@@ -43,7 +43,7 @@ public class RegisterActivity extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_regist);
-        mAuth = FirebaseAuth.getInstance();
+        auth = FirebaseAuth.getInstance();
         email=(TextInputLayout)findViewById(R.id.email2);
         password=(TextInputLayout)findViewById(R.id.password2);
 
@@ -84,7 +84,7 @@ public class RegisterActivity extends AppCompatActivity{
                     Toast.makeText(RegisterActivity.this, "Please choose whether vegan", Toast.LENGTH_SHORT).show();
                 }
                 if(emailText.length()!=0&&passwordText.length()!=0&&Patterns.EMAIL_ADDRESS.matcher(emailText).matches()&&genderGroup.getCheckedRadioButtonId()!=-1&&veganGroup.getCheckedRadioButtonId()!=-1) {
-                    mAuth.createUserWithEmailAndPassword(emailText, passwordText)
+                    auth.createUserWithEmailAndPassword(emailText, passwordText)
                             .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                                 @Override
                                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -113,14 +113,14 @@ public class RegisterActivity extends AppCompatActivity{
      * */
     private void addPersonalInfo() {
         //add gender and vegan information to server
-        mAuth = FirebaseAuth.getInstance();
-        final String uid = mAuth.getCurrentUser().getUid();
-        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("Information");
-        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        auth = FirebaseAuth.getInstance();
+        final String uid = auth.getCurrentUser().getUid();
+        rootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("Information");
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 personalInfo = new PersonalInfo(genderSelect.getText().toString(),veganSelect.getText().toString());
-                mRootRef.setValue(personalInfo);
+                rootRef.setValue(personalInfo);
                 Intent mainIntent= new Intent(RegisterActivity.this, MainActivity.class);
                 startActivity(mainIntent);
                 finish();

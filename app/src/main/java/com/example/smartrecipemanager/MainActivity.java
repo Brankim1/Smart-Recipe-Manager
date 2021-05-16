@@ -16,10 +16,11 @@ import com.google.firebase.auth.FirebaseUser;
 
 /**
 * main Activity
-* it can judge whether user were already login, if yes go to home Activity.if not, go to Login Activity
+* it can judge whether user were already login, if yes go to home Activity.
+ * if not, go to Login Activity
 * */
 public class MainActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
     private ConnectivityManager manager;
     private NetworkInfo networkInfo;
     @Override
@@ -36,10 +37,10 @@ public class MainActivity extends AppCompatActivity {
         networkInfo = manager.getActiveNetworkInfo();
         if (networkInfo != null) {
             //login authentication(Firebase API)
-            mAuth = FirebaseAuth.getInstance();
+            auth = FirebaseAuth.getInstance();
             //get current user, choose to login or home activity
-            FirebaseUser currentUser = mAuth.getCurrentUser();
-            if (currentUser == null) {
+            FirebaseUser user = auth.getCurrentUser();
+            if (user == null) {
                 //go to login activity
                 Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
                 startActivity(loginIntent);

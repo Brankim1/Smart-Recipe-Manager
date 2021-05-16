@@ -7,7 +7,6 @@ import com.example.smartrecipemanager.fragment.AiFragment;
 import com.example.smartrecipemanager.fragment.IngredientsFragment;
 import com.example.smartrecipemanager.fragment.StyleFragment;
 
-
 /**SearchViewPagerAdapter
  * for swipe three fragment (StyleFragment and IngredientsFragment and AiFragment) in searchActivity.
  * */

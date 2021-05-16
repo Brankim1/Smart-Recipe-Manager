@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.CalorieQuery.CalorieQueryFragment">
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        tools:ignore="MissingConstraints">
         <!-- TODO: Update blank fragment layout -->
         <com.google.android.material.appbar.AppBarLayout
             android:layout_width="match_parent"
@@ -413,7 +413,5 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/Calcium" />
         </RelativeLayout>
-
     </LinearLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

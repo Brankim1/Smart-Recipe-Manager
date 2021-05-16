@@ -27,29 +27,28 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
             <ImageView
                 android:id="@+id/recipe_img"
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:contentDescription="@+id/recipe_img"
-                app:srcCompat="@color/common_google_signin_btn_text_light_pressed" />
+                android:contentDescription="@+id/recipe_img"/>
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/floatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:layout_marginTop="-70dp"
-                android:layout_marginEnd="15dp"
                 android:layout_marginBottom="10dp"
                 android:clickable="true"
+                android:layout_marginTop="-70dp"
                 android:focusable="true"
-                app:backgroundTint="#FFFFFF"
+                android:layout_marginEnd="15dp"
                 app:borderWidth="0.5dp"
-                app:tint="@null"
-                app:srcCompat= "@drawable/dislike"/>
+                app:srcCompat= "@drawable/dislike"
+                app:backgroundTint="#FFFFFF"
+                android:layout_gravity="end"
+                app:tint="@null"/>
         </LinearLayout>
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/recipeTab"
@@ -61,6 +60,5 @@
             android:layout_height="fill_parent"
             android:layout_below="@id/searchTab"/>
     </LinearLayout>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
 

@@ -43,11 +43,11 @@ public class RecipeActivity extends AppCompatActivity {
     private String id;
     private String title;
     private String pic;
-    private TabLayout mytab;
+    private TabLayout tab;
     private ImageView img;
-    private FirebaseAuth mAuth;
-    private DatabaseReference mRootRef;
-    private FloatingActionButton fab;
+    private FirebaseAuth auth;
+    private DatabaseReference rootRef;
+    private FloatingActionButton fabutton;
     private boolean like = false;
     private Recipe recipe;
     private RecipeViewPagerAdapter adapter;
@@ -61,7 +61,7 @@ public class RecipeActivity extends AppCompatActivity {
         title = intent.getStringExtra("title");
         pic = intent.getStringExtra("pic");
         img = findViewById(R.id.recipe_img);
-        fab = findViewById(R.id.floatingActionButton);
+        fabutton = findViewById(R.id.floatingActionButton);
         ConnectivityManager manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = manager.getActiveNetworkInfo();
 
@@ -85,15 +85,15 @@ public class RecipeActivity extends AppCompatActivity {
      * */
     private void checkFavourite() {
         //check user whether like this recipe from server
-        mAuth = FirebaseAuth.getInstance();
-        final String uid = mAuth.getCurrentUser().getUid();
-        mRootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("favourite").child(id);
-        mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        auth = FirebaseAuth.getInstance();
+        final String uid = auth.getCurrentUser().getUid();
+        rootRef = FirebaseDatabase.getInstance().getReference().child(uid).child("favourite").child(id);
+        rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if (dataSnapshot.getValue() != null) {
                     //if like,set like image
-                    fab.setImageResource(R.drawable.like);
+                    fabutton.setImageResource(R.drawable.like);
                     like = true;
                 }
             }
@@ -104,22 +104,22 @@ public class RecipeActivity extends AppCompatActivity {
         });
 
         //register listener to FloatingActionButton, which can change like or dislike
-        fab.setOnClickListener(new View.OnClickListener() {
+        fabutton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRootRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                rootRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (like==false) {
                             like=true;
-                            fab.setImageResource(R.drawable.like);
+                            fabutton.setImageResource(R.drawable.like);
                             recipe = new Recipe(id,title,pic);
-                            mRootRef.setValue(recipe);
+                            rootRef.setValue(recipe);
                         } else {
                             try {
                                 like=false;
-                                fab.setImageResource(R.drawable.dislike);
-                                mRootRef.removeValue();
+                                fabutton.setImageResource(R.drawable.dislike);
+                                rootRef.removeValue();
                             } catch (Exception e) {
                             }
                         }
@@ -175,16 +175,16 @@ public class RecipeActivity extends AppCompatActivity {
      * */
     private void setTabLayout(JSONObject response) {
         //show ingredients and instructions through RecipeViewPagerAdapter
-        mytab = (TabLayout) findViewById(R.id.recipeTab);
-        mytab.addTab(mytab.newTab().setText("ingredients"));
-        mytab.addTab(mytab.newTab().setText("instructions"));
-        mytab.setTabGravity(TabLayout.GRAVITY_FILL);
+        tab = (TabLayout) findViewById(R.id.recipeTab);
+        tab.addTab(tab.newTab().setText("ingredients"));
+        tab.addTab(tab.newTab().setText("instructions"));
+        tab.setTabGravity(TabLayout.GRAVITY_FILL);
         final ViewPager viewPager = (ViewPager) findViewById(R.id.recipe_pager);
-        adapter = new RecipeViewPagerAdapter(getSupportFragmentManager(),mytab.getTabCount(),response);
+        adapter = new RecipeViewPagerAdapter(getSupportFragmentManager(),tab.getTabCount(),response);
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(mytab));
+        viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tab));
 
-        mytab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        tab.setOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 viewPager.setCurrentItem(tab.getPosition());

@@ -49,7 +49,7 @@ public class SearchResultActivity extends AppCompatActivity {
     private JSONArray recipeArray;
     public  List<Recipe> RecipeList;
     private RecyclerView recyclerView;
-    private SearchListRecyclerAdapter myAdapter;
+    private SearchListRecyclerAdapter adapter;
     private String vegan;
     private String ingredientSearch;
     @Override
@@ -66,8 +66,8 @@ public class SearchResultActivity extends AppCompatActivity {
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         layoutManager.setGapStrategy(StaggeredGridLayoutManager.GAP_HANDLING_NONE);
         recyclerView.setLayoutManager(layoutManager);
-        myAdapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
-        recyclerView.setAdapter(myAdapter);
+        adapter = new SearchListRecyclerAdapter(getApplicationContext(), RecipeList);
+        recyclerView.setAdapter(adapter);
 
         setToolBar();
         manager = (ConnectivityManager) getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -134,10 +134,9 @@ public class SearchResultActivity extends AppCompatActivity {
                                     recipe.setPic(jsonObject1.optString("image"));
                                     RecipeList.add(recipe);
                                 }
-                                myAdapter.notifyDataSetChanged();
+                                adapter.notifyDataSetChanged();
                             } catch (JSONException e) {
                                 Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
-                                e.printStackTrace();
                             }
                         }
                     },
@@ -170,16 +169,14 @@ public class SearchResultActivity extends AppCompatActivity {
                                 RecipeList.add(recipe);
                                 }
                             }catch (JSONException ex) {
-                                Toast.makeText(SearchResultActivity.this, "recipes get fail", Toast.LENGTH_SHORT).show();
                                 dialog("Sorry", "Query recipes failed, Please choose OK to back");
                             }
-                            myAdapter.notifyDataSetChanged();
+                            adapter.notifyDataSetChanged();
                         }
                     },
                             new ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
                                     dialog("Sorry","Query recipes failed, Please choose OK to back");
                                 }
 
@@ -214,10 +211,9 @@ public class SearchResultActivity extends AppCompatActivity {
                                         recipe.setPic("https://spoonacular.com/recipeImages/" + jsonObject1.optString("image"));
                                         RecipeList.add(recipe);
                                     }
-                                    myAdapter.notifyDataSetChanged();
+                                    adapter.notifyDataSetChanged();
                                 }
                             }catch (JSONException e) {
-                                Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
                                 dialog("Sorry","Query recipes failed, Please choose OK to back");
                             }
                         }
@@ -225,7 +221,6 @@ public class SearchResultActivity extends AppCompatActivity {
                             new ErrorListener() {
                                 @Override
                                 public void onErrorResponse(VolleyError error) {
-                                    Toast.makeText(SearchResultActivity.this,"recipes get fail",Toast.LENGTH_SHORT).show();
                                     dialog("Sorry","Query recipes failed, Please choose OK to back");
                                 }
 

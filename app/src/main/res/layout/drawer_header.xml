@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
-
-
     <View
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="#FFA500" />
-
     <ImageView
         android:id="@+id/headerPortrait"
         android:layout_width="90dp"
@@ -18,7 +15,6 @@
         android:layout_marginTop="50dp"
         android:layout_marginLeft="25dp"
         android:src="@drawable/ic_portrait" />
-
     <TextView
         android:id="@+id/drawerText1"
         android:textColor="@android:color/white"
@@ -28,5 +24,4 @@
         android:layout_marginLeft="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
 </RelativeLayout>

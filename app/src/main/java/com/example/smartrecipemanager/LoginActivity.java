@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuthInvalidUserException;
  * use firebase to verify email and password
 * */
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
-    private FirebaseAuth mAuth;
+    private FirebaseAuth auth;
     private TextInputLayout email;
     private TextInputLayout password;
     private Button login;
@@ -51,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         forgotText.setOnClickListener(this);
 
         if (networkInfo != null) {
-            mAuth = FirebaseAuth.getInstance();
+            auth = FirebaseAuth.getInstance();
         }else{
             Toast.makeText(LoginActivity.this, "Network Connect Fail", Toast.LENGTH_LONG).show();
         }
@@ -100,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * */
     private void login(String emailText, String passwordText) {
         //use firebaseAuth to authentic email and password
-        mAuth.signInWithEmailAndPassword(emailText, passwordText)
+        auth.signInWithEmailAndPassword(emailText, passwordText)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
