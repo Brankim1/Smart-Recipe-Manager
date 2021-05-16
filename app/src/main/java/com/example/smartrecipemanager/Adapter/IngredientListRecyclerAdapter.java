@@ -88,7 +88,6 @@ public class IngredientListRecyclerAdapter extends RecyclerView.Adapter<Ingredie
                         holder.itemView.setBackgroundColor(Color.WHITE);
                         ingredientsList.remove(ingredientsList.indexOf(Name.get(position)));
                     }
-
                 }
             });
     }

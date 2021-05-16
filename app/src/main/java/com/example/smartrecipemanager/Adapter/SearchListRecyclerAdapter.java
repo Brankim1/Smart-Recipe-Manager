@@ -55,8 +55,7 @@ public class SearchListRecyclerAdapter extends RecyclerView.Adapter<SearchListRe
     public void onBindViewHolder(ViewHolder holder, final int position) {
         Recipe recipe = recipeList.get(position);
         // handle empty image
-        if (recipeList.get(position).getPic().isEmpty()) {
-        } else{
+        if (recipeList.get(position).getPic()!= "") {
             //load food image for layout
             Picasso.get().load(recipeList.get(position).getPic()).into(holder.recipeImage);
         }
